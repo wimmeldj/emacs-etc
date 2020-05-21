@@ -268,32 +268,6 @@
           #'(lambda ()
               (setq-local fill-column 100)))
 
-;; ;; autocompletion backend for python
-;; (use-package company-jedi
-;;   :ensure t
-;;   :after (company)
-;;   :config
-;;   (add-to-list 'company-backends #'company-jedi)
-;;   (add-hook 'python-mode-hook #'jedi-mode))
-
-;; (use-package pydoc
-;;   :ensure t
-;;   :after (company-jedi))
-
-
-;; (add-hook 'python-mode-hook
-;;           #'(lambda ()
-;;               (push '("lambda" . 955) prettify-symbols-alist)
-;;               (push '("=>" . 8658) prettify-symbols-alist)
-;;               (push '(">=" . 8805) prettify-symbols-alist)
-;;               (push '("<=" . 8804) prettify-symbols-alist)))
-
-;; (use-package js2-mode
-;;   :ensure t
-;;   :config
-;;   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-;;   (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
-
 ;; in buffer completion framework
 (use-package company
   :ensure t

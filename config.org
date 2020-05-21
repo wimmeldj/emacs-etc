@@ -244,7 +244,7 @@ We are using [[undo-tree][undo-tree]] for persistent undo to ./undo-tree-hist/.
 #+END_SRC
 * TODO Mode specific
 ** langs
-*** C,C++,Objective-C off
+*** C,C++,Objective-C
 In order to get the irony c/c++ completion server to work, you'll need to run M-x
 irony-install-server. This runs a cmake command on a file in ./elpa/company-<version>. In order for
 this command to succeed, you will need the following packages:
@@ -355,38 +355,38 @@ Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hoo
             #'(lambda ()
                 (setq-local fill-column 100)))
 #+END_SRC
-*** python off
+*** python                                                         :disabled:
 Need to run, M-x jedi:install-server.
 This depends on:
 - *virtualenv* (pacman: extra/python-virtualenv)
-#+BEGIN_SRC emacs-lisp
-  ;; ;; autocompletion backend for python
-  ;; (use-package company-jedi
-  ;;   :ensure t
-  ;;   :after (company)
-  ;;   :config
-  ;;   (add-to-list 'company-backends #'company-jedi)
-  ;;   (add-hook 'python-mode-hook #'jedi-mode))
+#+BEGIN_SRC emacs-lisp :tangle no
+  ;; autocompletion backend for python
+  (use-package company-jedi
+    :ensure t
+    :after (company)
+    :config
+    (add-to-list 'company-backends #'company-jedi)
+    (add-hook 'python-mode-hook #'jedi-mode))
 
-  ;; (use-package pydoc
-  ;;   :ensure t
-  ;;   :after (company-jedi))
+  (use-package pydoc
+    :ensure t
+    :after (company-jedi))
 
 
-  ;; (add-hook 'python-mode-hook
-  ;;           #'(lambda ()
-  ;;               (push '("lambda" . 955) prettify-symbols-alist)
-  ;;               (push '("=>" . 8658) prettify-symbols-alist)
-  ;;               (push '(">=" . 8805) prettify-symbols-alist)
-  ;;               (push '("<=" . 8804) prettify-symbols-alist)))
+  (add-hook 'python-mode-hook
+	    #'(lambda ()
+		(push '("lambda" . 955) prettify-symbols-alist)
+		(push '("=>" . 8658) prettify-symbols-alist)
+		(push '(">=" . 8805) prettify-symbols-alist)
+		(push '("<=" . 8804) prettify-symbols-alist)))
 #+END_SRC
-*** js off
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package js2-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-  ;;   (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
+*** js                                                             :disabled:
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package js2-mode
+    :ensure t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+    (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
 #+END_SRC
 ** company
 #+BEGIN_SRC emacs-lisp :noweb yes

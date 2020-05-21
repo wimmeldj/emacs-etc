@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# contributor: David Wimmel
+# name: comment-header
+# key: coh
+# --
+;;;; ===========================================================================
+${1:$(let* ((col (current-column))
+           (str "")
+           (start ";;;;"))
+         (while (< (length str) (ffloor (/ (- 78.0 (+ col (string-width yas-text))) 2.0)))
+                (setq str (concat str " ")))
+        (concat start str))} ${1:comment} ${1:$(let* ((col (current-column))
+                                                     (str "")
+                                                     (start (yas-trimmed-comment-start)))
+                                                   (while (< (length str) (- 79.0 (if (eq (mod (string-width yas-text) 2) 1) (- col 1) col)))
+                                                          (setq str (concat str " "))))}

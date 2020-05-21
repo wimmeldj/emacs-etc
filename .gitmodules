@@ -1,0 +1,6 @@
+[submodule "eshell-ring"]
+	path = eshell-ring
+	url = git@github.com:wimmeldj/eshell-ring.git
+[submodule "ido-hacks"]
+	path = ido-hacks
+	url = https://github.com/scottjad/ido-hacks.git

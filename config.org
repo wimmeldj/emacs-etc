@@ -261,39 +261,40 @@ k.
  | memb2 -> unsigned char     |
  +----------------------------+
 #+BEGIN_SRC emacs-lisp :noweb yes
-  ;; ;; C, C++, Objective-C completion
-  ;; ;; this takes care of loading the irony server as well. It integrates with
-  ;; ;; company
-  ;; (use-package company-irony
-  ;;   :ensure t
-  ;;   :after (company)
-  ;;   :config
-  ;;   (add-hook 'c++-mode-hook #'irony-mode)
-  ;;   (add-hook 'c-mode-hook #'irony-mode)
-  ;;   (add-hook 'objc-mode-hook #'irony-mode)
-  ;;   (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
-  ;;   (add-to-list 'company-backends #'company-irony))
+  ;; C, C++, Objective-C completion
+  ;; this takes care of loading the irony server as well. It integrates with
+  ;; company
+  (use-package company-irony
+    :ensure t
+    :after (company)
+    :config
+    (require 'irony)
+    (add-hook 'c++-mode-hook #'irony-mode)
+    (add-hook 'c-mode-hook #'irony-mode)
+    (add-hook 'objc-mode-hook #'irony-mode)
+    (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
+    (add-to-list 'company-backends #'company-irony))
 
-  ;; ;; eldoc support in c modes
-  ;; (use-package irony-eldoc
-  ;;   :ensure t
-  ;;   :after (company-irony)
-  ;;   :config (add-hook 'irony-mode-hook #'irony-eldoc))
+  ;; eldoc support in c modes
+  (use-package irony-eldoc
+    :ensure t
+    :after (company-irony)
+    :config (add-hook 'irony-mode-hook #'irony-eldoc))
 
-  ;; (add-hook 'c-mode-hook
-  ;;           #'irony-mode)
+  (add-hook 'c-mode-hook
+	    #'irony-mode)
 
 
-  ;; <<fs-c-mode-map>>
+  <<fs-c-mode-map>>
 
-  ;; (add-hook 'c-mode-hook
-  ;;           #'(lambda ()
-  ;;               (local-set-key (kbd "C-x u") nil) ;don't overwrite this
-  ;;               (local-set-key (kbd "C-/") fs-c-mode-map)))
+  (add-hook 'c-mode-hook
+	    #'(lambda ()
+		(local-set-key (kbd "C-x u") nil) ;don't overwrite this
+		(local-set-key (kbd "C-/") fs-c-mode-map)))
 
-  ;; ;; (setq c-default-style "k&r")
-  ;; (require 'cc-vars)
-  ;; (push '(c-mode . "k&r") c-default-style)
+  ;; (setq c-default-style "k&r")
+  (require 'cc-vars)
+  (push '(c-mode . "k&r") c-default-style)
 #+END_SRC
 
 Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hook to this.

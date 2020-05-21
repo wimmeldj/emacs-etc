@@ -184,48 +184,49 @@
 ;; (load-theme 'almost-mono-gray t)
 ;; (load-theme 'gruvbox-dark-hard t)
 
-;; ;; C, C++, Objective-C completion
-;; ;; this takes care of loading the irony server as well. It integrates with
-;; ;; company
-;; (use-package company-irony
-;;   :ensure t
-;;   :after (company)
-;;   :config
-;;   (add-hook 'c++-mode-hook #'irony-mode)
-;;   (add-hook 'c-mode-hook #'irony-mode)
-;;   (add-hook 'objc-mode-hook #'irony-mode)
-;;   (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
-;;   (add-to-list 'company-backends #'company-irony))
+;; C, C++, Objective-C completion
+;; this takes care of loading the irony server as well. It integrates with
+;; company
+(use-package company-irony
+  :ensure t
+  :after (company)
+  :config
+  (require 'irony)
+  (add-hook 'c++-mode-hook #'irony-mode)
+  (add-hook 'c-mode-hook #'irony-mode)
+  (add-hook 'objc-mode-hook #'irony-mode)
+  (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
+  (add-to-list 'company-backends #'company-irony))
 
-;; ;; eldoc support in c modes
-;; (use-package irony-eldoc
-;;   :ensure t
-;;   :after (company-irony)
-;;   :config (add-hook 'irony-mode-hook #'irony-eldoc))
+;; eldoc support in c modes
+(use-package irony-eldoc
+  :ensure t
+  :after (company-irony)
+  :config (add-hook 'irony-mode-hook #'irony-eldoc))
 
-;; (add-hook 'c-mode-hook
-;;           #'irony-mode)
+(add-hook 'c-mode-hook
+	  #'irony-mode)
 
 
-;; (defvar fs-c-mode-map
-;;   (let ((map (make-sparse-keymap)))
-;;     (set-keymap-parent map fs-map)
-;;     map)
-;;   "Overrides `fs-map' in c-mode buffers")
-;; (define-prefix-command 'bs-c-mode-map)
-;; 
-;; ;; look up man page at point
-;; (define-key fs-c-mode-map (kbd "C-h") #'man-follow) ; C-/ C-h for man follow
-;; 
+(defvar fs-c-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map fs-map)
+    map)
+  "Overrides `fs-map' in c-mode buffers")
+(define-prefix-command 'bs-c-mode-map)
 
-;; (add-hook 'c-mode-hook
-;;           #'(lambda ()
-;;               (local-set-key (kbd "C-x u") nil) ;don't overwrite this
-;;               (local-set-key (kbd "C-/") fs-c-mode-map)))
+;; look up man page at point
+(define-key fs-c-mode-map (kbd "C-h") #'man-follow) ; C-/ C-h for man follow
 
-;; ;; (setq c-default-style "k&r")
-;; (require 'cc-vars)
-;; (push '(c-mode . "k&r") c-default-style)
+
+(add-hook 'c-mode-hook
+	  #'(lambda ()
+	      (local-set-key (kbd "C-x u") nil) ;don't overwrite this
+	      (local-set-key (kbd "C-/") fs-c-mode-map)))
+
+;; (setq c-default-style "k&r")
+(require 'cc-vars)
+(push '(c-mode . "k&r") c-default-style)
 
 (use-package web-mode
   :ensure t

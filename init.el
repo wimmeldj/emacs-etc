@@ -73,6 +73,4 @@
  '(mode-line-inactive ((t (:background "#3c3836" :foreground "#a89984" :box nil)))))
 (put 'dired-find-alternate-file 'disabled nil)
 
-(add-to-list 'default-frame-alist
-	     '(font . "Fixedsys Excelsior 3.01-L2:pixelsize=13:foundry=POOP:weight=normal:slant=normal:width=normal:scalable=true"))
-
+(set-face-attribute 'default nil :font "fixedsys" :height 80)

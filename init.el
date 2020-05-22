@@ -73,4 +73,5 @@
  '(mode-line-inactive ((t (:background "#3c3836" :foreground "#a89984" :box nil)))))
 (put 'dired-find-alternate-file 'disabled nil)
 
-(set-face-attribute 'default nil :font "fixedsys" :height 80)
+;; (set-face-attribute 'default nil :font "fixedsys" :height 80)
+(set-face-attribute 'default nil :font "Terminus (TTF)" :height 70)

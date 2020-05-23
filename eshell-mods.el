@@ -91,28 +91,4 @@ ESHELL-ALIASES."
 
 ;; (add-hook 'eshell-alias-load-hook 'write-eshell-aliases)
 
-
-
-
-;; ;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
-;; ;;; This format is meant to be slightly human-readable;
-;; ;;; nevertheless, you probably don't want to edit it.
-;; ;;; -*- End Of Bookmark File Format Version Stamp -*-
-;; (("comma sep"
-;;  (filename . "~/miami-university-senior-capstone-project/packages/web/src/routes/experiments/new/NewExperimentView.tsx")
-;;  (front-context-string . "n>\n      </div>\n")
-;;  (rear-context-string . ", Eth0)</b></spa")
-;;  (position . 5898))
-;; ("check cages not empty"
-;;  (filename . "~/miami-university-senior-capstone-project/packages/web/src/routes/experiments/index.tsx")
-;;  (front-context-string . "  // TODO: Add c")
-;;  (rear-context-string . "> {\n            ")
-;;  (position . 2814))
-;; ("metadat obj"
-;;  (filename . "~/miami-university-senior-capstone-project/packages/web/src/routes/experiments/new/NewExperimentView.tsx")
-;;  (front-context-string . "ends Readonly<{\n")
-;;  (rear-context-string . "mentMetaData ext")
-;;  (position . 829))
-;; )
-
 (provide 'eshell-mods)

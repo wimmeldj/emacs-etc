@@ -4,6 +4,12 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
+;; emacs c src
+(setq source-directory "/home/d/.emacs.d/src/emacs-26.3/")
+;; (setq find-function-C-source-directory
+;;   (let ((dir (expand-file-name "src" source-directory)))
+;;     (if (file-accessible-directory-p dir) dir)))
+
 ;; (require 'cl-lib)
 
 ;; get rid of greeting screen

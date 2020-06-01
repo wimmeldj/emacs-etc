@@ -2,7 +2,7 @@
 (define-prefix-command 'semicolon-map)
 (define-prefix-command 'fs-map)
 (global-set-key (kbd "C-;") semicolon-map)
-(global-set-key (kbd "C-/") fs-map)
+;; (global-set-key (kbd "C-/") fs-map)
 
 ;; don't allow execution of (save-buffers-kill-terminal) so easily
 (global-unset-key (kbd "C-x C-c"))
@@ -193,7 +193,7 @@
   :config
   (require 'irony)
   (add-hook 'c++-mode-hook #'irony-mode)
-  (add-hook 'c-mode-hook #'irony-mode)
+  ;; (add-hook 'c-mode-hook #'irony-mode)
   (add-hook 'objc-mode-hook #'irony-mode)
   (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
   (add-to-list 'company-backends #'company-irony))
@@ -204,8 +204,8 @@
   :after (company-irony)
   :config (add-hook 'irony-mode-hook #'irony-eldoc))
 
-(add-hook 'c-mode-hook
-	  #'irony-mode)
+;; (add-hook 'c-mode-hook
+	  ;; #'irony-mode)
 
 
 (defvar fs-c-mode-map
@@ -586,7 +586,7 @@
 	  ivy-occur-grep-mode		;so the above works in counsel-ag too
 	  ))
 
-  :after (evil-numbers ivy))
+  :after (ivy))
 
 ;; vimish fold
 (use-package vimish-fold
@@ -600,9 +600,6 @@
   (evil-vimish-fold-mode)
   (diminish 'evil-vimish-fold-mode)
   :after (diminish evil))
-
-(use-package evil-numbers
-  :ensure t)
 
 ;; auto start flyspell on non programming buffers
 (add-hook 'org-mode-hook #'flyspell-mode)

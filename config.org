@@ -290,7 +290,8 @@ k.
   (add-hook 'c-mode-hook
 	    #'(lambda ()
 		(local-set-key (kbd "C-x u") nil) ;don't overwrite this
-		(local-set-key (kbd "C-/") fs-c-mode-map)))
+		(local-set-key (kbd "C-/") fs-c-mode-map)
+		))
 
   ;; (setq c-default-style "k&r")
   (require 'cc-vars)
@@ -305,7 +306,7 @@ Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hoo
       (set-keymap-parent map fs-map)
       map)
     "Overrides `fs-map' in c-mode buffers")
-  (define-prefix-command 'bs-c-mode-map)
+  (define-prefix-command 'fs-c-mode-map)
 
   ;; look up man page at point
   (define-key fs-c-mode-map (kbd "C-h") #'man-follow) ; C-/ C-h for man follow
@@ -361,24 +362,23 @@ This depends on:
 - *virtualenv* (pacman: extra/python-virtualenv)
 #+BEGIN_SRC emacs-lisp :tangle no
   ;; autocompletion backend for python
-  (use-package company-jedi
-    :ensure t
-    :after (company)
-    :config
-    (add-to-list 'company-backends #'company-jedi)
-    (add-hook 'python-mode-hook #'jedi-mode))
+  ;; (use-package company-jedi
+  ;;   :ensure t
+  ;;   :after (company)
+  ;;   :config
+  ;;   (add-to-list 'company-backends #'company-jedi)
+  ;;   (add-hook 'python-mode-hook #'jedi-mode))
 
-  (use-package pydoc
-    :ensure t
-    :after (company-jedi))
+  ;; (use-package pydoc
+  ;;   :ensure t
+  ;;   :after (company-jedi))
 
 
   (add-hook 'python-mode-hook
 	    #'(lambda ()
-		(push '("lambda" . 955) prettify-symbols-alist)
-		(push '("=>" . 8658) prettify-symbols-alist)
-		(push '(">=" . 8805) prettify-symbols-alist)
-		(push '("<=" . 8804) prettify-symbols-alist)))
+		(push '("lambda" . λ) prettify-symbols-alist)
+		(push '(">=" . ≥) prettify-symbols-alist)
+		(push '("<=" . ≤) prettify-symbols-alist)))
 #+END_SRC
 *** js                                                             :disabled:
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -519,7 +519,7 @@ Various completion functions using ivy
       (set-keymap-parent map fs-map)
       map)
     "Overrides `fs-map' in dired-mode buffers")
-  (define-prefix-command 'bs-dired-mode-map)
+  (define-prefix-command 'fs-dired-mode-map)
 
   (define-key fs-dired-mode-map (kbd "C-d") #'dired-dotfiles-toggle)
 #+END_SRC
@@ -567,7 +567,7 @@ Various completion functions using ivy
   (use-package eshell-up
     :ensure t)
 #+END_SRC
-*** eshring
+*** eshell-ring
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path "~/.emacs.d/eshell-ring/")
   (require 'eshell-ring)

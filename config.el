@@ -213,7 +213,7 @@
     (set-keymap-parent map fs-map)
     map)
   "Overrides `fs-map' in c-mode buffers")
-(define-prefix-command 'bs-c-mode-map)
+(define-prefix-command 'fs-c-mode-map)
 
 ;; look up man page at point
 (define-key fs-c-mode-map (kbd "C-h") #'man-follow) ; C-/ C-h for man follow
@@ -222,7 +222,8 @@
 (add-hook 'c-mode-hook
 	  #'(lambda ()
 	      (local-set-key (kbd "C-x u") nil) ;don't overwrite this
-	      (local-set-key (kbd "C-/") fs-c-mode-map)))
+	      (local-set-key (kbd "C-/") fs-c-mode-map)
+	      ))
 
 ;; (setq c-default-style "k&r")
 (require 'cc-vars)
@@ -379,7 +380,7 @@
     (set-keymap-parent map fs-map)
     map)
   "Overrides `fs-map' in dired-mode buffers")
-(define-prefix-command 'bs-dired-mode-map)
+(define-prefix-command 'fs-dired-mode-map)
 
 (define-key fs-dired-mode-map (kbd "C-d") #'dired-dotfiles-toggle)
 

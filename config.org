@@ -315,8 +315,6 @@ We are using [[undo-tree][undo-tree]] for persistent undo to ./undo-tree-hist/.
 
   ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/gruvbox")
 
-
-  (add-to-list 'load-path "~/.emacs.d/small-mods/")
   (require 'better-theme-switching)
   (d/make-theme light-theme 'leuven
 		;; blue and white ivy selection
@@ -664,13 +662,12 @@ Various completion functions using ivy
 #+END_SRC
 *** eshell-ring
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/eshell-ring/")
   (require 'eshell-ring)
   (global-eshring-mode 1)
 #+END_SRC
 *** eshell-mods
 #+BEGIN_SRC emacs-lisp :noweb yes
-  (require 'eshell-mods "~/.emacs.d/eshell-mods")
+  (require 'eshell-mods)
 
   (setq eshell-aliases-source "~/.zshrc")
 
@@ -776,7 +773,6 @@ sub-commands
 #+END_SRC
 ** evil
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "~/.emacs.d/evil-numbers/")
   (require 'evil-numbers)
 
   (use-package evil

@@ -1,5 +1,6 @@
 ;; emacs c src
 (setq source-directory "/home/d/.emacs.d/emacs-26.3/")
+;; below is unnecessary so long as `find-func' hasn't been loaded yet.
 ;; (setq find-function-C-source-directory
 ;;   (let ((dir (expand-file-name "src" source-directory)))
 ;;     (if (file-accessible-directory-p dir) dir)))
@@ -31,6 +32,12 @@
     (package-refresh-contents)
     (mapc #'package-install
 	  notinstalled)))
+
+
+(add-to-list 'load-path "~/.emacs.d/small-mods/")
+(add-to-list 'load-path "~/.emacs.d/eshell-ring/")
+(add-to-list 'load-path "~/.emacs.d/evil-numbers/")
+
 
 ;;; load org config file if it exists.
 (when (file-readable-p "~/.emacs.d/config.org")

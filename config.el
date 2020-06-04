@@ -228,8 +228,6 @@ Return the scratch buffer opened."
 
 ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/gruvbox")
 
-
-(add-to-list 'load-path "~/.emacs.d/small-mods/")
 (require 'better-theme-switching)
 (d/make-theme light-theme 'leuven
 	      ;; blue and white ivy selection
@@ -491,11 +489,10 @@ Return the scratch buffer opened."
 (use-package eshell-up
   :ensure t)
 
-(add-to-list 'load-path "~/.emacs.d/eshell-ring/")
 (require 'eshell-ring)
 (global-eshring-mode 1)
 
-(require 'eshell-mods "~/.emacs.d/eshell-mods")
+(require 'eshell-mods)
 
 (setq eshell-aliases-source "~/.zshrc")
 
@@ -589,7 +586,6 @@ Return the scratch buffer opened."
   (diminish 'undo-tree-mode)
   :after (diminish))
 
-(add-to-list 'load-path "~/.emacs.d/evil-numbers/")
 (require 'evil-numbers)
 
 (use-package evil

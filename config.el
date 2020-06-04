@@ -13,10 +13,70 @@
 
 (global-set-key (kbd "s-SPC") #'golden-ratio)
 
+(global-set-key (kbd "M-<f12>") #'d/flip-theme)
+
 ;; (global-set-key (kbd "M-s") #'avy-goto-char)
 
 (define-key semicolon-map
   (kbd "C-u") #'browse-url)
+
+(defun modi/switch-to-scratch-and-back (&optional arg)
+  "Toggle between *scratch-MODE* buffer and the current buffer.
+If a scratch buffer does not exist, create it with the major mode set to that
+of the buffer from where this function is called.
+
+        COMMAND -> Open/switch to a scratch buffer in the current buffer's major mode
+    C-0 COMMAND -> Open/switch to a scratch buffer in `fundamental-mode'
+    C-u COMMAND -> Open/switch to a scratch buffer in `org-mode'
+C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'
+
+Even if the current major mode is a read-only mode (derived from `special-mode'
+or `dired-mode'), we would want to be able to write in the scratch buffer. So
+the scratch major mode is set to `org-mode' for such cases.
+
+Return the scratch buffer opened."
+  (interactive "p")
+  (if (and (or (null arg)               ; no prefix
+               (= arg 1))
+           (string-match-p "\\*scratch" (buffer-name)))
+      (switch-to-buffer (other-buffer))
+    (let* ((mode-str (cl-case arg
+                       (0  "fundamental-mode") ; C-0
+                       (4  "org-mode") ; C-u
+                       (16 "emacs-lisp-mode") ; C-u C-u
+                       ;; If the major mode turns out to be a `special-mode'
+                       ;; derived mode, a read-only mode like `help-mode', open
+                       ;; an `org-mode' scratch buffer instead.
+                       (t (if (or (derived-mode-p 'special-mode) ; no prefix
+                                  (derived-mode-p 'dired-mode))
+                              "org-mode"
+                            (format "%s" major-mode)))))
+           (buf (get-buffer-create (concat "*scratch-" mode-str "*"))))
+      (switch-to-buffer buf)
+      (funcall (intern mode-str))   ; http://stackoverflow.com/a/7539787/1219634
+      buf)))
+
+;; Makes an independent buffer (yanking text of current and putting it in a new one)
+;; applies the current mode to the new scratch buffer
+(defun make-scratch-buffer-from-current ()
+  "Copied the current buffer, open scratch, paste it there."
+  (interactive)
+  (kill-ring-save (point-min) (point-max))
+  (modi/switch-to-scratch-and-back)
+  (yank))
+
+(defun kill-help ()
+  "Kill help, wherever it is, so you don't have to jump to it."
+  (interactive)
+  (let ((help-buff (get-buffer "*Help*")))
+    (when (buffer-live-p help-buff)
+      (kill-buffer help-buff))))
+
+(use-package csound-mode
+  :ensure t)
+
+(use-package dired-rsync
+  :ensure t)
 
 ;; these both have essential nice functions for elisp
 (use-package s :ensure t)		;string manip
@@ -27,6 +87,9 @@
 (require 'server)
 (unless (server-running-p)
   (server-start))
+
+;; get rid of greeting screen
+;;(setq inhibit-startup-message t)
 
 ;; declutter view
 (tool-bar-mode -1)
@@ -143,14 +206,6 @@
   :after
   (diminish))
 
-;; visual queue to show same indentation level
-;; (use-package highlight-indent-guides
-;;   :ensure t
-;;   :config
-;;   (setq highlight-indent-guides-method 'character)
-;;   (diminish 'highlight-indent-guides-mode)
-;;   :after (diminish))
-
 ;; easily see cursor
 (use-package beacon
   :ensure t
@@ -167,22 +222,36 @@
 (use-package rainbow-mode
   :ensure t)
 
-(use-package gruvbox-theme
-  :ensure t
-  :config
-  (load-theme 'gruvbox-dark-hard t)
-  )
-
-(use-package almost-mono-themes
-  :ensure t
-  :config
-  ;; (load-theme 'almost-mono-black t)
-  )
+;; (use-package gruvbox-theme :ensure t)
+;; (use-package modus-operandi-theme :ensure t :config (load-theme 'modus-operandi t))
+;; (use-package modus-vivendi-theme :ensure t)
 
 ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/gruvbox")
-;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/almost-mono")
-;; (load-theme 'almost-mono-gray t)
-;; (load-theme 'gruvbox-dark-hard t)
+
+
+(add-to-list 'load-path "~/.emacs.d/small-mods/")
+(require 'better-theme-switching)
+(d/make-theme light-theme 'leuven
+	      ;; blue and white ivy selection
+	      (custom-set-faces '(ivy-current-match ((((class color) (background light))
+						      (:background "#1a4b77" :foreground "white" :extend t))
+						     (((class color) (background dark))
+						      (:background "#65a7e2" :foreground "black" :extend t)))))
+	      (mapc #'disable-theme custom-enabled-themes) ;disable all themes currently enabled
+	      (setq theme-state 'light)			   ;for use by `d/flip-theme'
+	      (message "==loaded light theme")
+	      )
+
+(d/make-theme dark-theme 'spacemacs-dark
+	      (custom-set-faces
+	       ;; bright green ivy selection
+	       '(ivy-current-match ((t (:foreground "chartreuse3" :underline t :weight bold)))))
+
+	      (mapc #'disable-theme custom-enabled-themes)
+	      (setq theme-state 'dark)
+	      (message "==loaded dark theme")
+	      )
+(d/load-theme dark-theme)
 
 ;; C, C++, Objective-C completion
 ;; this takes care of loading the irony server as well. It integrates with
@@ -308,9 +377,6 @@
   (global-set-key (kbd "C-c C-r") #'ivy-resume)
 
   (setq ivy-use-virtual-buffers t)
-
-  (custom-set-faces
-   '(ivy-current-match ((t (:foreground "chartreuse3" :underline t :weight bold)))))
 
   (diminish 'ivy-mode)
   :after (diminish))
@@ -498,6 +564,7 @@
               (setq-local company-idle-delay nil)))
 
 (use-package undo-tree
+  :load-path "~/.emacs.d/undo-tree/"
   :ensure t
   :init
   (when (not (f-exists? "~/.emacs.d/undo-tree-hist"))
@@ -767,55 +834,3 @@
   (yas-global-mode 1)
   (diminish 'yas-minor-mode)
   :after (diminish))
-
-(defun modi/switch-to-scratch-and-back (&optional arg)
-  "Toggle between *scratch-MODE* buffer and the current buffer.
-If a scratch buffer does not exist, create it with the major mode set to that
-of the buffer from where this function is called.
-
-        COMMAND -> Open/switch to a scratch buffer in the current buffer's major mode
-    C-0 COMMAND -> Open/switch to a scratch buffer in `fundamental-mode'
-    C-u COMMAND -> Open/switch to a scratch buffer in `org-mode'
-C-u C-u COMMAND -> Open/switch to a scratch buffer in `emacs-elisp-mode'
-
-Even if the current major mode is a read-only mode (derived from `special-mode'
-or `dired-mode'), we would want to be able to write in the scratch buffer. So
-the scratch major mode is set to `org-mode' for such cases.
-
-Return the scratch buffer opened."
-  (interactive "p")
-  (if (and (or (null arg)               ; no prefix
-               (= arg 1))
-           (string-match-p "\\*scratch" (buffer-name)))
-      (switch-to-buffer (other-buffer))
-    (let* ((mode-str (cl-case arg
-                       (0  "fundamental-mode") ; C-0
-                       (4  "org-mode") ; C-u
-                       (16 "emacs-lisp-mode") ; C-u C-u
-                       ;; If the major mode turns out to be a `special-mode'
-                       ;; derived mode, a read-only mode like `help-mode', open
-                       ;; an `org-mode' scratch buffer instead.
-                       (t (if (or (derived-mode-p 'special-mode) ; no prefix
-                                  (derived-mode-p 'dired-mode))
-                              "org-mode"
-                            (format "%s" major-mode)))))
-           (buf (get-buffer-create (concat "*scratch-" mode-str "*"))))
-      (switch-to-buffer buf)
-      (funcall (intern mode-str))   ; http://stackoverflow.com/a/7539787/1219634
-      buf)))
-
-;; Makes an independent buffer (yanking text of current and putting it in a new one)
-;; applies the current mode to the new scratch buffer
-(defun make-scratch-buffer-from-current ()
-  "Copied the current buffer, open scratch, paste it there."
-  (interactive)
-  (kill-ring-save (point-min) (point-max))
-  (modi/switch-to-scratch-and-back)
-  (yank))
-
-(defun kill-help ()
-  "Kill help, wherever it is, so you don't have to jump to it."
-  (interactive)
-  (let ((help-buff (get-buffer "*Help*")))
-    (when (buffer-live-p help-buff)
-      (kill-buffer help-buff))))

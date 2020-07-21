@@ -854,7 +854,7 @@ sub-commands
     (require 'ivy)
     (setq evil-normal-state-modes
 	  '(
-	    ;; grep-mode			;so we can use evil to edit with `wgrep'
+	    grep-mode			;so we can use evil to edit with `wgrep'
 	    ivy-occur-grep-mode		;so the above works in counsel-ag too
 	    ))
 

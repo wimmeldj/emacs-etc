@@ -139,7 +139,7 @@ Return the scratch buffer opened."
 	  (top . 200))))
 
 ;; make firefox-developer-edition default browser
-(setq browse-url-generic-program "firefox-developer-edition"
+(setq browse-url-generic-program "chromium"
       browse-url-browser-function #'browse-url-generic)
 
 (setq enable-recursive-minibuffers t)
@@ -336,6 +336,22 @@ Return the scratch buffer opened."
           #'(lambda ()
               (setq-local fill-column 100)))
 
+(use-package omnisharp :ensure t
+  :config
+  (add-hook 'csharp-mode-hook #'omnisharp)
+  (require 'company)
+  (add-to-list 'company-backends #'company-omnisharp)
+  (add-hook 'csharp-mode-hook #'flycheck-mode)
+  (add-hook 'csharp-mode-hook #'eldoc-mode)
+
+  (require 'csharp-mode)
+  (define-key csharp-mode-map (kbd "M-.") #'omnisharp-go-to-definition)
+  :after (company))
+
+(use-package blimp :ensure t
+  :config
+  (add-hook 'image-minor-mode-hook 'blimp-mode))
+
 ;; in buffer completion framework
 (use-package company
   :ensure t
@@ -356,6 +372,7 @@ Return the scratch buffer opened."
 ;; if idle delay is non-nil, tramp will hang a lot.
 (setq company-default-idle-delay 0.05)
 (setq company-idle-delay company-default-idle-delay)
+(require 'company)
 
 (defun toggle-company-idle-delay ()
   (interactive)
@@ -645,7 +662,8 @@ Return the scratch buffer opened."
   ;; force nomral evil state in these modes
   (require 'ivy)
   (setq evil-normal-state-modes
-	'(grep-mode			;so we can use evil to edit with `wgrep'
+	'(
+	  ;; grep-mode			;so we can use evil to edit with `wgrep'
 	  ivy-occur-grep-mode		;so the above works in counsel-ag too
 	  ))
 
@@ -682,6 +700,8 @@ Return the scratch buffer opened."
 ;;               (define-key flyspell-mode-map (kbd "C-,") nil)
 ;;               (define-key flyspell-mode-map (kbd "C-c $") nil)))
 
+(use-package gnuplot :ensure t)
+
 (use-package magit
   :ensure t)
 
@@ -689,15 +709,15 @@ Return the scratch buffer opened."
 	  (lambda ()
 	    ;; redefines org's definition of paragraph start and end to be compatible with
 	    ;; evil mode's notion of "a paragraph"
-	    ;; (setq paragraph-start "\\|[ 	]*$"
-	    ;;       paragraph-separate "[ 	]*$")
+	    (setq paragraph-start "\\|[ 	]*$"
+	          paragraph-separate "[ 	]*$")
 	    
-	    ;; (setq fill-column 100)
+	    (setq fill-column 100)
 	    (auto-fill-mode 1) ;automatically break line at `current-fill-column'
 	    (defun org-insert-today ()
-	                  "Inserts todays date in the following form <1969-12-31 Wed>"
-	                  (interactive)
-	                  (insert (format-time-string "<%Y-%m-%d %a>" (current-time))))
+	    	      "Inserts todays date in the following form <1969-12-31 Wed>"
+	    	      (interactive)
+	    	      (insert (format-time-string "<%Y-%m-%d %a>" (current-time))))
 	    
 	    (define-skeleton org-mode-html-header
 	      "Inserts skeleton fitting most org-mode files which export to HTML"
@@ -709,17 +729,18 @@ Return the scratch buffer opened."
 	      "#+LANGUAGE: en"\n
 	      (if (y-or-n-p "Custom stylesheet?")
 	          (format "#+HTML_HEAD: <link rel='stylesheet' type='text/css' href='%s'\n%s\n"
-	                  (file-relative-name (read-file-name "path: " ) default-directory)
-	                  "#+OPTIONS: html-style:nil")
+	    	      (file-relative-name (read-file-name "path: " ) default-directory)
+	    	      "#+OPTIONS: html-style:nil")
 	        "#+OPTIONS: html-style:t\n")
 	      "#+OPTIONS: toc:t"\n
 	      "#+OPTIONS: tex:t"\n
 	      "#+OPTIONS: html-postamble:nil"\n
 	      (let ((todo-kwords ""))
 	        (loop for kword in (cdar org-todo-keywords)
-	              do (setq todo-kwords (s-concat todo-kwords " " kword)))
+	    	  do (setq todo-kwords (s-concat todo-kwords " " kword)))
 	        (format "#+TODO: %s\n" todo-kwords))
-	      "#+PROPERTY: header-args :results output")))
+	      "#+PROPERTY: header-args :results output"\n
+	      "#+FILETAGS: :ex1:ex2:")))
 
 (define-key org-mode-map
   (kbd "C-c C-'")
@@ -806,6 +827,11 @@ Return the scratch buffer opened."
 (add-hook 'lisp-mode-hook #'slime-mode)
 
 (setq tramp-default-method "ssh")
+
+(use-package vlf :ensure t
+  :config
+  (require 'vlf-setup) ;when opening large file, gives a 'v' option for opening with vlf
+  )
 
 ;; writable `grep'. do a grep and edit it to apply those changes.
 ;; use with `rgrep' to modify multiple files recursively

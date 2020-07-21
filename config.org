@@ -1,22 +1,22 @@
 #+TITLE: emacs config
 #+AUTHOR: David Wimmel
-#+DATE: <2020-05-21 Thu>
+#+DATE: <2020-06-06 Sat>
 #+LANGUAGE: en
 
 * TODO remind                                                      :noexport:
-- [ ] fix issue caused by some themes (e.g. `modus-operandi-theme') where org
-  file text looks weirdly spaced out
-- [ ] something better than irony for c/c++
+- [ ] *get evil-mode to work with grep*
+- [ ] figure out why org isn't working with xdg-open
 - [ ] fix dired-collapse-mode from breaking j -> dired-goto-file
 - [ ] fix the shitty man prompt. make it so different manuals are expanded in
   the first selection and it doesn't drop down to another selection list e.g:
   - malloc(1)
   - malloc(3)
   - malloc(3p) ...
+- [ ] something better than irony for c/c++
 - [ ] make all shell execs static (i.e. save contents to file and load that file.)
-- [ ] fix the eshring bugs, mainly the dired-do-async-command not killing buffer
 - [ ] figure out how to make `counsel-ag' better. Like toggling hidden files for
   instance. Look at `counsel-ag-base-command' and (man "ag")
+- [ ] fix the eshring bugs, mainly the dired-do-async-command not killing buffer
 * Global key bindings
 #+BEGIN_SRC emacs-lisp
   ;; two alternative keymaps, C-; and C-/
@@ -192,7 +192,7 @@ Update this if you change the default font face.
 	    (top . 200))))
 
   ;; make firefox-developer-edition default browser
-  (setq browse-url-generic-program "firefox-developer-edition"
+  (setq browse-url-generic-program "chromium"
 	browse-url-browser-function #'browse-url-generic)
 
   (setq enable-recursive-minibuffers t)
@@ -452,6 +452,20 @@ Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hoo
             #'(lambda ()
                 (setq-local fill-column 100)))
 #+END_SRC
+*** csharp
+#+BEGIN_SRC emacs-lisp
+  (use-package omnisharp :ensure t
+    :config
+    (add-hook 'csharp-mode-hook #'omnisharp)
+    (require 'company)
+    (add-to-list 'company-backends #'company-omnisharp)
+    (add-hook 'csharp-mode-hook #'flycheck-mode)
+    (add-hook 'csharp-mode-hook #'eldoc-mode)
+
+    (require 'csharp-mode)
+    (define-key csharp-mode-map (kbd "M-.") #'omnisharp-go-to-definition)
+    :after (company))
+#+END_SRC
 *** python                                                         :disabled:
 Need to run, M-x jedi:install-server.
 This depends on:
@@ -484,6 +498,12 @@ This depends on:
     (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
     (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
 #+END_SRC
+** blimp
+#+BEGIN_SRC emacs-lisp
+  (use-package blimp :ensure t
+    :config
+    (add-hook 'image-minor-mode-hook 'blimp-mode))
+#+END_SRC
 ** company
 #+BEGIN_SRC emacs-lisp :noweb yes
   ;; in buffer completion framework
@@ -506,6 +526,7 @@ This depends on:
   ;; if idle delay is non-nil, tramp will hang a lot.
   (setq company-default-idle-delay 0.05)
   (setq company-idle-delay company-default-idle-delay)
+  (require 'company)
 
   (defun toggle-company-idle-delay ()
     (interactive)
@@ -832,7 +853,8 @@ sub-commands
     ;; force nomral evil state in these modes
     (require 'ivy)
     (setq evil-normal-state-modes
-	  '(grep-mode			;so we can use evil to edit with `wgrep'
+	  '(
+	    ;; grep-mode			;so we can use evil to edit with `wgrep'
 	    ivy-occur-grep-mode		;so the above works in counsel-ag too
 	    ))
 
@@ -874,6 +896,10 @@ sub-commands
   ;;               (define-key flyspell-mode-map (kbd "C-,") nil)
   ;;               (define-key flyspell-mode-map (kbd "C-c $") nil)))
 
+#+END_SRC
+** gnuplot
+#+BEGIN_SRC emacs-lisp
+  (use-package gnuplot :ensure t)
 #+END_SRC
 ** ido                                                             :disabled:
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -918,18 +944,18 @@ sub-commands
 #+BEGIN_SRC emacs-lisp :tangle no
   ;; redefines org's definition of paragraph start and end to be compatible with
   ;; evil mode's notion of "a paragraph"
-  ;; (setq paragraph-start "\\|[ 	]*$"
-  ;;       paragraph-separate "[ 	]*$")
+  (setq paragraph-start "\\|[ 	]*$"
+	paragraph-separate "[ 	]*$")
 
-  ;; (setq fill-column 100)
+  (setq fill-column 100)
 #+END_SRC
 
 #+NAME:org-hook-funs
 #+BEGIN_SRC emacs-lisp :tangle no
   (defun org-insert-today ()
-                "Inserts todays date in the following form <1969-12-31 Wed>"
-                (interactive)
-                (insert (format-time-string "<%Y-%m-%d %a>" (current-time))))
+		"Inserts todays date in the following form <1969-12-31 Wed>"
+		(interactive)
+		(insert (format-time-string "<%Y-%m-%d %a>" (current-time))))
 
   (define-skeleton org-mode-html-header
     "Inserts skeleton fitting most org-mode files which export to HTML"
@@ -940,18 +966,19 @@ sub-commands
     (format "#+DATE: %s\n" (format-time-string "<%Y-%m-%d %a>" (current-time)))
     "#+LANGUAGE: en"\n
     (if (y-or-n-p "Custom stylesheet?")
-        (format "#+HTML_HEAD: <link rel='stylesheet' type='text/css' href='%s'\n%s\n"
-                (file-relative-name (read-file-name "path: " ) default-directory)
-                "#+OPTIONS: html-style:nil")
+	(format "#+HTML_HEAD: <link rel='stylesheet' type='text/css' href='%s'\n%s\n"
+		(file-relative-name (read-file-name "path: " ) default-directory)
+		"#+OPTIONS: html-style:nil")
       "#+OPTIONS: html-style:t\n")
     "#+OPTIONS: toc:t"\n
     "#+OPTIONS: tex:t"\n
     "#+OPTIONS: html-postamble:nil"\n
     (let ((todo-kwords ""))
       (loop for kword in (cdar org-todo-keywords)
-            do (setq todo-kwords (s-concat todo-kwords " " kword)))
+	    do (setq todo-kwords (s-concat todo-kwords " " kword)))
       (format "#+TODO: %s\n" todo-kwords))
-    "#+PROPERTY: header-args :results output")
+    "#+PROPERTY: header-args :results output"\n
+    "#+FILETAGS: :ex1:ex2:")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :noweb yes
@@ -1060,6 +1087,13 @@ Superior Lisp Interaction Mode for Emacs
 #+BEGIN_SRC emacs-lisp
   (setq tramp-default-method "ssh")
 #+END_SRC
+** vlf
+#+BEGIN_SRC emacs-lisp
+  (use-package vlf :ensure t
+    :config
+    (require 'vlf-setup) ;when opening large file, gives a 'v' option for opening with vlf
+    )
+#+END_SRC
 ** grep
 #+BEGIN_SRC emacs-lisp
   ;; writable `grep'. do a grep and edit it to apply those changes.
@@ -1108,31 +1142,27 @@ Superior Lisp Interaction Mode for Emacs
 
 "ace-window"
 
-"almost-mono-themes"
+"autothemer"
 
 "avy"
 
 "beacon"
 
-"berrys-theme"
-
 "company-irony"
-
-"company-jedi"
 
 "company-web"
 
+"company"
+
 "counsel"
+
+"csound-mode"
 
 "diminish"
 
-"dired-collapse"
-
-"dired-hacks-utils"
-
 "dired-quick-sort"
 
-"editorconfig"
+"dired-rsync"
 
 "eshell-up"
 
@@ -1146,15 +1176,11 @@ Superior Lisp Interaction Mode for Emacs
 
 "goto-chg"
 
-"gruvbox-theme"
-
-"autothemer"
-
 "helm"
 
 "helm-core"
 
-"highlight-indent-guides"
+"highlight"
 
 "htmlize"
 
@@ -1164,37 +1190,17 @@ Superior Lisp Interaction Mode for Emacs
 
 "irony"
 
-"jedi-core"
-
-"epc"
-
-"ctable"
-
-"concurrent"
-
-"js2-mode"
-
-"julia-mode"
-
 "lv"
 
 "magit"
 
 "git-commit"
 
-"markdown-mode"
-
-"org-bullets"
-
-"pdf-tools"
+"multi"
 
 "popup"
 
-"pydoc"
-
-"python-environment"
-
-"deferred"
+"powerline"
 
 "rainbow-delimiters"
 
@@ -1202,9 +1208,7 @@ Superior Lisp Interaction Mode for Emacs
 
 "restclient"
 
-"slime-company"
-
-"company"
+"shut-up"
 
 "slime"
 
@@ -1212,23 +1216,13 @@ Superior Lisp Interaction Mode for Emacs
 
 "smex"
 
+"spacemacs-theme"
+
 "swiper"
 
 "ivy"
 
-"tablist"
-
-"tide"
-
-"flycheck"
-
-"pkg-info"
-
-"epl"
-
 "transient"
-
-"typescript-mode"
 
 "undo-tree"
 
@@ -1248,13 +1242,15 @@ Superior Lisp Interaction Mode for Emacs
 
 "web-mode"
 
+"wgrep-ag"
+
+"wgrep"
+
 "which-key"
 
 "with-editor"
 
 "async"
-
-"xelb"
 
 "yasnippet"
 #+end_example

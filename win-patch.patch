@@ -1,0 +1,146 @@
+diff --git a/config.org b/config.org
+index 1ee44f9..b1aa12f 100644
+--- a/config.org
++++ b/config.org
+@@ -178,21 +178,20 @@ Update this if you change the default font face.
+   (defalias 'yes-or-no-p 'y-or-n-p)
+ 
+   ;; leave off unless and locally set to t dependent on language.
+-  ;; (setq-default indent-tabs-mode nil)
++  (setq-default indent-tabs-mode nil)
+ 
+   ;; make 80 the horizontal char limit
+   (setq-default fill-column 80)
+ 
+   ;; default window dimensions 130x150 and 200 pixels down. X unspecified. This
+   ;; works for emacsclient as well
+-  (when (display-graphic-p)
+-    (setq default-frame-alist
+-	  '((width . 130)
+-	    (height . 150)
+-	    (top . 200))))
++  (setq default-frame-alist
++	'((width . 120)
++	  (height . 100)
++	  (top . 100)))
+ 
+   ;; make firefox-developer-edition default browser
+-  (setq browse-url-generic-program "chromium"
++  (setq browse-url-generic-program "chrome.exe"
+ 	browse-url-browser-function #'browse-url-generic)
+ 
+   (setq enable-recursive-minibuffers t)
+@@ -458,12 +457,13 @@ Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hoo
+     :config
+     (add-hook 'csharp-mode-hook #'omnisharp)
+     (require 'company)
+-    (add-to-list 'company-backends #'company-omnisharp)
++    ;; (add-to-list 'company-backends #'company-omnisharp)
+     (add-hook 'csharp-mode-hook #'flycheck-mode)
+     (add-hook 'csharp-mode-hook #'eldoc-mode)
+ 
+     (require 'csharp-mode)
+     (define-key csharp-mode-map (kbd "M-.") #'omnisharp-go-to-definition)
++    (define-key csharp-mode-map (kbd "C-o") #'omnisharp-auto-complete)
+     :after (company))
+ #+END_SRC
+ *** python                                                         :disabled:
+@@ -498,8 +498,8 @@ This depends on:
+     (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+     (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
+ #+END_SRC
+-** blimp
+-#+BEGIN_SRC emacs-lisp
++** blimp                                                           :disabled:
++#+BEGIN_SRC emacs-lisp :tangle no
+   (use-package blimp :ensure t
+     :config
+     (add-hook 'image-minor-mode-hook 'blimp-mode))
+@@ -598,9 +598,9 @@ Various completion functions using ivy
+     ;; :ensure t
+     ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
+ 
+-  (use-package dired-quick-sort
+-    :ensure t
+-    :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
++  ;; (use-package dired-quick-sort
++    ;; :ensure t
++    ;; :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
+ 
+   (setq dired-dwim-target t)
+ 
+@@ -817,6 +817,8 @@ sub-commands
+     ;; escape from insert state with M-i
+     (define-key evil-insert-state-map
+       (kbd "M-i") #'evil-normal-state)
++    (define-key evil-insert-state-map
++      (kbd "C-o") nil)
+     ;; VISUAL STATE
+     (define-key evil-visual-state-map
+       (kbd "M-i") #'evil-normal-state)
+diff --git a/init.el b/init.el
+index aeda005..56abc22 100644
+--- a/init.el
++++ b/init.el
+@@ -44,24 +44,45 @@
+   (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
+ ;; (load "~/.emacs.d/config")          ;byte compiling seems to have no effect on startup time
+ 
+-
+ ;;;; ===========================================================================
+ ;;;;                                    desktop
+ ;; (set-face-attribute 'default nil :font "fixedsys" :height 80)
+-(set-face-attribute 'default nil :font "Terminus (TTF)" :height 70)
++;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 70)
+ 
+ ;;;; ===========================================================================
+ ;;;;                                     mobile
+ ;; (set-face-attribute 'default nil :font "fixedsys" :height 110)
+ ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
+ 
++;; windows patch
++(setq-default buffer-file-coding-system 'utf-8-dos)
++(setq-default default-buffer-file-coding-system 'utf-8-dos)
++(set-default-coding-systems 'utf-8-dos)
++(prefer-coding-system 'utf-8-dos)
+ 
++(defun counsel-locate-action-extern (x)
++  "Pass X to `xdg-open' or equivalent command via the shell."
++  (interactive "FFile: ")
++  (if (and (eq system-type 'windows-nt)
++           (fboundp 'w32-shell-execute))
++      (w32-shell-execute "open" x)
++    (message (format "%s %s"
++                                        (cl-case system-type
++                                          (darwin "open")
++                                          (cygwin "cygstart")
++                                          (t "wsl-open"))
++                                        (shell-quote-argument x)))
++    (call-process-shell-command (format "%s %s"
++                                        (cl-case system-type
++                                          (darwin "open")
++                                          (cygwin "cygstart")
++                                          (t "wsl-open"))
++                                        (shell-quote-argument x))
++                                nil 0)))
+ 
+-
+-
+-
+-
+-
++;; temp
++(setq default-frame-alist (append default-frame-alist
++'((inhibit-double-buffering . t))))
+ 
+ 
+ 
+@@ -104,7 +125,7 @@
+  '(ibuffer-title-face (quote dired-header))
+  '(package-selected-packages
+    (quote
+-    (omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window)))
++    (htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window)))
+  '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#1d2021")))
+  '(vc-annotate-background "#ffffff")
+  '(vc-annotate-background-mode nil)

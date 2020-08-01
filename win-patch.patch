@@ -1,99 +1,3 @@
-diff --git a/config.el b/config.el
-index b163cda..ee7f930 100644
---- a/config.el
-+++ b/config.el
-@@ -125,25 +125,22 @@ Return the scratch buffer opened."
- (defalias 'yes-or-no-p 'y-or-n-p)
- 
- ;; leave off unless and locally set to t dependent on language.
--;; (setq-default indent-tabs-mode nil)
-+(setq-default indent-tabs-mode nil)
- 
- ;; make 80 the horizontal char limit
- (setq-default fill-column 80)
- 
- ;; default window dimensions 130x150 and 200 pixels down. X unspecified. This
- ;; works for emacsclient as well
--(when (display-graphic-p)
--  (setq default-frame-alist
--	'((width . 130)
--	  (height . 150)
--	  (top . 200))))
-+(setq default-frame-alist
-+      '((width . 120)
-+        (height . 100)
-+        (top . 100)))
- 
- ;; make firefox-developer-edition default browser
--(setq browse-url-generic-program "chromium"
-+(setq browse-url-generic-program "chrome.exe"
-       browse-url-browser-function #'browse-url-generic)
- 
--(setq enable-recursive-minibuffers t)
--
- (add-to-list 'auto-mode-alist '("\\.service\\'" . conf-mode))
- (add-to-list 'auto-mode-alist '("\\.rules\\'" . conf-mode))
- (add-to-list 'auto-mode-alist '("\\.bashrc\\'" . shell-script-mode))
-@@ -340,18 +337,15 @@ Return the scratch buffer opened."
-   :config
-   (add-hook 'csharp-mode-hook #'omnisharp)
-   (require 'company)
--  (add-to-list 'company-backends #'company-omnisharp)
-+  ;; (add-to-list 'company-backends #'company-omnisharp)
-   (add-hook 'csharp-mode-hook #'flycheck-mode)
-   (add-hook 'csharp-mode-hook #'eldoc-mode)
- 
-   (require 'csharp-mode)
-   (define-key csharp-mode-map (kbd "M-.") #'omnisharp-go-to-definition)
-+  (define-key csharp-mode-map (kbd "C-o") #'omnisharp-auto-complete)
-   :after (company))
- 
--(use-package blimp :ensure t
--  :config
--  (add-hook 'image-minor-mode-hook 'blimp-mode))
--
- ;; in buffer completion framework
- (use-package company
-   :ensure t
-@@ -367,6 +361,7 @@ Return the scratch buffer opened."
-   (diminish 'company-mode)
-   :after (diminish))
- 
-+(setq company-dabbrev-downcase nil) ;otherwise completion is downcase for plaintext
- (setq company-minimum-prefix-length 3)
- (setq company-tooltip-limit 15)
- ;; if idle delay is non-nil, tramp will hang a lot.
-@@ -434,9 +429,9 @@ Return the scratch buffer opened."
-   ;; :ensure t
-   ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
- 
--(use-package dired-quick-sort
--  :ensure t
--  :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
-+;; (use-package dired-quick-sort
-+  ;; :ensure t
-+  ;; :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
- 
- (setq dired-dwim-target t)
- 
-@@ -625,6 +620,8 @@ Return the scratch buffer opened."
-   ;; escape from insert state with M-i
-   (define-key evil-insert-state-map
-     (kbd "M-i") #'evil-normal-state)
-+  (define-key evil-insert-state-map
-+    (kbd "C-o") nil)
-   ;; VISUAL STATE
-   (define-key evil-visual-state-map
-     (kbd "M-i") #'evil-normal-state)
-@@ -663,7 +660,7 @@ Return the scratch buffer opened."
-   (require 'ivy)
-   (setq evil-normal-state-modes
- 	'(
--	  ;; grep-mode			;so we can use evil to edit with `wgrep'
-+	  grep-mode			;so we can use evil to edit with `wgrep'
- 	  ivy-occur-grep-mode		;so the above works in counsel-ag too
- 	  ))
- 
 diff --git a/config.org b/config.org
 index 1ee44f9..9beafaa 100644
 --- a/config.org
@@ -179,7 +83,7 @@ index 1ee44f9..9beafaa 100644
      (define-key evil-visual-state-map
        (kbd "M-i") #'evil-normal-state)
 diff --git a/init.el b/init.el
-index aeda005..5884b82 100644
+index aeda005..3c17f42 100644
 --- a/init.el
 +++ b/init.el
 @@ -44,27 +44,56 @@
@@ -199,7 +103,7 @@ index aeda005..5884b82 100644
  ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
  
 +;;;; ===========================================================================
-+;;;;                                 windows patch 
++;;;;                                 windows patch
 +(setq-default buffer-file-coding-system 'utf-8-dos)
 +(setq-default default-buffer-file-coding-system 'utf-8-dos)
 +(set-default-coding-systems 'utf-8-dos)
@@ -235,7 +139,7 @@ index aeda005..5884b82 100644
 +  (interactive)
 +  (let* ((filename (file-relative-name (dired-get-filename)))
 +	(cmd (concat "devenv.exe " filename " /Edit")))
-+    (call-process-shell-command cmd)))
++    (call-process-shell-command cmd nil 0)))
  
 -
 -

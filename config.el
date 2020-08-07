@@ -628,6 +628,8 @@ Return the scratch buffer opened."
   ;; escape from insert state with M-i
   (define-key evil-insert-state-map
     (kbd "M-i") #'evil-normal-state)
+  (define-key evil-insert-state-map
+    (kbd "C-o") nil)
   ;; VISUAL STATE
   (define-key evil-visual-state-map
     (kbd "M-i") #'evil-normal-state)
@@ -666,7 +668,7 @@ Return the scratch buffer opened."
   (require 'ivy)
   (setq evil-normal-state-modes
 	'(
-	  ;; grep-mode			;so we can use evil to edit with `wgrep'
+	  grep-mode			;so we can use evil to edit with `wgrep'
 	  ivy-occur-grep-mode		;so the above works in counsel-ag too
 	  ))
 

@@ -820,6 +820,8 @@ sub-commands
     ;; escape from insert state with M-i
     (define-key evil-insert-state-map
       (kbd "M-i") #'evil-normal-state)
+    (define-key evil-insert-state-map
+      (kbd "C-o") nil)
     ;; VISUAL STATE
     (define-key evil-visual-state-map
       (kbd "M-i") #'evil-normal-state)

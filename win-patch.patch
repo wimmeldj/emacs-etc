@@ -1,8 +1,92 @@
+diff --git a/config.el b/config.el
+index 4ccbc0c..40fefe0 100644
+--- a/config.el
++++ b/config.el
+@@ -128,30 +128,28 @@ Return the scratch buffer opened."
+ (defalias 'yes-or-no-p 'y-or-n-p)
+ 
+ ;; leave off unless and locally set to t dependent on language.
+-;; (setq-default indent-tabs-mode nil)
++(setq-default indent-tabs-mode nil)
+ 
+ ;; make 80 the horizontal char limit
+ (setq-default fill-column 80)
+ 
+ ;; default window dimensions 130x150 and 200 pixels down. X unspecified. This
+ ;; works for emacsclient as well
+-(when (display-graphic-p)
+-  (setq default-frame-alist
+-	'((width . 130)
+-	  (height . 150)
+-	  (top . 200))))
++(setq default-frame-alist
++      '((width . 120)
++        (height . 100)
++        (top . 100)))
+ 
+ ;; make firefox-developer-edition default browser
+-(setq browse-url-generic-program "chromium"
++(setq browse-url-generic-program "chrome.exe"
+       browse-url-browser-function #'browse-url-generic)
+ 
+-(setq enable-recursive-minibuffers t)
+-
+ (add-to-list 'auto-mode-alist '("\\.service\\'" . conf-mode))
+ (add-to-list 'auto-mode-alist '("\\.rules\\'" . conf-mode))
+ (add-to-list 'auto-mode-alist '("\\.bashrc\\'" . shell-script-mode))
+ (add-to-list 'auto-mode-alist '("\\.zshrc\\'" . shell-script-mode))
+ (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
++(add-to-list 'auto-mode-alist '("\\.ps1\\'" . conf-mode))
+ 
+ ;; not autosave and no lock files. But do backup to specific dir
+ (setq make-backup-files t
+@@ -343,18 +341,15 @@ Return the scratch buffer opened."
+   :config
+   (add-hook 'csharp-mode-hook #'omnisharp)
+   (require 'company)
+-  (add-to-list 'company-backends #'company-omnisharp)
++  ;; (add-to-list 'company-backends #'company-omnisharp)
+   (add-hook 'csharp-mode-hook #'flycheck-mode)
+   (add-hook 'csharp-mode-hook #'eldoc-mode)
+ 
+   (require 'csharp-mode)
+   (define-key csharp-mode-map (kbd "M-.") #'omnisharp-go-to-definition)
++  (define-key csharp-mode-map (kbd "C-o") #'omnisharp-auto-complete)
+   :after (company))
+ 
+-(use-package blimp :ensure t
+-  :config
+-  (add-hook 'image-minor-mode-hook 'blimp-mode))
+-
+ ;; in buffer completion framework
+ (use-package company
+   :ensure t
+@@ -370,6 +365,7 @@ Return the scratch buffer opened."
+   (diminish 'company-mode)
+   :after (diminish))
+ 
++(setq company-dabbrev-downcase nil) ;otherwise completion is downcase for plaintext
+ (setq company-minimum-prefix-length 3)
+ (setq company-tooltip-limit 15)
+ ;; if idle delay is non-nil, tramp will hang a lot.
+@@ -437,9 +433,9 @@ Return the scratch buffer opened."
+   ;; :ensure t
+   ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
+ 
+-(use-package dired-quick-sort
+-  :ensure t
+-  :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
++;; (use-package dired-quick-sort
++  ;; :ensure t
++  ;; :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
+ 
+ (setq dired-dwim-target t)
+ 
 diff --git a/config.org b/config.org
-index 1ee44f9..9beafaa 100644
+index fd7bcd8..b354238 100644
 --- a/config.org
 +++ b/config.org
-@@ -178,24 +178,21 @@ Update this if you change the default font face.
+@@ -181,24 +181,21 @@ Update this if you change the default font face.
    (defalias 'yes-or-no-p 'y-or-n-p)
  
    ;; leave off unless and locally set to t dependent on language.
@@ -34,7 +118,15 @@ index 1ee44f9..9beafaa 100644
  #+END_SRC
  ** file mode associations
  #+BEGIN_SRC emacs-lisp
-@@ -458,12 +455,13 @@ Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hoo
+@@ -207,6 +204,7 @@ Update this if you change the default font face.
+   (add-to-list 'auto-mode-alist '("\\.bashrc\\'" . shell-script-mode))
+   (add-to-list 'auto-mode-alist '("\\.zshrc\\'" . shell-script-mode))
+   (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
++  (add-to-list 'auto-mode-alist '("\\.ps1\\'" . conf-mode))
+ #+END_SRC
+ ** file backup
+ We are using [[undo-tree][undo-tree]] for persistent undo to ./undo-tree-hist/.
+@@ -461,12 +459,13 @@ Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hoo
      :config
      (add-hook 'csharp-mode-hook #'omnisharp)
      (require 'company)
@@ -49,7 +141,7 @@ index 1ee44f9..9beafaa 100644
      :after (company))
  #+END_SRC
  *** python                                                         :disabled:
-@@ -498,8 +496,8 @@ This depends on:
+@@ -501,8 +500,8 @@ This depends on:
      (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
      (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
  #+END_SRC
@@ -60,7 +152,7 @@ index 1ee44f9..9beafaa 100644
    (use-package blimp :ensure t
      :config
      (add-hook 'image-minor-mode-hook 'blimp-mode))
-@@ -598,9 +596,9 @@ Various completion functions using ivy
+@@ -601,9 +600,9 @@ Various completion functions using ivy
      ;; :ensure t
      ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
  
@@ -73,15 +165,6 @@ index 1ee44f9..9beafaa 100644
  
    (setq dired-dwim-target t)
  
-@@ -817,6 +815,8 @@ sub-commands
-     ;; escape from insert state with M-i
-     (define-key evil-insert-state-map
-       (kbd "M-i") #'evil-normal-state)
-+    (define-key evil-insert-state-map
-+      (kbd "C-o") nil)
-     ;; VISUAL STATE
-     (define-key evil-visual-state-map
-       (kbd "M-i") #'evil-normal-state)
 diff --git a/init.el b/init.el
 index aeda005..3c17f42 100644
 --- a/init.el

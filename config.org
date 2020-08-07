@@ -164,6 +164,9 @@ Update this if you change the default font face.
   ;; highlight matching paren when point is on top of one. Applies to braces, brackets, etc.
   (show-paren-mode 1)
 
+  ;; wrap lines somewhat intelligently. Would still like some sort of indentation of wrapped line
+  (setq-default word-wrap t)
+
   ;; x clipboard support
   (setq select-enable-clipboard t)
   (setq x-select-enable-clipboard-manager t)

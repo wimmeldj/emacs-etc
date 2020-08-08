@@ -1,0 +1,36 @@
+This is a hack to get embedded custom css in org export. As of today, <2020-08-08 Sat>, you link a
+custom css file to an org file like so:
+
+~#+HTML_HEAD: <link rel='stylesheet' type='text/css' href='%s' />\n%s\n~
+
+But when you export to HTML, it just includes a reference to the css file and doesn't embed it,
+making it necessary to distribute TWO files.
+
+By including this file with the in-buffer setting ~#+SETUPFILE: FILE~, we can get embedded custom
+css. The SETUPFILE directive will ignore anything that isn't a setting.
+
+Put your css in this block. When finished, execute [[embedded]].
+#+NAME: style
+#+BEGIN_SRC css
+  table {
+      break-inside: avoid;   /* don't break inside a table */
+      /* center them */
+      margin-left: auto;
+      margin-right: auto;
+  }
+#+END_SRC
+
+#+NAME: embedded
+#+BEGIN_SRC emacs-lisp :noweb yes :results value drawer
+  (let* ((style "
+  <<style>>
+  ")
+	 (formatted (replace-regexp-in-string "\n" "" style))
+	 (htmlized (concat "<style type='text/css'>" formatted "</style>")))
+    (concat "#+HTML_HEAD: " htmlized))
+#+END_SRC
+
+#+RESULTS: embedded
+:RESULTS:
+#+HTML_HEAD: <style type='text/css'>table {    break-inside: avoid;   /* don't break inside a table */    /* center them */    margin-left: auto;    margin-right: auto;}</style>
+:END:

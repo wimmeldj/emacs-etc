@@ -15,6 +15,8 @@
 
 (global-set-key (kbd "M-<f12>") #'d/flip-theme)
 
+(global-set-key (kbd "C-x C-r") #'revert-buffer)
+
 ;; (global-set-key (kbd "M-s") #'avy-goto-char)
 
 (define-key semicolon-map
@@ -719,6 +721,7 @@ Return the scratch buffer opened."
 	          paragraph-separate "[ 	]*$")
 	    
 	    (setq fill-column 100)
+	    (setq d/org-default-setup-file "~/.emacs.d/org-default-setup.org")
 	    (auto-fill-mode 1) ;automatically break line at `current-fill-column'
 	    (defun org-insert-today ()
 	    	      "Inserts todays date in the following form <1969-12-31 Wed>"
@@ -733,11 +736,11 @@ Return the scratch buffer opened."
 	      "#+EMAIL: nil\n"
 	      (format "#+DATE: %s\n" (format-time-string "<%Y-%m-%d %a>" (current-time)))
 	      "#+LANGUAGE: en"\n
-	      (if (y-or-n-p "Custom stylesheet?")
-	          (format "#+HTML_HEAD: <link rel='stylesheet' type='text/css' href='%s'\n%s\n"
-	    	      (file-relative-name (read-file-name "path: " ) default-directory)
-	    	      "#+OPTIONS: html-style:nil")
-	        "#+OPTIONS: html-style:t\n")
+	      (format "#+SETUPFILE: %s\n"
+	    	  (if (y-or-n-p "Custom setup file?")
+	    	      (file-relative-name (read-file-name "path: ") default-directory)
+	    	    d/org-default-setup-file))
+	      "#+OPTIONS: html-style:t"\n
 	      "#+OPTIONS: toc:t"\n
 	      "#+OPTIONS: tex:t"\n
 	      "#+OPTIONS: html-postamble:nil"\n

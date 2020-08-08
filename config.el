@@ -370,6 +370,7 @@ Return the scratch buffer opened."
   (diminish 'company-mode)
   :after (diminish))
 
+(setq company-dabbrev-downcase nil) ;otherwise completion is downcase for plaintext
 (setq company-minimum-prefix-length 3)
 (setq company-tooltip-limit 15)
 ;; if idle delay is non-nil, tramp will hang a lot.

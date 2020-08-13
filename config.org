@@ -784,7 +784,7 @@ sub-commands
   (define-key semicolon-map
     (kbd "C-f") #'fzf)
 
-  (setq fzf/executable "fzf.exe")
+  (setq fzf/executable "fzf")
   (setq fzf/args "-x --print-query")
 #+END_SRC
 ** shell

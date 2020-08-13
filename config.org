@@ -210,6 +210,9 @@ Update this if you change the default font face.
   (add-to-list 'auto-mode-alist '("\\.bashrc\\'" . shell-script-mode))
   (add-to-list 'auto-mode-alist '("\\.zshrc\\'" . shell-script-mode))
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
+  (add-to-list 'auto-mode-alist '("\\.ps1\\'" . conf-mode))
+
+  (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
 #+END_SRC
 ** file backup
 We are using [[undo-tree][undo-tree]] for persistent undo to ./undo-tree-hist/.

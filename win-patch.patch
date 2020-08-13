@@ -1,8 +1,8 @@
 diff --git a/config.el b/config.el
-index 4ccbc0c..40fefe0 100644
+index aea30c6..d5e1d99 100644
 --- a/config.el
 +++ b/config.el
-@@ -128,30 +128,28 @@ Return the scratch buffer opened."
+@@ -130,30 +130,30 @@ Return the scratch buffer opened."
  (defalias 'yes-or-no-p 'y-or-n-p)
  
  ;; leave off unless and locally set to t dependent on language.
@@ -37,10 +37,12 @@ index 4ccbc0c..40fefe0 100644
  (add-to-list 'auto-mode-alist '("\\.zshrc\\'" . shell-script-mode))
  (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
 +(add-to-list 'auto-mode-alist '("\\.ps1\\'" . conf-mode))
++
++(add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
  
  ;; not autosave and no lock files. But do backup to specific dir
  (setq make-backup-files t
-@@ -343,18 +341,15 @@ Return the scratch buffer opened."
+@@ -345,18 +345,15 @@ Return the scratch buffer opened."
    :config
    (add-hook 'csharp-mode-hook #'omnisharp)
    (require 'company)
@@ -61,15 +63,7 @@ index 4ccbc0c..40fefe0 100644
  ;; in buffer completion framework
  (use-package company
    :ensure t
-@@ -370,6 +365,7 @@ Return the scratch buffer opened."
-   (diminish 'company-mode)
-   :after (diminish))
- 
-+(setq company-dabbrev-downcase nil) ;otherwise completion is downcase for plaintext
- (setq company-minimum-prefix-length 3)
- (setq company-tooltip-limit 15)
- ;; if idle delay is non-nil, tramp will hang a lot.
-@@ -437,9 +433,9 @@ Return the scratch buffer opened."
+@@ -440,9 +437,9 @@ Return the scratch buffer opened."
    ;; :ensure t
    ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
  
@@ -82,11 +76,19 @@ index 4ccbc0c..40fefe0 100644
  
  (setq dired-dwim-target t)
  
+@@ -595,6 +592,7 @@ Return the scratch buffer opened."
+ 
+ (setq fzf/executable "fzf.exe")
+ (setq fzf/args "-x --print-query")
++(setq fzf/wsl t)                        ;set wsl flag
+ 
+ (add-hook 'shell-mode-hook
+           #'(lambda ()
 diff --git a/config.org b/config.org
-index fd7bcd8..b354238 100644
+index 290e3f1..bd97e6c 100644
 --- a/config.org
 +++ b/config.org
-@@ -181,24 +181,21 @@ Update this if you change the default font face.
+@@ -184,24 +184,21 @@ Update this if you change the default font face.
    (defalias 'yes-or-no-p 'y-or-n-p)
  
    ;; leave off unless and locally set to t dependent on language.
@@ -118,15 +120,7 @@ index fd7bcd8..b354238 100644
  #+END_SRC
  ** file mode associations
  #+BEGIN_SRC emacs-lisp
-@@ -207,6 +204,7 @@ Update this if you change the default font face.
-   (add-to-list 'auto-mode-alist '("\\.bashrc\\'" . shell-script-mode))
-   (add-to-list 'auto-mode-alist '("\\.zshrc\\'" . shell-script-mode))
-   (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
-+  (add-to-list 'auto-mode-alist '("\\.ps1\\'" . conf-mode))
- #+END_SRC
- ** file backup
- We are using [[undo-tree][undo-tree]] for persistent undo to ./undo-tree-hist/.
-@@ -461,12 +459,13 @@ Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hoo
+@@ -467,12 +464,13 @@ Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hoo
      :config
      (add-hook 'csharp-mode-hook #'omnisharp)
      (require 'company)
@@ -141,7 +135,7 @@ index fd7bcd8..b354238 100644
      :after (company))
  #+END_SRC
  *** python                                                         :disabled:
-@@ -501,8 +500,8 @@ This depends on:
+@@ -507,8 +505,8 @@ This depends on:
      (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
      (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
  #+END_SRC
@@ -152,7 +146,7 @@ index fd7bcd8..b354238 100644
    (use-package blimp :ensure t
      :config
      (add-hook 'image-minor-mode-hook 'blimp-mode))
-@@ -601,9 +600,9 @@ Various completion functions using ivy
+@@ -608,9 +606,9 @@ Various completion functions using ivy
      ;; :ensure t
      ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
  
@@ -165,11 +159,19 @@ index fd7bcd8..b354238 100644
  
    (setq dired-dwim-target t)
  
+@@ -786,6 +784,7 @@ sub-commands
+ 
+   (setq fzf/executable "fzf.exe")
+   (setq fzf/args "-x --print-query")
++  (setq fzf/wsl t)                        ;set wsl flag
+ #+END_SRC
+ ** shell
+ #+BEGIN_SRC emacs-lisp
 diff --git a/init.el b/init.el
-index aeda005..3c17f42 100644
+index 70bd931..42271f8 100644
 --- a/init.el
 +++ b/init.el
-@@ -44,27 +44,56 @@
+@@ -45,27 +45,56 @@
    (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
  ;; (load "~/.emacs.d/config")          ;byte compiling seems to have no effect on startup time
  
@@ -187,10 +189,10 @@ index aeda005..3c17f42 100644
  
 +;;;; ===========================================================================
 +;;;;                                 windows patch
-+(setq-default buffer-file-coding-system 'utf-8-dos)
-+(setq-default default-buffer-file-coding-system 'utf-8-dos)
-+(set-default-coding-systems 'utf-8-dos)
-+(prefer-coding-system 'utf-8-dos)
++;; (setq-default buffer-file-coding-system 'utf-8-dos)
++;; (setq-default default-buffer-file-coding-system 'utf-8-dos)
++;; (set-default-coding-systems 'utf-8-dos)
++;; (prefer-coding-system 'utf-8-dos)
  
 +(defun counsel-locate-action-extern (x)
 +  "Pass X to `xdg-open' or equivalent command via the shell."
@@ -233,12 +235,14 @@ index aeda005..3c17f42 100644
  
  
  
-@@ -104,7 +133,7 @@
+@@ -105,8 +134,9 @@
   '(ibuffer-title-face (quote dired-header))
   '(package-selected-packages
     (quote
 -    (omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window)))
 +    (htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window)))
   '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#1d2021")))
++ '(require-final-newline nil)
   '(vc-annotate-background "#ffffff")
   '(vc-annotate-background-mode nil)
+  '(vc-annotate-color-map

@@ -154,6 +154,9 @@ Return the scratch buffer opened."
 (add-to-list 'auto-mode-alist '("\\.bashrc\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\.zshrc\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.ps1\\'" . conf-mode))
+
+(add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
 
 ;; not autosave and no lock files. But do backup to specific dir
 (setq make-backup-files t
@@ -424,6 +427,7 @@ Return the scratch buffer opened."
 
   (define-key semicolon-map
     (kbd "C-s") #'counsel-ag)
+  ;; using `fzf' instead
   ;; (define-key semicolon-map
     ;; (kbd "C-f") #'counsel-fzf)
   :after (ivy swiper))

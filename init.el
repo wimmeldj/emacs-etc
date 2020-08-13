@@ -37,6 +37,7 @@
 (add-to-list 'load-path "~/.emacs.d/small-mods/")
 (add-to-list 'load-path "~/.emacs.d/eshell-ring/")
 (add-to-list 'load-path "~/.emacs.d/evil-numbers/")
+(add-to-list 'load-path "~/.emacs.d/fzf/")
 
 
 ;;; load org config file if it exists.

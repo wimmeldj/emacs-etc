@@ -424,8 +424,8 @@ Return the scratch buffer opened."
 
   (define-key semicolon-map
     (kbd "C-s") #'counsel-ag)
-  (define-key semicolon-map
-    (kbd "C-f") #'counsel-fzf)
+  ;; (define-key semicolon-map
+    ;; (kbd "C-f") #'counsel-fzf)
   :after (ivy swiper))
 
 (setq dired-listing-switches "-al --human-readable")
@@ -577,6 +577,24 @@ Return the scratch buffer opened."
   (pcomplete-here pcomplete-man-user-commands))
 
 (shell-command-to-string "man man")
+
+;; forked implementation of fzf
+(require 'fzf)
+
+;; no evil mode in fzf
+(advice-add 'fzf :after 'turn-off-evil-mode)
+(advice-add 'fzf-git :after 'turn-off-evil-mode)
+(advice-add 'fzf-git-grep :after 'turn-off-evil-mode)
+(advice-add 'fzf-git-files :after 'turn-off-evil-mode)
+(advice-add 'fzf-hg :after 'turn-off-evil-mode)
+(advice-add 'fzf-directory :after 'turn-off-evil-mode)
+(advice-add 'fzf-projectile :after 'turn-off-evil-mode)
+
+(define-key semicolon-map
+  (kbd "C-f") #'fzf)
+
+(setq fzf/executable "fzf.exe")
+(setq fzf/args "-x --print-query")
 
 (add-hook 'shell-mode-hook
           #'(lambda ()

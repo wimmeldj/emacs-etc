@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: microsoft copyright
+# key: mscopy
+# --
+//==============================================================================
+// Copyright (c) Microsoft Corporation. All Rights Reserved.
+//==============================================================================
+
+$0

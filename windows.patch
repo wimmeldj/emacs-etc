@@ -1,8 +1,8 @@
 diff --git a/config.el b/config.el
-index aea30c6..d5e1d99 100644
+index a1b921e..ec071d0 100644
 --- a/config.el
 +++ b/config.el
-@@ -130,30 +130,30 @@ Return the scratch buffer opened."
+@@ -130,25 +130,22 @@ Return the scratch buffer opened."
  (defalias 'yes-or-no-p 'y-or-n-p)
  
  ;; leave off unless and locally set to t dependent on language.
@@ -34,15 +34,7 @@ index aea30c6..d5e1d99 100644
  (add-to-list 'auto-mode-alist '("\\.service\\'" . conf-mode))
  (add-to-list 'auto-mode-alist '("\\.rules\\'" . conf-mode))
  (add-to-list 'auto-mode-alist '("\\.bashrc\\'" . shell-script-mode))
- (add-to-list 'auto-mode-alist '("\\.zshrc\\'" . shell-script-mode))
- (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
-+(add-to-list 'auto-mode-alist '("\\.ps1\\'" . conf-mode))
-+
-+(add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
- 
- ;; not autosave and no lock files. But do backup to specific dir
- (setq make-backup-files t
-@@ -345,18 +345,15 @@ Return the scratch buffer opened."
+@@ -348,18 +345,15 @@ Return the scratch buffer opened."
    :config
    (add-hook 'csharp-mode-hook #'omnisharp)
    (require 'company)
@@ -63,7 +55,7 @@ index aea30c6..d5e1d99 100644
  ;; in buffer completion framework
  (use-package company
    :ensure t
-@@ -440,9 +437,9 @@ Return the scratch buffer opened."
+@@ -444,9 +438,9 @@ Return the scratch buffer opened."
    ;; :ensure t
    ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
  
@@ -76,16 +68,17 @@ index aea30c6..d5e1d99 100644
  
  (setq dired-dwim-target t)
  
-@@ -595,6 +592,7 @@ Return the scratch buffer opened."
+@@ -597,7 +591,7 @@ Return the scratch buffer opened."
+ (define-key semicolon-map
+   (kbd "C-f") #'fzf)
  
- (setq fzf/executable "fzf.exe")
+-(setq fzf/executable "fzf")
++(setq fzf/executable "fzf.exe")
  (setq fzf/args "-x --print-query")
-+(setq fzf/wsl t)                        ;set wsl flag
- 
- (add-hook 'shell-mode-hook
-           #'(lambda ()
+ (setq fzf/args "-x --print-query --print0 --prompt='@ ' --query='!^bin !^obj '")
+ (setq fzf/wsl t)                        ;set wsl flag
 diff --git a/config.org b/config.org
-index 290e3f1..bd97e6c 100644
+index a255b6f..b5d021c 100644
 --- a/config.org
 +++ b/config.org
 @@ -184,24 +184,21 @@ Update this if you change the default font face.
@@ -159,14 +152,15 @@ index 290e3f1..bd97e6c 100644
  
    (setq dired-dwim-target t)
  
-@@ -786,6 +784,7 @@ sub-commands
+@@ -784,7 +782,7 @@ sub-commands
+   (define-key semicolon-map
+     (kbd "C-f") #'fzf)
  
-   (setq fzf/executable "fzf.exe")
+-  (setq fzf/executable "fzf")
++  (setq fzf/executable "fzf.exe")
    (setq fzf/args "-x --print-query")
-+  (setq fzf/wsl t)                        ;set wsl flag
- #+END_SRC
- ** shell
- #+BEGIN_SRC emacs-lisp
+   (setq fzf/args "-x --print-query --print0 --prompt='@ ' --query='!^bin !^obj '")
+   (setq fzf/wsl t)                        ;set wsl flag
 diff --git a/init.el b/init.el
 index 70bd931..42271f8 100644
 --- a/init.el

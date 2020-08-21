@@ -1,5 +1,5 @@
 diff --git a/config.el b/config.el
-index a1b921e..ec071d0 100644
+index dca24d7..196ffa0 100644
 --- a/config.el
 +++ b/config.el
 @@ -130,25 +130,22 @@ Return the scratch buffer opened."
@@ -74,11 +74,11 @@ index a1b921e..ec071d0 100644
  
 -(setq fzf/executable "fzf")
 +(setq fzf/executable "fzf.exe")
- (setq fzf/args "-x --print-query")
- (setq fzf/args "-x --print-query --print0 --prompt='@ ' --query='!^bin !^obj '")
- (setq fzf/wsl t)                        ;set wsl flag
+ (setq fzf/wsl t)                                          ;set wsl flag
+ (setq fzf/args "-x --prompt='@ ' --query='!^bin !^obj '")
+ 
 diff --git a/config.org b/config.org
-index a255b6f..b5d021c 100644
+index 960a73a..36ca68a 100644
 --- a/config.org
 +++ b/config.org
 @@ -184,24 +184,21 @@ Update this if you change the default font face.
@@ -158,9 +158,9 @@ index a255b6f..b5d021c 100644
  
 -  (setq fzf/executable "fzf")
 +  (setq fzf/executable "fzf.exe")
-   (setq fzf/args "-x --print-query")
-   (setq fzf/args "-x --print-query --print0 --prompt='@ ' --query='!^bin !^obj '")
-   (setq fzf/wsl t)                        ;set wsl flag
+   (setq fzf/wsl t)                                          ;set wsl flag
+   (setq fzf/args "-x --prompt='@ ' --query='!^bin !^obj '")
+ #+END_SRC
 diff --git a/init.el b/init.el
 index 70bd931..42271f8 100644
 --- a/init.el

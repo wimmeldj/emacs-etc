@@ -70,7 +70,7 @@
 
 (defvar fzf/wsl nil)
 
-(defvar fzf/success-msg "Process fzf finished")
+(defvar fzf/success-msg "finished")
 
 (defgroup fzf nil
   "Configuration options for fzf.el"
@@ -130,33 +130,39 @@
       (goto-char (point-min))
       (forward-line (- (string-to-number linenumber) 1))
       (back-to-indentation)))
-  (advice-remove 'term-handle-exit #'fzf/after-term-handle-exit))
+    (advice-remove 'term-handle-exit #'fzf/after-term-handle-exit))
 
-;; original implementation relied on fzf printing the selected file after
-;; exit. When run in `term', fzf.exe does that. But for some reason, the
-;; selected file is /not/ included in the *fzf* buffer which is running a `term'
-;; process. I couldn't figure out why, so instead we'll just find the match from
-;; the *fzf* buffer by selecting the first line starting with ">" (the default
-;; fzf cursor) So, this doesn't work if for some reason you modified the
-;; cursor. This one doesn't have the linenumber functionality, becuase I don't
-;; understand how it's working and don't use it.
-(defun fzf/after-term-handle-exit-wsl (process-name msg)
+;; (defun fzf/after-term-handle-exit (process-name msg)
+;;   (let* ((text (buffer-substring-no-properties (point-min) (point-max)))
+;;          (lines (split-string text "\n" t "\s*>\s+"))
+;;          (line (car (last (butlast lines 1))))
+;;          (selected (split-string line ":"))
+;;          (file (expand-file-name (pop selected)))
+;;          (linenumber (pop selected)))
+;;     (kill-buffer "*fzf*")
+;;     (jump-to-register :fzf-windows)
+;;     (when (file-exists-p file)
+;;       (find-file file))
+;;     (when linenumber
+;;       (goto-char (point-min))
+;;       (forward-line (- (string-to-number linenumber) 1))
+;;       (back-to-indentation)))
+;;   (advice-remove 'term-handle-exit #'fzf/after-term-handle-exit))
+
+
+;; the way fzf works on wsl changed for some reason. New way we're doing it:
+(defun fzf/after-term-handle-exit-wsl (process-name msg) ;msg gives status of execution (diff between C-g and <RET>) success = "finished"
   (require 'seq)
   (let* ((text (buffer-substring-no-properties (point-min) (point-max)))
          (lines (split-string text "\n" t " *"))
-         (starts-with-> (seq-filter (lambda (x) (and (> (length x) 1)
-                                                (equal ?> (elt x 0))))
-                                    lines))
-         (selected (string-trim (substring (car starts-with->) 1 nil)))
-         (file (expand-file-name (replace-regexp-in-string "\\\\" "/" selected)))
-         (success-p (catch 'found
-                      (dotimes (i (length lines))
-                        (when (equal (elt lines i) fzf/success-msg)
-                          (throw 'found t))))))
+         (success-p (string= (string-trim "finished") fzf/success-msg))
+         (selected (when success-p (car lines)))
+         (path (when success-p (replace-regexp-in-string "\\\\" "/" ;replace \\ with /
+                                                         (expand-file-name selected)))))
     (kill-buffer "*fzf*")
     (jump-to-register :fzf-windows)
-    (when (and success-p (file-exists-p file))
-      (find-file file)))
+    (when (and success-p (file-exists-p path))
+      (find-file path)))
   (advice-remove 'term-handle-exit #'fzf/after-term-handle-exit-wsl))
 
 (defun fzf/start (directory &optional cmd-stream)

@@ -598,9 +598,8 @@ Return the scratch buffer opened."
   (kbd "C-f") #'fzf)
 
 (setq fzf/executable "fzf")
-(setq fzf/args "-x --print-query")
-(setq fzf/args "-x --print-query --print0 --prompt='@ ' --query='!^bin !^obj '")
-(setq fzf/wsl t)                        ;set wsl flag
+(setq fzf/wsl t)                                          ;set wsl flag
+(setq fzf/args "-x --prompt='@ ' --query='!^bin !^obj '")
 
 (add-hook 'shell-mode-hook
           #'(lambda ()

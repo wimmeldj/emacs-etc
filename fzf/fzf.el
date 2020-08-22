@@ -69,7 +69,6 @@
 (require 'subr-x)
 
 (defvar fzf/wsl nil)
-
 (defvar fzf/success-msg "finished")
 
 (defgroup fzf nil
@@ -106,6 +105,13 @@
   :type 'string
   :group 'fzf)
 
+;; fzf in wsl should not include "--print-query" in `fzf/args', but on linux /should/
+(let ((prints-query (string-match-p "--print-query" fzf/args)))
+  (if fzf/wsl
+      (assert (not prints-query) nil
+	      "When running in WSL, `fzf/args' must NOT include '--print-query'.")
+    (assert prints-query nil "When not running in WSL, `fzf/args' must include '--print-query'.")))
+
 (defun fzf/grep-cmd (cmd args)
   (format (concat cmd " " args)
           (shell-quote-argument
@@ -131,24 +137,6 @@
       (forward-line (- (string-to-number linenumber) 1))
       (back-to-indentation)))
     (advice-remove 'term-handle-exit #'fzf/after-term-handle-exit))
-
-;; (defun fzf/after-term-handle-exit (process-name msg)
-;;   (let* ((text (buffer-substring-no-properties (point-min) (point-max)))
-;;          (lines (split-string text "\n" t "\s*>\s+"))
-;;          (line (car (last (butlast lines 1))))
-;;          (selected (split-string line ":"))
-;;          (file (expand-file-name (pop selected)))
-;;          (linenumber (pop selected)))
-;;     (kill-buffer "*fzf*")
-;;     (jump-to-register :fzf-windows)
-;;     (when (file-exists-p file)
-;;       (find-file file))
-;;     (when linenumber
-;;       (goto-char (point-min))
-;;       (forward-line (- (string-to-number linenumber) 1))
-;;       (back-to-indentation)))
-;;   (advice-remove 'term-handle-exit #'fzf/after-term-handle-exit))
-
 
 ;; the way fzf works on wsl changed for some reason. New way we're doing it:
 (defun fzf/after-term-handle-exit-wsl (process-name msg) ;msg gives status of execution (diff between C-g and <RET>) success = "finished"

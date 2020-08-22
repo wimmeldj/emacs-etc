@@ -582,6 +582,11 @@ Return the scratch buffer opened."
 
 (shell-command-to-string "man man")
 
+;; set before requiring so as to trigger warning message when these settings don't make sense
+(setq fzf/executable "fzf")
+(setq fzf/wsl nil)			;set wsl flag
+(setq fzf/args "-x --prompt='? ' --print-query --query='!^bin !^obj '")
+
 ;; forked implementation of fzf
 (require 'fzf)
 
@@ -596,10 +601,6 @@ Return the scratch buffer opened."
 
 (define-key semicolon-map
   (kbd "C-f") #'fzf)
-
-(setq fzf/executable "fzf")
-(setq fzf/wsl t)                                          ;set wsl flag
-(setq fzf/args "-x --prompt='@ ' --query='!^bin !^obj '")
 
 (add-hook 'shell-mode-hook
           #'(lambda ()

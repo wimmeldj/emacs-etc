@@ -769,6 +769,11 @@ sub-commands
 #+END_SRC
 ** fzf
 #+BEGIN_SRC emacs-lisp
+  ;; set before requiring so as to trigger warning message when these settings don't make sense
+  (setq fzf/executable "fzf")
+  (setq fzf/wsl nil)			;set wsl flag
+  (setq fzf/args "-x --prompt='? ' --print-query --query='!^bin !^obj '")
+
   ;; forked implementation of fzf
   (require 'fzf)
 
@@ -784,9 +789,6 @@ sub-commands
   (define-key semicolon-map
     (kbd "C-f") #'fzf)
 
-  (setq fzf/executable "fzf")
-  (setq fzf/wsl t)                                          ;set wsl flag
-  (setq fzf/args "-x --prompt='@ ' --query='!^bin !^obj '")
 #+END_SRC
 ** shell
 #+BEGIN_SRC emacs-lisp

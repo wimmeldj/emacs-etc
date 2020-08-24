@@ -1,5 +1,5 @@
 diff --git a/config.el b/config.el
-index dca24d7..196ffa0 100644
+index 80fcdd3..41e286c 100644
 --- a/config.el
 +++ b/config.el
 @@ -130,25 +130,22 @@ Return the scratch buffer opened."
@@ -68,17 +68,21 @@ index dca24d7..196ffa0 100644
  
  (setq dired-dwim-target t)
  
-@@ -597,7 +591,7 @@ Return the scratch buffer opened."
- (define-key semicolon-map
-   (kbd "C-f") #'fzf)
+@@ -583,9 +577,9 @@ Return the scratch buffer opened."
+ (shell-command-to-string "man man")
  
+ ;; set before requiring so as to trigger warning message when these settings don't make sense
 -(setq fzf/executable "fzf")
+-(setq fzf/wsl nil)			;set wsl flag
+-(setq fzf/args "-x --prompt='? ' --print-query --query='!^bin !^obj '")
 +(setq fzf/executable "fzf.exe")
- (setq fzf/wsl t)                                          ;set wsl flag
- (setq fzf/args "-x --prompt='@ ' --query='!^bin !^obj '")
++(setq fzf/wsl t)			;set wsl flag
++(setq fzf/args "-x --prompt='? ' --query='!^bin !^obj '")
  
+ ;; forked implementation of fzf
+ (require 'fzf)
 diff --git a/config.org b/config.org
-index 960a73a..36ca68a 100644
+index 9fd3133..c0ae8fb 100644
 --- a/config.org
 +++ b/config.org
 @@ -184,24 +184,21 @@ Update this if you change the default font face.
@@ -152,20 +156,56 @@ index 960a73a..36ca68a 100644
  
    (setq dired-dwim-target t)
  
-@@ -784,7 +782,7 @@ sub-commands
-   (define-key semicolon-map
-     (kbd "C-f") #'fzf)
- 
--  (setq fzf/executable "fzf")
-+  (setq fzf/executable "fzf.exe")
-   (setq fzf/wsl t)                                          ;set wsl flag
-   (setq fzf/args "-x --prompt='@ ' --query='!^bin !^obj '")
+@@ -769,26 +767,25 @@ sub-commands
  #+END_SRC
+ ** fzf
+ #+BEGIN_SRC emacs-lisp
+-  ;; set before requiring so as to trigger warning message when these settings don't make sense
+-  (setq fzf/executable "fzf")
+-  (setq fzf/wsl nil)			;set wsl flag
+-  (setq fzf/args "-x --prompt='? ' --print-query --query='!^bin !^obj '")
+-
+-  ;; forked implementation of fzf
+-  (require 'fzf)
+-
+-  ;; no evil mode in fzf
+-  (advice-add 'fzf :after 'turn-off-evil-mode)
+-  (advice-add 'fzf-git :after 'turn-off-evil-mode)
+-  (advice-add 'fzf-git-grep :after 'turn-off-evil-mode)
+-  (advice-add 'fzf-git-files :after 'turn-off-evil-mode)
+-  (advice-add 'fzf-hg :after 'turn-off-evil-mode)
+-  (advice-add 'fzf-directory :after 'turn-off-evil-mode)
+-  (advice-add 'fzf-projectile :after 'turn-off-evil-mode)
+-
+-  (define-key semicolon-map
+-    (kbd "C-f") #'fzf)
++    ;; set before requiring so as to trigger warning message when these settings don't make sense
++    (setq fzf/executable "fzf.exe")
++    (setq fzf/wsl t)			;set wsl flag
++    (setq fzf/args "-x --prompt='? ' --query='!^bin !^obj '")
++
++    ;; forked implementation of fzf
++    (require 'fzf)
++
++    ;; no evil mode in fzf
++    (advice-add 'fzf :after 'turn-off-evil-mode)
++    (advice-add 'fzf-git :after 'turn-off-evil-mode)
++    (advice-add 'fzf-git-grep :after 'turn-off-evil-mode)
++    (advice-add 'fzf-git-files :after 'turn-off-evil-mode)
++    (advice-add 'fzf-hg :after 'turn-off-evil-mode)
++    (advice-add 'fzf-directory :after 'turn-off-evil-mode)
++    (advice-add 'fzf-projectile :after 'turn-off-evil-mode)
+ 
++    (define-key semicolon-map
++      (kbd "C-f") #'fzf)
+ #+END_SRC
+ ** shell
+ #+BEGIN_SRC emacs-lisp
 diff --git a/init.el b/init.el
-index 70bd931..42271f8 100644
+index 70bd931..78a0f11 100644
 --- a/init.el
 +++ b/init.el
-@@ -45,27 +45,56 @@
+@@ -45,27 +45,62 @@
    (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
  ;; (load "~/.emacs.d/config")          ;byte compiling seems to have no effect on startup time
  
@@ -183,6 +223,12 @@ index 70bd931..42271f8 100644
  
 +;;;; ===========================================================================
 +;;;;                                 windows patch
+ 
++;; Add these:
++;; export DISPLAY=localhost:0.0
++;; alias emacsd="emacs-gtk --daemon"
++;; alias ecl="emacsclient -c -n -d=${DISPLAY}"
+ 
 +;; (setq-default buffer-file-coding-system 'utf-8-dos)
 +;; (setq-default default-buffer-file-coding-system 'utf-8-dos)
 +;; (set-default-coding-systems 'utf-8-dos)
@@ -223,13 +269,11 @@ index 70bd931..42271f8 100644
 -
 -
 -
--
--
 +(define-key dired-mode-map (kbd "C-i") #'dired-open-in-vs)
  
  
  
-@@ -105,8 +134,9 @@
+@@ -105,8 +140,9 @@
   '(ibuffer-title-face (quote dired-header))
   '(package-selected-packages
     (quote

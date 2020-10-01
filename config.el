@@ -1,3 +1,6 @@
+;; (require 'keymap)
+;; (d/keymap-global-mode 1)
+
 ;; two alternative keymaps, C-; and C-/
 (define-prefix-command 'semicolon-map)
 (define-prefix-command 'fs-map)
@@ -81,10 +84,10 @@ Return the scratch buffer opened."
   :ensure t)
 
 ;; these both have essential nice functions for elisp
-(use-package s :ensure t)		;string manip
-(use-package f :ensure t)		;file manip
+(use-package s :ensure t)             ;string manip
+(use-package f :ensure t)             ;file manip
 
-(require 'f)				;used several times in init
+(require 'f)                          ;used several times in init
 
 (require 'server)
 (unless (server-running-p)
@@ -95,7 +98,7 @@ Return the scratch buffer opened."
 
 ;; declutter view
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+(menu-bar-mode 1)
 (scroll-bar-mode -1)
 ;; (display-battery-mode 1)
 ;; (display-time-mode 1)
@@ -130,7 +133,7 @@ Return the scratch buffer opened."
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; leave off unless and locally set to t dependent on language.
-;; (setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 
 ;; make 80 the horizontal char limit
 (setq-default fill-column 80)
@@ -139,9 +142,9 @@ Return the scratch buffer opened."
 ;; works for emacsclient as well
 (when (display-graphic-p)
   (setq default-frame-alist
-	'((width . 130)
-	  (height . 150)
-	  (top . 200))))
+        '((width . 130)
+          (height . 150)
+          (top . 200))))
 
 ;; make firefox-developer-edition default browser
 (setq browse-url-generic-program "chromium"
@@ -194,13 +197,13 @@ Return the scratch buffer opened."
 (use-package golden-ratio
   :ensure t)
 
-;; (use-package markdown-mode
-;;   :ensure t
-;;   :mode (("README\\.md\\'" . gfm-mode)
-;;          ("\\.md\\'" . markdown-mode)
-;;          ("\\.markdown\\'" . markdown-mode))
-;;   :init
-;;   (setq markdown-command "pandoc -s --quiet"))
+(use-package markdown-mode
+  :ensure t
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init
+  (setq markdown-command "pandoc -s --quiet"))
 
 (use-package diminish
   :ensure t)
@@ -238,25 +241,25 @@ Return the scratch buffer opened."
 
 (require 'better-theme-switching)
 (d/make-theme light-theme 'leuven
-	      ;; blue and white ivy selection
-	      (custom-set-faces '(ivy-current-match ((((class color) (background light))
-						      (:background "#1a4b77" :foreground "white" :extend t))
-						     (((class color) (background dark))
-						      (:background "#65a7e2" :foreground "black" :extend t)))))
-	      (mapc #'disable-theme custom-enabled-themes) ;disable all themes currently enabled
-	      (setq theme-state 'light)			   ;for use by `d/flip-theme'
-	      (message "==loaded light theme")
-	      )
+              ;; blue and white ivy selection
+              (custom-set-faces '(ivy-current-match ((((class color) (background light))
+                                                      (:background "#1a4b77" :foreground "white" :extend t))
+                                                     (((class color) (background dark))
+                                                      (:background "#65a7e2" :foreground "black" :extend t)))))
+              (mapc #'disable-theme custom-enabled-themes) ;disable all themes currently enabled
+              (setq theme-state 'light)                          ;for use by `d/flip-theme'
+              (message "==loaded light theme")
+              )
 
 (d/make-theme dark-theme 'spacemacs-dark
-	      (custom-set-faces
-	       ;; bright green ivy selection
-	       '(ivy-current-match ((t (:foreground "chartreuse3" :underline t :weight bold)))))
+              (custom-set-faces
+               ;; bright green ivy selection
+               '(ivy-current-match ((t (:foreground "chartreuse3" :underline t :weight bold)))))
 
-	      (mapc #'disable-theme custom-enabled-themes)
-	      (setq theme-state 'dark)
-	      (message "==loaded dark theme")
-	      )
+              (mapc #'disable-theme custom-enabled-themes)
+              (setq theme-state 'dark)
+              (message "==loaded dark theme")
+              )
 (d/load-theme dark-theme)
 
 ;; C, C++, Objective-C completion
@@ -280,7 +283,7 @@ Return the scratch buffer opened."
   :config (add-hook 'irony-mode-hook #'irony-eldoc))
 
 ;; (add-hook 'c-mode-hook
-	  ;; #'irony-mode)
+          ;; #'irony-mode)
 
 
 (defvar fs-c-mode-map
@@ -295,10 +298,10 @@ Return the scratch buffer opened."
 
 
 (add-hook 'c-mode-hook
-	  #'(lambda ()
-	      (local-set-key (kbd "C-x u") nil) ;don't overwrite this
-	      (local-set-key (kbd "C-/") fs-c-mode-map)
-	      ))
+          #'(lambda ()
+              (local-set-key (kbd "C-x u") nil) ;don't overwrite this
+              (local-set-key (kbd "C-/") fs-c-mode-map)
+              ))
 
 ;; (setq c-default-style "k&r")
 (require 'cc-vars)
@@ -432,7 +435,7 @@ Return the scratch buffer opened."
     ;; (kbd "C-f") #'counsel-fzf)
   :after (ivy swiper))
 
-(setq dired-listing-switches "-al --human-readable")
+(setq dired-listing-switches "-Al -v --human-readable")
 
 ;; additional dired functionality. Comes with emacs
 (require 'dired-x)
@@ -444,10 +447,6 @@ Return the scratch buffer opened."
   ;; :ensure t
   ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
 
-(use-package dired-quick-sort
-  :ensure t
-  :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
-
 (setq dired-dwim-target t)
 
 ;; (setq dired-omit-mode t)                ;this hides .elc among others
@@ -458,13 +457,12 @@ Return the scratch buffer opened."
   (interactive)
   (when (equal major-mode 'dired-mode)
     (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) ; if currently showing
-	(progn 
-	  (set (make-local-variable 'dired-dotfiles-show-p) nil)
-	  (message "h")
-	  (dired-mark-files-regexp "^\\\.")
-	  (dired-do-kill-lines))
+        (progn
+          (set (make-local-variable 'dired-dotfiles-show-p) nil)
+          (dired-mark-files-regexp "^\\\.")
+          (dired-do-kill-lines))
       (progn (revert-buffer) ; otherwise just revert to re-show
-	     (set (make-local-variable 'dired-dotfiles-show-p) t)))))
+             (set (make-local-variable 'dired-dotfiles-show-p) t)))))
 
 (defvar fs-dired-mode-map
   (let ((map (make-sparse-keymap)))
@@ -476,8 +474,8 @@ Return the scratch buffer opened."
 (define-key fs-dired-mode-map (kbd "C-d") #'dired-dotfiles-toggle)
 
 (add-hook 'dired-mode-hook
-	  #'(lambda ()
-	      (local-set-key (kbd "C-/") fs-dired-mode-map)))
+          #'(lambda ()
+              (local-set-key (kbd "C-/") fs-dired-mode-map)))
 
 (setq doc-view-resolution 300)
 
@@ -497,16 +495,16 @@ Return the scratch buffer opened."
 
 (custom-set-faces
  '(eldoc-highlight-function-argument ((t (:inherit bold
-						   :foreground "#98971a"
-						   :height 1.3)))))
+                                                   :foreground "#98971a"
+                                                   :height 1.3)))))
 
 (add-hook 'eshell-mode-hook
-	  #'(lambda ()
-	      ;; don't auto complete with company
-	      (setq-local company-idle-delay nil)
-	      ;; use default completion instead of pcomplete
-	      ;; (define-key eshell-mode-map (kbd "<tab>") #'completion-at-point)
-	      ))
+          #'(lambda ()
+              ;; don't auto complete with company
+              (setq-local company-idle-delay nil)
+              ;; use default completion instead of pcomplete
+              ;; (define-key eshell-mode-map (kbd "<tab>") #'completion-at-point)
+              ))
 (setq eshell-prefer-lisp-functions nil)
 
 ; tab completion in eshell
@@ -526,13 +524,13 @@ Return the scratch buffer opened."
 (defun write-eshell-aliases () 
   (interactive)
   (f-write (eshell-parse-aliases eshell-aliases-source
-				 '(("ls" . ("--classify"
-					    "--color=[[:word:]]+"))
-				   ("top" . nil))
-				 ;; "alias top (helm-top)"
-				 "alias up eshell-up $1"
-				 "alias pk eshell-up-peek $1")
-	   'utf-8 eshell-aliases-file))
+                                 '(("ls" . ("--classify"
+                                            "--color=[[:word:]]+"))
+                                   ("top" . nil))
+                                 ;; "alias top (helm-top)"
+                                 "alias up eshell-up $1"
+                                 "alias pk eshell-up-peek $1")
+           'utf-8 eshell-aliases-file))
 
 ;;;; sudo completion
 (defun pcomplete/sudo ()
@@ -565,9 +563,9 @@ Return the scratch buffer opened."
   "Completion rules for the `systemctl' command."
   (pcomplete-here (append pcomplete-systemctl-commands '("--user")))
   (cond ((pcomplete-test "--user")
-	 (pcomplete-here pcomplete-systemctl-commands)
-	 (pcomplete-here pcomplete-systemd-user-units))
-	(t (pcomplete-here pcomplete-systemd-units))))
+         (pcomplete-here pcomplete-systemctl-commands)
+         (pcomplete-here pcomplete-systemd-user-units))
+        (t (pcomplete-here pcomplete-systemd-units))))
 
 ;;;; man completion
 (defvar pcomplete-man-user-commands
@@ -584,7 +582,7 @@ Return the scratch buffer opened."
 
 ;; set before requiring so as to trigger warning message when these settings don't make sense
 (setq fzf/executable "fzf")
-(setq fzf/wsl nil)			;set wsl flag
+(setq fzf/wsl nil)                    ;set wsl flag
 (setq fzf/args "-x --prompt='? ' --print-query --query='!^bin !^obj '")
 
 ;; forked implementation of fzf
@@ -639,11 +637,11 @@ Return the scratch buffer opened."
   :ensure t
   :init
   (setq evil-want-C-u-scroll t  ;set C-u to function as scroll up in evil mode
-	evil-want-C-i-jump nil  ;this should fix issues with evil tabbing in org
-	evil-want-fine-undo t   ;finer granularity for undo
-	evil-want-Y-yank-to-eol t   ;Y yanks to eol instead of stupid whole line
-	;; evil-want-minibuffer t
-	)
+        evil-want-C-i-jump nil  ;this should fix issues with evil tabbing in org
+        evil-want-fine-undo t   ;finer granularity for undo
+        evil-want-Y-yank-to-eol t   ;Y yanks to eol instead of stupid whole line
+        ;; evil-want-minibuffer t
+        )
   ;; Normally bound to `upcase-word', but evil provides gUaw and
   ;; `universal-argument' is more important
   (global-set-key (kbd "M-u") #'universal-argument)
@@ -685,19 +683,19 @@ Return the scratch buffer opened."
 
   ;; tell evil to not run in these modes
   (nconc evil-emacs-state-modes
-	 '(dired-mode)
-	 '(image-mode)
-	 '(ivy-occur-mode)
-	 '(epa-key-list-mode epa-key-mode epa-info-mode) ;easy pgp
-	 )
+         '(dired-mode)
+         '(image-mode)
+         '(ivy-occur-mode)
+         '(epa-key-list-mode epa-key-mode epa-info-mode) ;easy pgp
+         )
 
   ;; force nomral evil state in these modes
   (require 'ivy)
   (setq evil-normal-state-modes
-	'(
-	  grep-mode			;so we can use evil to edit with `wgrep'
-	  ivy-occur-grep-mode		;so the above works in counsel-ag too
-	  ))
+        '(
+          grep-mode                   ;so we can use evil to edit with `wgrep'
+          ivy-occur-grep-mode         ;so the above works in counsel-ag too
+          ))
 
   :after (ivy))
 
@@ -738,42 +736,42 @@ Return the scratch buffer opened."
   :ensure t)
 
 (add-hook 'org-mode-hook
-	  (lambda ()
-	    ;; redefines org's definition of paragraph start and end to be compatible with
-	    ;; evil mode's notion of "a paragraph"
-	    (setq paragraph-start "\\|[ 	]*$"
-	          paragraph-separate "[ 	]*$")
-	    
-	    (setq fill-column 100)
-	    (setq d/org-default-setup-file "~/.emacs.d/org-default-setup.org")
-	    (auto-fill-mode 1) ;automatically break line at `current-fill-column'
-	    (defun org-insert-today ()
-	    	      "Inserts todays date in the following form <1969-12-31 Wed>"
-	    	      (interactive)
-	    	      (insert (format-time-string "<%Y-%m-%d %a>" (current-time))))
-	    
-	    (define-skeleton org-mode-html-header
-	      "Inserts skeleton fitting most org-mode files which export to HTML"
-	      ""
-	      (format "#+TITLE: %12s\n" (read-string "Title: "))
-	      "#+AUTHOR:\n"
-	      "#+EMAIL: nil\n"
-	      (format "#+DATE: %s\n" (format-time-string "<%Y-%m-%d %a>" (current-time)))
-	      "#+LANGUAGE: en"\n
-	      (format "#+SETUPFILE: %s\n"
-	    	  (if (y-or-n-p "Custom setup file?")
-	    	      (file-relative-name (read-file-name "path: ") default-directory)
-	    	    d/org-default-setup-file))
-	      "#+OPTIONS: html-style:t"\n
-	      "#+OPTIONS: toc:t"\n
-	      "#+OPTIONS: tex:t"\n
-	      "#+OPTIONS: html-postamble:nil"\n
-	      (let ((todo-kwords ""))
-	        (loop for kword in (cdar org-todo-keywords)
-	    	  do (setq todo-kwords (s-concat todo-kwords " " kword)))
-	        (format "#+TODO: %s\n" todo-kwords))
-	      "#+PROPERTY: header-args :results output"\n
-	      "#+FILETAGS: :ex1:ex2:")))
+          (lambda ()
+            ;; redefines org's definition of paragraph start and end to be compatible with
+            ;; evil mode's notion of "a paragraph"
+            (setq paragraph-start "\\|[         ]*$"
+                  paragraph-separate "[   ]*$")
+            
+            (setq fill-column 100)
+            (setq d/org-default-setup-file "~/.emacs.d/org-default-setup.org")
+            (auto-fill-mode 1) ;automatically break line at `current-fill-column'
+            (defun org-insert-today ()
+                          "Inserts todays date in the following form <1969-12-31 Wed>"
+                          (interactive)
+                          (insert (format-time-string "<%Y-%m-%d %a>" (current-time))))
+            
+            (define-skeleton org-mode-html-header
+              "Inserts skeleton fitting most org-mode files which export to HTML"
+              ""
+              (format "#+TITLE: %12s\n" (read-string "Title: "))
+              "#+AUTHOR:\n"
+              "#+EMAIL: nil\n"
+              (format "#+DATE: %s\n" (format-time-string "<%Y-%m-%d %a>" (current-time)))
+              "#+LANGUAGE: en"\n
+              (format "#+SETUPFILE: %s\n"
+                      (if (y-or-n-p "Custom setup file?")
+                          (file-relative-name (read-file-name "path: ") default-directory)
+                        d/org-default-setup-file))
+              "#+OPTIONS: html-style:t"\n
+              "#+OPTIONS: toc:t"\n
+              "#+OPTIONS: tex:t"\n
+              "#+OPTIONS: html-postamble:nil"\n
+              (let ((todo-kwords ""))
+                (loop for kword in (cdar org-todo-keywords)
+                      do (setq todo-kwords (s-concat todo-kwords " " kword)))
+                (format "#+TODO: %s\n" todo-kwords))
+              "#+PROPERTY: header-args :results output"\n
+              "#+FILETAGS: :ex1:ex2:")))
 
 (define-key org-mode-map
   (kbd "C-c C-'")
@@ -834,21 +832,21 @@ Return the scratch buffer opened."
 ;; man completion
 (defadvice man (before my-woman-prompt activate)
   (interactive (progn
-		 (require 'woman)
-		 (list (woman-file-name nil)))))
+                 (require 'woman)
+                 (list (woman-file-name nil)))))
 
 (use-package slime
   :ensure t)
 
 (defun set-inferior-lisp (name)
   (with-temp-buffer
-    (let ((res (shell-command (format "which %s" name) (current-buffer)))
+    (let ((res (call-process "which" nil (current-buffer) nil name))
           (output (string-remove-suffix "\n" (buffer-string))))
       (if (= res 0)
           (message "SLIME: inferior lisp, %s, located at %s" name
                    (setq inferior-lisp-program output))
-        (message "SLIME: tried to located inferior lisp, %s, but got the following error [%s]"
-                 name output)))))
+        (message "%S SLIME: tried to located inferior lisp, %s, but got the following error [%s]"
+                 res name output)))))
 
 (set-inferior-lisp "sbcl")
 
@@ -877,9 +875,9 @@ Return the scratch buffer opened."
   :after (wgrep))
 
 (setq electric-pair-pairs '((?\( . ?\))
-			    (?\[ . ?\])
-			    (?\{ . ?\})
-			    (?\" . ?\")))
+                            (?\[ . ?\])
+                            (?\{ . ?\})
+                            (?\" . ?\")))
 (electric-pair-mode t)
 
 (use-package yasnippet

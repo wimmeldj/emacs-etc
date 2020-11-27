@@ -1,0 +1,18 @@
+- [ ] emacs 27 has built in tab support. Consider re-implementing eshring with this
+- [ ] add gnus
+- [ ] display-fill-column-indicator-mode
+- [ ] so-long-mode !!!!
+- [ ] change color of leuven's modebar in inactive windows so that it can still be read.
+- [ ] `hide-show-minor-mode' can be used for code folding
+- [ ] dired should compress files asynchronously
+- [ ] setup lsp-mode
+- [ ] something better than irony for c/c++
+- [ ] images in org files should be embedded as base64 strings in html export
+- [ ] figure out why org isn't working with xdg-open
+- [ ] fix dired-collapse-mode from breaking j -> dired-goto-file
+- [ ] fix the shitty man prompt. make it so different manuals are expanded in
+  the first selection and it doesn't drop down to another selection list e.g:
+  - malloc(1)
+  - malloc(3)
+  - malloc(3p) ...
+- [ ] make all shell execs static (i.e. save contents to file and load that file.)

@@ -1,18 +1,11 @@
-;; emacs c src
-(setq source-directory "/home/d/.emacs.d/emacs-26.3/")
+;; emacs c-src
+(setq source-directory "/home/d/.emacs.d/emacs-27.1/")
 ;; below is unnecessary so long as `find-func' hasn't been loaded yet.
 ;; (setq find-function-C-source-directory
 ;;   (let ((dir (expand-file-name "src" source-directory)))
 ;;     (if (file-accessible-directory-p dir) dir)))
 
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
 (package-initialize)
-
-(require 'package)
-(require 'seq)
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			 ("melpa" . "http://melpa.org/packages/")
@@ -20,31 +13,6 @@
 			 ("org" . "http://orgmode.org/elpa/")
 ;;			 ("marmalade" . "http://marmalade-repo.org/packages/")
 			 ))
-
-(let* ((packages '(use-package
-		    helm
-		    spacemacs-theme
-		    ))
-       (notinstalled (seq-filter #'(lambda (pkg) (not (package-installed-p pkg)))
-				 packages)))
-  (when notinstalled
-    (message "==The following packages will be installed: %s" (format "%S" notinstalled))
-    (package-refresh-contents)
-    (mapc #'package-install
-	  notinstalled)))
-
-
-(add-to-list 'load-path "~/.emacs.d/small-mods/")
-(add-to-list 'load-path "~/.emacs.d/eshell-ring/")
-(add-to-list 'load-path "~/.emacs.d/evil-numbers/")
-(add-to-list 'load-path "~/.emacs.d/fzf/")
-(add-to-list 'load-path "~/.emacs.d/keymap/")
-
-
-;;; load org config file if it exists.
-(when (file-readable-p "~/.emacs.d/config.org")
-  (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
-;; (load "~/.emacs.d/config")          ;byte compiling seems to have no effect on startup time
 
 
 ;;;; ===========================================================================
@@ -56,6 +24,109 @@
 ;;;;                                     mobile
 (set-face-attribute 'default nil :font "fixedsys" :height 110)
 ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
+
+
+;;;; ===========================================================================
+;;;;                    pacakges installed without `use-package' 
+(require 'package)
+(require 'seq)
+(let* ((packages '(use-package
+		    helm
+		    spacemacs-theme
+		    ))
+       (notinstalled (seq-filter #'(lambda (pkg) (not (package-installed-p pkg)))
+				 packages)))
+  (when notinstalled
+    (message "==The following packages will be installed: %s" (format "%S" notinstalled))
+    (package-refresh-contents)
+    (mapc #'package-install notinstalled)))
+
+;;;; ===========================================================================
+;;;;                                   load-path 
+
+(add-to-list 'load-path (concat user-emacs-directory "config/"))
+(add-to-list 'load-path (concat user-emacs-directory "config/hacks/"))
+(add-to-list 'load-path (concat user-emacs-directory "eshell-ring/"))
+(add-to-list 'load-path (concat user-emacs-directory "ezkeys/"))
+(add-to-list 'load-path (concat user-emacs-directory "evil-numbers/"))
+(add-to-list 'load-path (concat user-emacs-directory "fzf/"))
+
+
+(require 'main)
+(require 'ezkeys)
+
+
+;;;; ===========================================================================
+;;;;                                   config.org 
+;; (when (file-readable-p "~/.emacs.d/config.org")
+;;   (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
+;; (load "~/.emacs.d/config")          ;byte compiling seems to have no effect on startup time
+
+
+
+;;;; ===========================================================================
+;;;;                        evil hack to work with `ezkeys' 
+;; (define-minor-mode evil-local-mode
+;;   "Minor mode for setting up Evil in a single buffer."
+;;   :init-value nil
+;;   (cond
+;;    ((evil-disabled-buffer-p)
+;;     ;; Don't leave the mode variable on in buffers where evil disabled, because
+;;     ;; functions that check this variable will get an incorrect result (e.g.,
+;;     ;; evil-refresh-cursor).
+;;     (setq evil-local-mode nil))
+;;    (evil-local-mode
+;;     (setq emulation-mode-map-alists
+;;           (if (cdr emulation-mode-map-alists)
+;;               (evil-concat-lists (list (car emulation-mode-map-alists)) '(evil-mode-map-alist) emulation-mode-map-alists)
+;;             (evil-concat-lists '(evil-mode-map-alist) emulation-mode-map-alists)))
+;;     (evil-initialize-local-keymaps)
+;;     ;; restore the proper value of `major-mode' in Fundamental buffers
+;;     (when (eq major-mode 'turn-on-evil-mode)
+;;       (setq major-mode 'fundamental-mode))
+;;     (when (minibufferp)
+;;       (setq-local evil-default-state 'insert)
+;;       (setq-local evil-echo-state nil))
+;;     ;; The initial state is usually setup by `evil-initialize' when
+;;     ;; the major-mode in a buffer changes. This preliminary
+;;     ;; initialization is only for the case when `evil-local-mode' is
+;;     ;; called directly for the first time in a buffer.
+;;     (unless evil-state (evil-initialize-state))
+;;     (add-hook 'input-method-activate-hook 'evil-activate-input-method t t)
+;;     (add-hook 'input-method-deactivate-hook 'evil-deactivate-input-method t t)
+;;     (add-hook 'activate-mark-hook 'evil-visual-activate-hook nil t)
+;;     (add-hook 'pre-command-hook 'evil-repeat-pre-hook)
+;;     (add-hook 'post-command-hook 'evil-repeat-post-hook))
+;;    (t
+;;     (evil-refresh-mode-line)
+;;     (remove-hook 'activate-mark-hook 'evil-visual-activate-hook t)
+;;     (remove-hook 'input-method-activate-hook 'evil-activate-input-method t)
+;;     (remove-hook 'input-method-deactivate-hook 'evil-deactivate-input-method t)
+;;     (evil-change-state nil))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -97,12 +168,28 @@
  '(flymake-error-bitmap '(flymake-double-exclamation-mark modus-theme-fringe-red))
  '(flymake-note-bitmap '(exclamation-mark modus-theme-fringe-cyan))
  '(flymake-warning-bitmap '(exclamation-mark modus-theme-fringe-yellow))
+ '(hl-todo-keyword-faces
+   '(("TODO" . "#dc752f")
+     ("NEXT" . "#dc752f")
+     ("THEM" . "#2d9574")
+     ("PROG" . "#4f97d7")
+     ("OKAY" . "#4f97d7")
+     ("DONT" . "#f2241f")
+     ("FAIL" . "#f2241f")
+     ("DONE" . "#86dc2f")
+     ("NOTE" . "#b1951d")
+     ("KLUDGE" . "#b1951d")
+     ("HACK" . "#b1951d")
+     ("TEMP" . "#b1951d")
+     ("FIXME" . "#dc752f")
+     ("XXX+" . "#dc752f")
+     ("\\?\\?\\?+" . "#dc752f")))
  '(ibuffer-deletion-face 'dired-flagged)
  '(ibuffer-filter-group-name-face 'dired-mark)
  '(ibuffer-marked-face 'dired-marked)
  '(ibuffer-title-face 'dired-header)
  '(package-selected-packages
-   '(omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
+   '(gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
  '(vc-annotate-background "#ffffff")
  '(vc-annotate-background-mode nil)
@@ -120,6 +207,7 @@
      (320 . "#383838")
      (350 . "#585858")))
  '(vc-annotate-very-old-color "#585858")
+ '(which-key-mode t)
  '(xterm-color-names
    ["#000000" "#ff8059" "#44bc44" "#eecc00" "#33beff" "#feacd0" "#00d3d0" "#a8a8a8"])
  '(xterm-color-names-bright
@@ -130,6 +218,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(eldoc-highlight-function-argument ((t (:inherit bold :foreground "#98971a" :height 1.3))))
- '(ivy-current-match ((t (:foreground "chartreuse3" :underline t :weight bold))))
  '(mode-line-inactive ((((class color) (min-colors 89)) (:foreground "#655370" :background "#fbf8ef" :box (:color "#b3b9be" :line-width 1))))))
 (put 'dired-find-alternate-file 'disabled nil)
+(put 'narrow-to-region 'disabled nil)

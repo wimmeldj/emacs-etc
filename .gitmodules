@@ -4,3 +4,6 @@
 [submodule "ido-hacks"]
 	path = ido-hacks
 	url = https://github.com/scottjad/ido-hacks.git
+[submodule "ezkeys"]
+	path = ezkeys
+	url = git@github.com:wimmeldj/ezkeys.el.git

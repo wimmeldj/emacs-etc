@@ -53,7 +53,65 @@
 
 
 (require 'main)
+
+(setq ezk-keymap-path (concat user-emacs-directory "init.el"))
 (require 'ezkeys)
+
+(ezk-defkeymaps
+ (c-mode
+  scheme-mode)
+ ((G GLOBAL)
+  (CC c-mode c++-mode)
+  (LISP emacs-lisp-mode scheme-mode-hook lisp-mode))
+
+ ;; the real
+ ("M-u" (universal-argument G))
+ ("M-a" (avy-goto-line G))
+ ("M-x" (counsel-M-x G))
+ ("C-s" (counsel-grep-or-swiper G))
+
+ ("C-h"
+    ("v" (counsel-describe-variable G))
+    ("f" (counsel-describe-function G))
+    ("l" (counsel-find-library G))
+    ("S" (counsel-info-lookup-symbol G))
+    )
+
+ ("C-;"
+    ("C-m" (magit-status G))
+    ("C-f" (fzf G))
+    ("C-/" (company-files G))
+    ;; ("f" (recentf-open-files G))
+    ("C-s" (counsel-ag G))
+    ("u" (browse-url G))
+    ("C-h" (man-follow CC))
+    ("C-d" (d-dired-dotfiles-toggle dired-mode))
+    )
+
+
+ ("M-<f12>" (d-load-next-theme G))
+
+ ("C-w" ("C-h" (winner-undo G))
+        ("C-l" (winner-redo G)))
+
+ ("C-x"
+    ("o" (ace-window G))
+    ("C-b" (ibuffer G))
+    ("f" (counsel-find-file G))
+    ("u" (undo-tree-visualize G))
+    ("b" (ivy-switch-buffer G))
+    ("r b" (counsel-bookmark G))
+    ("r i" (counsel-register G))
+    )
+
+ ("C-c"
+    ("C-r" (ivy-resume G))
+    )
+
+ )
+
+
+
 
 
 ;;;; ===========================================================================

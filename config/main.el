@@ -348,9 +348,6 @@
         evil-want-Y-yank-to-eol t   ;Y yanks to eol instead of stupid whole line
         ;; evil-want-minibuffer t
         )
-  ;; Normally bound to `upcase-word', but evil provides gUaw and
-  ;; `universal-argument' is more important
-  (global-set-key (kbd "M-u") #'universal-argument)
   :config
   (evil-mode 1)
   (setq evil-echo-state nil) ;turn off -- INSERT --, -- VISUAL --, because it ruins eldoc.
@@ -359,8 +356,6 @@
   ;; escape from insert state with M-i
   (define-key evil-insert-state-map
     (kbd "M-i") #'evil-normal-state)
-  (define-key evil-insert-state-map
-    (kbd "C-o") nil)
   ;; VISUAL STATE
   (define-key evil-visual-state-map
     (kbd "M-i") #'evil-normal-state)
@@ -368,8 +363,6 @@
   ;; set vimish-fold-avy as default action for zf
   (define-key evil-normal-state-map
     (kbd "zf") #'vimish-fold-avy)
-  (define-key evil-normal-state-map
-    (kbd "M-a") #'evil-avy-goto-line)
   (define-key evil-normal-state-map
     (kbd "M-i") #'evil-normal-state-map)
   ;; don't overwrite `xref-find-definitions'

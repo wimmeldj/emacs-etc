@@ -1,239 +1,140 @@
-diff --git a/config.el b/config.el
-index 80fcdd3..41e286c 100644
---- a/config.el
-+++ b/config.el
-@@ -130,25 +130,22 @@ Return the scratch buffer opened."
- (defalias 'yes-or-no-p 'y-or-n-p)
+diff --git a/config/langs.el b/config/langs.el
+index a860292..049fab6 100644
+--- a/config/langs.el
++++ b/config/langs.el
+@@ -160,23 +160,23 @@
+ ;;;;                                     scheme 
  
- ;; leave off unless and locally set to t dependent on language.
--;; (setq-default indent-tabs-mode nil)
-+(setq-default indent-tabs-mode nil)
+ ;; get a repl up with C-C C-z
+-(use-package geiser
+-  :ensure t
+-  :config
+-  (setq geiser-active-implementations '(chez))
+-  (setq geiser-default-implementation 'chez)
+-  (add-hook 'scheme-mode-hook #'geiser-mode))
++;; (use-package geiser
++;;   :ensure t
++;;   :config
++;;   (setq geiser-active-implementations '(chez))
++;;   (setq geiser-default-implementation 'chez)
++;;   (add-hook 'scheme-mode-hook #'geiser-mode))
  
+ 
+ 
+ ;;;; ===========================================================================
+ ;;;;                                       js 
+ 
+-(use-package js2-mode
+-  :ensure t
+-  :config
+-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+-  (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
++;; (use-package js2-mode
++;;   :ensure t
++;;   :config
++;;   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
++;;   (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
+ 
+ 
+ 
+diff --git a/config/main.el b/config/main.el
+index 091e9b8..1436c66 100644
+--- a/config/main.el
++++ b/config/main.el
+@@ -7,14 +7,14 @@
+ ;;;; ===========================================================================
+ ;;;;                                   trying out 
+ 
+-(use-package dired-rsync
+-  :ensure t)
+-(use-package rainbow-blocks
+-  :ensure t
+-  :config (rainbow-blocks-mode 1))
+-(use-package blimp :ensure t
+-  :config
+-  (add-hook 'image-minor-mode-hook 'blimp-mode))
++;; (use-package dired-rsync
++;;   :ensure t)
++;; (use-package rainbow-blocks
++;;   :ensure t
++;;   :config (rainbow-blocks-mode 1))
++;; (use-package blimp :ensure t
++;;   :config
++;;   (add-hook 'image-minor-mode-hook 'blimp-mode))
+ (use-package gnuplot :ensure t)
+ (use-package restclient
+   :ensure t
+@@ -61,13 +61,13 @@
  ;; make 80 the horizontal char limit
  (setq-default fill-column 80)
  
- ;; default window dimensions 130x150 and 200 pixels down. X unspecified. This
- ;; works for emacsclient as well
--(when (display-graphic-p)
--  (setq default-frame-alist
--	'((width . 130)
--	  (height . 150)
--	  (top . 200))))
-+(setq default-frame-alist
-+      '((width . 120)
-+        (height . 100)
-+        (top . 100)))
- 
- ;; make firefox-developer-edition default browser
 -(setq browse-url-generic-program "chromium"
 +(setq browse-url-generic-program "chrome.exe"
        browse-url-browser-function #'browse-url-generic)
  
--(setq enable-recursive-minibuffers t)
--
- (add-to-list 'auto-mode-alist '("\\.service\\'" . conf-mode))
- (add-to-list 'auto-mode-alist '("\\.rules\\'" . conf-mode))
- (add-to-list 'auto-mode-alist '("\\.bashrc\\'" . shell-script-mode))
-@@ -348,18 +345,15 @@ Return the scratch buffer opened."
-   :config
-   (add-hook 'csharp-mode-hook #'omnisharp)
-   (require 'company)
--  (add-to-list 'company-backends #'company-omnisharp)
-+  ;; (add-to-list 'company-backends #'company-omnisharp)
-   (add-hook 'csharp-mode-hook #'flycheck-mode)
-   (add-hook 'csharp-mode-hook #'eldoc-mode)
+ (setq enable-recursive-minibuffers t)
  
-   (require 'csharp-mode)
-   (define-key csharp-mode-map (kbd "M-.") #'omnisharp-go-to-definition)
-+  (define-key csharp-mode-map (kbd "C-o") #'omnisharp-auto-complete)
-   :after (company))
+ ;; hack in emacs 27.1 to make buffers with really long lines not cause ruin
+-(global-so-long-mode)
++;(global-so-long-mode)
  
--(use-package blimp :ensure t
--  :config
--  (add-hook 'image-minor-mode-hook 'blimp-mode))
--
- ;; in buffer completion framework
- (use-package company
-   :ensure t
-@@ -444,9 +438,9 @@ Return the scratch buffer opened."
-   ;; :ensure t
-   ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
- 
--(use-package dired-quick-sort
--  :ensure t
--  :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
-+;; (use-package dired-quick-sort
-+  ;; :ensure t
-+  ;; :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
- 
- (setq dired-dwim-target t)
- 
-@@ -583,9 +577,9 @@ Return the scratch buffer opened."
- (shell-command-to-string "man man")
- 
- ;; set before requiring so as to trigger warning message when these settings don't make sense
+ ;; not autosave and no lock files. But do backup to specific dir
+ (setq make-backup-files t
+@@ -175,9 +175,9 @@
+ ;;;;                                      fzf 
+ ;; set before requiring so as to trigger warning message when loaded and these
+ ;; settings don't make sense
 -(setq fzf/executable "fzf")
--(setq fzf/wsl nil)			;set wsl flag
+-(setq fzf/wsl nil)                      ;set wsl flag
 -(setq fzf/args "-x --prompt='? ' --print-query --query='!^bin !^obj '")
 +(setq fzf/executable "fzf.exe")
-+(setq fzf/wsl t)			;set wsl flag
++(setq fzf/wsl t)                      ;set wsl flag
 +(setq fzf/args "-x --prompt='? ' --query='!^bin !^obj '")
  
  ;; forked implementation of fzf
  (require 'fzf)
-diff --git a/config.org b/config.org
-index 9fd3133..c0ae8fb 100644
---- a/config.org
-+++ b/config.org
-@@ -184,24 +184,21 @@ Update this if you change the default font face.
-   (defalias 'yes-or-no-p 'y-or-n-p)
+diff --git a/config/visual.el b/config/visual.el
+index 8fd6ff9..06552d6 100644
+--- a/config/visual.el
++++ b/config/visual.el
+@@ -27,11 +27,12 @@
  
-   ;; leave off unless and locally set to t dependent on language.
--  ;; (setq-default indent-tabs-mode nil)
-+  (setq-default indent-tabs-mode nil)
- 
-   ;; make 80 the horizontal char limit
-   (setq-default fill-column 80)
- 
-   ;; default window dimensions 130x150 and 200 pixels down. X unspecified. This
-   ;; works for emacsclient as well
--  (when (display-graphic-p)
--    (setq default-frame-alist
--	  '((width . 130)
--	    (height . 150)
--	    (top . 200))))
-+  (setq default-frame-alist
+ ;; default window dimensions 130x150 and 200 pixels down. X unspecified. This
+ ;; works for emacsclient as well
+-(when (display-graphic-p)
++;; (when (display-graphic-p)
+   (setq default-frame-alist
+-        '((width . 130)
+-          (height . 150)
+-          (top . 200))))
 +        '((width . 120)
 +          (height . 100)
 +          (top . 100)))
++;; )
  
-   ;; make firefox-developer-edition default browser
--  (setq browse-url-generic-program "chromium"
--	browse-url-browser-function #'browse-url-generic)
--
--  (setq enable-recursive-minibuffers t)
-+  (setq browse-url-generic-program "chrome.exe"
-+        browse-url-browser-function #'browse-url-generic)
- #+END_SRC
- ** file mode associations
- #+BEGIN_SRC emacs-lisp
-@@ -467,12 +464,13 @@ Custom keymap for c-mode. Use local-set-key to bind a prefix key from c-mode-hoo
-     :config
-     (add-hook 'csharp-mode-hook #'omnisharp)
-     (require 'company)
--    (add-to-list 'company-backends #'company-omnisharp)
-+    ;; (add-to-list 'company-backends #'company-omnisharp)
-     (add-hook 'csharp-mode-hook #'flycheck-mode)
-     (add-hook 'csharp-mode-hook #'eldoc-mode)
- 
-     (require 'csharp-mode)
-     (define-key csharp-mode-map (kbd "M-.") #'omnisharp-go-to-definition)
-+    (define-key csharp-mode-map (kbd "C-o") #'omnisharp-auto-complete)
-     :after (company))
- #+END_SRC
- *** python                                                         :disabled:
-@@ -507,8 +505,8 @@ This depends on:
-     (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-     (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
- #+END_SRC
--** blimp
--#+BEGIN_SRC emacs-lisp
-+** blimp                                                           :disabled:
-+#+BEGIN_SRC emacs-lisp :tangle no
-   (use-package blimp :ensure t
-     :config
-     (add-hook 'image-minor-mode-hook 'blimp-mode))
-@@ -608,9 +606,9 @@ Various completion functions using ivy
-     ;; :ensure t
-     ;; :config (add-hook 'dired-mode-hook #'dired-collapse-mode))
- 
--  (use-package dired-quick-sort
--    :ensure t
--    :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
-+  ;; (use-package dired-quick-sort
-+    ;; :ensure t
-+    ;; :config (dired-quick-sort-setup))     ;binds S to hyrda sort dispatcher
- 
-   (setq dired-dwim-target t)
- 
-@@ -769,26 +767,25 @@ sub-commands
- #+END_SRC
- ** fzf
- #+BEGIN_SRC emacs-lisp
--  ;; set before requiring so as to trigger warning message when these settings don't make sense
--  (setq fzf/executable "fzf")
--  (setq fzf/wsl nil)			;set wsl flag
--  (setq fzf/args "-x --prompt='? ' --print-query --query='!^bin !^obj '")
--
--  ;; forked implementation of fzf
--  (require 'fzf)
--
--  ;; no evil mode in fzf
--  (advice-add 'fzf :after 'turn-off-evil-mode)
--  (advice-add 'fzf-git :after 'turn-off-evil-mode)
--  (advice-add 'fzf-git-grep :after 'turn-off-evil-mode)
--  (advice-add 'fzf-git-files :after 'turn-off-evil-mode)
--  (advice-add 'fzf-hg :after 'turn-off-evil-mode)
--  (advice-add 'fzf-directory :after 'turn-off-evil-mode)
--  (advice-add 'fzf-projectile :after 'turn-off-evil-mode)
--
--  (define-key semicolon-map
--    (kbd "C-f") #'fzf)
-+    ;; set before requiring so as to trigger warning message when these settings don't make sense
-+    (setq fzf/executable "fzf.exe")
-+    (setq fzf/wsl t)			;set wsl flag
-+    (setq fzf/args "-x --prompt='? ' --query='!^bin !^obj '")
-+
-+    ;; forked implementation of fzf
-+    (require 'fzf)
-+
-+    ;; no evil mode in fzf
-+    (advice-add 'fzf :after 'turn-off-evil-mode)
-+    (advice-add 'fzf-git :after 'turn-off-evil-mode)
-+    (advice-add 'fzf-git-grep :after 'turn-off-evil-mode)
-+    (advice-add 'fzf-git-files :after 'turn-off-evil-mode)
-+    (advice-add 'fzf-hg :after 'turn-off-evil-mode)
-+    (advice-add 'fzf-directory :after 'turn-off-evil-mode)
-+    (advice-add 'fzf-projectile :after 'turn-off-evil-mode)
- 
-+    (define-key semicolon-map
-+      (kbd "C-f") #'fzf)
- #+END_SRC
- ** shell
- #+BEGIN_SRC emacs-lisp
+ (require 'org)
+ ;; terminus doens't have italics or bold
 diff --git a/init.el b/init.el
-index 70bd931..78a0f11 100644
+index cabd194..efa4470 100644
 --- a/init.el
 +++ b/init.el
-@@ -45,27 +45,62 @@
-   (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
- ;; (load "~/.emacs.d/config")          ;byte compiling seems to have no effect on startup time
+@@ -15,6 +15,75 @@
+ 			 ))
  
--
- ;;;; ===========================================================================
- ;;;;                                    desktop
- ;; (set-face-attribute 'default nil :font "fixedsys" :height 80)
--(set-face-attribute 'default nil :font "Terminus (TTF)" :height 70)
-+;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 70)
- 
- ;;;; ===========================================================================
- ;;;;                                     mobile
- ;; (set-face-attribute 'default nil :font "fixedsys" :height 110)
- ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
  
 +;;;; ===========================================================================
 +;;;;                                 windows patch
- 
++
 +;; Add these:
 +;; export DISPLAY=localhost:0.0
 +;; alias emacsd="emacs-gtk --daemon"
 +;; alias ecl="emacsclient -c -n -d=${DISPLAY}"
- 
++
 +;; (setq-default buffer-file-coding-system 'utf-8-dos)
 +;; (setq-default default-buffer-file-coding-system 'utf-8-dos)
 +;; (set-default-coding-systems 'utf-8-dos)
 +;; (prefer-coding-system 'utf-8-dos)
- 
++
 +(defun counsel-locate-action-extern (x)
 +  "Pass X to `xdg-open' or equivalent command via the shell."
 +  (interactive "FFile: ")
@@ -241,11 +142,11 @@ index 70bd931..78a0f11 100644
 +           (fboundp 'w32-shell-execute))
 +      (w32-shell-execute "open" x)
 +    (message (format "%s %s"
-+                                        (cl-case system-type
-+                                          (darwin "open")
-+                                          (cygwin "cygstart")
-+                                          (t "wsl-open"))
-+                                        (shell-quote-argument x)))
++                     (cl-case system-type
++                       (darwin "open")
++                       (cygwin "cygstart")
++                       (t "wsl-open"))
++                     (shell-quote-argument x)))
 +    (call-process-shell-command (format "%s %s"
 +                                        (cl-case system-type
 +                                          (darwin "open")
@@ -253,34 +154,73 @@ index 70bd931..78a0f11 100644
 +                                          (t "wsl-open"))
 +                                        (shell-quote-argument x))
 +                                nil 0)))
- 
++
 +;; temp
 +(setq default-frame-alist (append default-frame-alist
-+'((inhibit-double-buffering . t))))
- 
- 
++                                  '((inhibit-double-buffering . t))))
++
++
 +(defun dired-open-in-vs ()
 +  "Opens dired's current file in visual studio"
 +  (interactive)
 +  (let* ((filename (file-relative-name (dired-get-filename)))
-+	(cmd (concat "devenv.exe " filename " /Edit")))
++         (cmd (concat "devenv.exe " filename " /Edit")))
 +    (call-process-shell-command cmd nil 0)))
- 
--
--
--
++
++(require 'dired)
 +(define-key dired-mode-map (kbd "C-i") #'dired-open-in-vs)
++
++
++(defun assoc-delete-all (key alist &optional test)
++  "Broken in wsl for some reason, so manually defining"
++  (unless test (setq test #'equal))
++  (while (and (consp (car alist))
++	      (funcall test (caar alist) key))
++    (setq alist (cdr alist)))
++  (let ((tail alist) tail-cdr)
++    (while (setq tail-cdr (cdr tail))
++      (if (and (consp (car tail-cdr))
++               (funcall test (caar tail-cdr) key))
++          (setcdr tail (cdr tail-cdr))
++        (setq tail tail-cdr))))
++  alist)
++
++
++
++
++
++
++
+ ;;;; ===========================================================================
+ ;;;;                                    desktop
+ ;; (set-face-attribute 'default nil :font "fixedsys" :height 80)
+@@ -22,7 +91,7 @@
+ 
+ ;;;; ===========================================================================
+ ;;;;                                     mobile
+-(set-face-attribute 'default nil :font "fixedsys" :height 110)
++;; (set-face-attribute 'default nil :font "fixedsys" :height 110)
+ ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
  
  
+@@ -52,8 +121,9 @@
+ 				 packages)))
+   (when notinstalled
+     (message "==The following packages will be installed: %s" (format "%S" notinstalled))
+-    (package-refresh-contents)
+-    (mapc #'package-install notinstalled)))
++    ;(package-refresh-contents)
++    ;(mapc #'package-install notinstalled)
++))
  
-@@ -105,8 +140,9 @@
-  '(ibuffer-title-face (quote dired-header))
+ ;;;; ===========================================================================
+ ;;;;                                   load-path 
+@@ -264,7 +334,7 @@
+  '(ibuffer-marked-face 'dired-marked)
+  '(ibuffer-title-face 'dired-header)
   '(package-selected-packages
-    (quote
--    (omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window)))
-+    (htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window)))
-  '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#1d2021")))
-+ '(require-final-newline nil)
+-   '(lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
++   '(lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-collapse diminish company beacon ace-window))
+  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
   '(vc-annotate-background "#ffffff")
   '(vc-annotate-background-mode nil)
-  '(vc-annotate-color-map

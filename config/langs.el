@@ -33,10 +33,35 @@
 
 
 ;;;; ===========================================================================
-;;;;                                       C 
+;;;;                                     clang 
+
 
 (require 'cc-vars)
 (push '(c-mode . "k&r") c-default-style)
+
+(let ((clangd-exit (call-process "which" nil nil nil "clangd"))
+      (bear-exit (call-process "which" nil nil nil "bear"))
+      (cmake-exit (call-process "which" nil nil nil "cmake")))
+  (when (not (= clangd-exit 0))
+    (message "==clang not found in PATH. Need this for lsp-mode completion of c/c++"))
+  (when (not (= bear-exit 0))
+    (message "==bear not found in PATH. Need this for clangd project setup of projects build with make. See https://clangd.llvm.org/installation.html"))
+  (when (not (= cmake-exit 0))
+    (message "==cmake not found in PATH. Need this for clangd project setup of projects build with cmake. See https://clangd.llvm.org/installation.html")))
+
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
+(setq gc-cons-threshold (* 100 1024 1024)
+      read-process-output-max (* 1024 1024)
+      treemacs-space-between-root-nodes nil
+      company-minimum-prefix-length 1
+      lsp-idle-delay 0.1
+      lsp-headerline-breadcrumb-enable t
+      lsp-keymap-prefix "M-l")
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (require 'dap-cpptools))
+
 
 
 
@@ -95,7 +120,7 @@
     (let ((res (call-process "which" nil (current-buffer) nil name))
           (output (string-remove-suffix "\n" (buffer-string))))
       (if (= res 0)
-          (message "SLIME: inferior lisp, %s, located at %s" name
+          (message "==inferior lisp, %s, located at %s" name
                    (setq inferior-lisp-program output))
         (message "%S SLIME: tried to located inferior lisp, %s, but got the following error [%s]"
                  res name output)))))

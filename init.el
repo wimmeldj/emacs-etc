@@ -33,6 +33,20 @@
 (let* ((packages '(use-package
 		    helm
 		    spacemacs-theme
+                    ;; from https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/
+                    ;; figure out what you really want to keep later
+                    lsp-mode
+                    lsp-treemacs
+                    helm-lsp       ;`helm-lsp-workspace-symbol' `helm-lsp-global-workspace-symbol' and `helm-lsp-code-actions'
+                    lsp-ivy        ;`lsp-ivy-workspace-symbol' and `lsp-ivy-global-workspace-symbol'
+                    projectile
+                    hydra
+                    flycheck
+                    company
+                    avy
+                    which-key
+                    helm-xref
+                    dap-mode
 		    ))
        (notinstalled (seq-filter #'(lambda (pkg) (not (package-installed-p pkg)))
 				 packages)))
@@ -58,17 +72,35 @@
 (require 'ezkeys)
 
 (ezk-defkeymaps
+ ;; precedence
  (c-mode
   scheme-mode)
+ ;; groups
  ((G GLOBAL)
   (CC c-mode c++-mode)
   (LISP emacs-lisp-mode scheme-mode-hook lisp-mode))
 
- ;; the real
+ ;; map
+ ("M-<f12>" (d-load-next-theme G))
+
  ("M-u" (universal-argument G))
- ("M-a" (avy-goto-line G))
  ("M-x" (counsel-M-x G))
+ ("M-a" (avy-goto-line G))
+
  ("C-s" (counsel-grep-or-swiper G))
+
+ ("C-x"
+    ("o" (ace-window G))
+    ("C-b" (ibuffer G))
+    ("C-f" (counsel-find-file G))
+    ("u" (undo-tree-visualize G))
+    ("b" (ivy-switch-buffer G))
+    ("r i" (counsel-register G))
+    )
+
+ ("C-c"
+    ("C-r" (ivy-resume G))
+    )
 
  ("C-h"
     ("v" (counsel-describe-variable G))
@@ -78,35 +110,20 @@
     )
 
  ("C-;"
-    ("C-m" (magit-status G))
+    ("m" (magit-status G))
     ("C-f" (fzf G))
     ("C-/" (company-files G))
-    ;; ("f" (recentf-open-files G))
     ("C-s" (counsel-ag G))
     ("u" (browse-url G))
+
     ("C-h" (man-follow CC))
+
     ("C-d" (d-dired-dotfiles-toggle dired-mode))
     )
 
 
- ("M-<f12>" (d-load-next-theme G))
-
  ("C-w" ("C-h" (winner-undo G))
         ("C-l" (winner-redo G)))
-
- ("C-x"
-    ("o" (ace-window G))
-    ("C-b" (ibuffer G))
-    ("f" (counsel-find-file G))
-    ("u" (undo-tree-visualize G))
-    ("b" (ivy-switch-buffer G))
-    ("r b" (counsel-bookmark G))
-    ("r i" (counsel-register G))
-    )
-
- ("C-c"
-    ("C-r" (ivy-resume G))
-    )
 
  )
 
@@ -247,7 +264,7 @@
  '(ibuffer-marked-face 'dired-marked)
  '(ibuffer-title-face 'dired-header)
  '(package-selected-packages
-   '(gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
+   '(lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
  '(vc-annotate-background "#ffffff")
  '(vc-annotate-background-mode nil)
@@ -276,6 +293,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(eldoc-highlight-function-argument ((t (:inherit bold :foreground "#98971a" :height 1.3))))
+ '(ivy-current-match ((((class color) (background light)) (:background "#1a4b77" :foreground "white" :extend t)) (((class color) (background dark)) (:background "#65a7e2" :foreground "black" :extend t))))
  '(mode-line-inactive ((((class color) (min-colors 89)) (:foreground "#655370" :background "#fbf8ef" :box (:color "#b3b9be" :line-width 1))))))
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'narrow-to-region 'disabled nil)

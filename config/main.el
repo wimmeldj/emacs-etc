@@ -89,6 +89,9 @@
 ;; pdfs not fuzzy
 (setq doc-view-resolution 300)
 
+(require 'bookmark)
+(setq bookmark-save-flag t
+      bookmark-use-annotations t)
 
 
 ;;;; ===========================================================================

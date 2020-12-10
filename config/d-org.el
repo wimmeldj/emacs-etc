@@ -4,10 +4,16 @@
 (use-package htmlize
   :ensure t)
 
-;; redefines org's definition of paragraph start and end to be compatible with
-;; evil mode's notion of "a paragraph"
-(setq paragraph-start "\\|[         ]*$"
-      paragraph-separate "[   ]*$")
+(add-hook 'org-mode-hook
+          (lambda ()
+            (setq fill-column 100
+                  ;; redefines org's definition of paragraph start and end to be compatible with
+                  ;; evil mode's notion of "a paragraph"
+                  paragraph-start "\\|[         ]*$"
+                  paragraph-separate "[   ]*$"
+                  )
+            (auto-fill-mode 1)
+            ))
 
 (setq fill-column 100
       org-src-window-setup 'current-window ; sets where org-edit-special takes you (C-c ')

@@ -110,7 +110,9 @@
     )
 
  ("C-;"
-    ("m" (magit-status G))
+    ("m"
+       ("m" (magit-status G))
+       ("f" (magit-find-file G)))
     ("C-f" (fzf G))
     ("C-/" (company-files G))
     ("C-s" (counsel-ag G))

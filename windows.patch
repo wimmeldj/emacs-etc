@@ -1,5 +1,5 @@
 diff --git a/config/langs.el b/config/langs.el
-index a860292..049fab6 100644
+index d853d3d..8e501fa 100644
 --- a/config/langs.el
 +++ b/config/langs.el
 @@ -160,23 +160,23 @@
@@ -38,7 +38,7 @@ index a860292..049fab6 100644
  
  
 diff --git a/config/main.el b/config/main.el
-index 091e9b8..1436c66 100644
+index 7a13ab7..ac5d1c7 100644
 --- a/config/main.el
 +++ b/config/main.el
 @@ -7,14 +7,14 @@
@@ -80,7 +80,7 @@ index 091e9b8..1436c66 100644
  
  ;; not autosave and no lock files. But do backup to specific dir
  (setq make-backup-files t
-@@ -175,9 +175,9 @@
+@@ -178,9 +178,9 @@
  ;;;;                                      fzf 
  ;; set before requiring so as to trigger warning message when loaded and these
  ;; settings don't make sense
@@ -94,10 +94,10 @@ index 091e9b8..1436c66 100644
  ;; forked implementation of fzf
  (require 'fzf)
 diff --git a/config/visual.el b/config/visual.el
-index 8fd6ff9..06552d6 100644
+index 8fd6ff9..911cf1e 100644
 --- a/config/visual.el
 +++ b/config/visual.el
-@@ -27,11 +27,12 @@
+@@ -27,11 +27,11 @@
  
  ;; default window dimensions 130x150 and 200 pixels down. X unspecified. This
  ;; works for emacsclient as well
@@ -110,20 +110,24 @@ index 8fd6ff9..06552d6 100644
 +        '((width . 120)
 +          (height . 100)
 +          (top . 100)))
-+;; )
  
  (require 'org)
  ;; terminus doens't have italics or bold
 diff --git a/init.el b/init.el
-index cabd194..efa4470 100644
+index edc3f39..97b51f2 100644
 --- a/init.el
 +++ b/init.el
-@@ -15,6 +15,75 @@
+@@ -15,17 +15,65 @@
  			 ))
  
  
-+;;;; ===========================================================================
++
+ ;;;; ===========================================================================
+-;;;;                                    desktop
+-;; (set-face-attribute 'default nil :font "fixedsys" :height 80)
+-;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 70)
 +;;;;                                 windows patch
++
 +
 +;; Add these:
 +;; export DISPLAY=localhost:0.0
@@ -135,6 +139,77 @@ index cabd194..efa4470 100644
 +;; (set-default-coding-systems 'utf-8-dos)
 +;; (prefer-coding-system 'utf-8-dos)
 +
++
++(defun assoc-delete-all (key alist &optional test)
++  "Broken in wsl for some reason, so manually defining"
++  (unless test (setq test #'equal))
++  (while (and (consp (car alist))
++	      (funcall test (caar alist) key))
++    (setq alist (cdr alist)))
++  (let ((tail alist) tail-cdr)
++    (while (setq tail-cdr (cdr tail))
++      (if (and (consp (car tail-cdr))
++               (funcall test (caar tail-cdr) key))
++          (setcdr tail (cdr tail-cdr))
++        (setq tail tail-cdr))))
++  alist)
++
++(setq require-final-newline nil)
++(setq mode-require-final-newline nil)
++
++
+ 
+ ;;;; ===========================================================================
+-;;;;                                     mobile
+-(set-face-attribute 'default nil :font "fixedsys" :height 110)
+-;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
++;;;;                                 windows-patch 
++;; In WSL add something like this to /etc/fonts/local.conf
++;; To make fonts installed in windows available to wsl
++;; <?xml version="1.0"?>
++;; <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
++;; <fontconfig>
++;; 	<dir>/mnt/c/Windows/Fonts</dir>
++;; 	<dir>/mnt/c/Users/dwimmel/AppData/Local/Microsoft/Windows/Fonts</dir>
++;; </fontconfig>
++;;
++;; verify they're available with
++;; $ fc-list
+ 
++;; (set-face-attribute 'default nil :font "fixedsys" :height 130)
++;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 130)
+ 
++;; have to modify json a lot and we use 2 spaces. For `json-pretty-print'
++(setq js-indent-level 2)
++
++
++
++
++
+ ;;;; ===========================================================================
+ ;;;;                    pacakges installed without `use-package' 
+ (require 'package)
+@@ -52,9 +100,11 @@
+ 				 packages)))
+   (when notinstalled
+     (message "==The following packages will be installed: %s" (format "%S" notinstalled))
+-    (package-refresh-contents)
+-    (mapc #'package-install notinstalled)))
++    ;(package-refresh-contents)
++    ;(mapc #'package-install notinstalled)
++))
+ 
++
+ ;;;; ===========================================================================
+ ;;;;                                   load-path 
+ 
+@@ -71,6 +121,49 @@
+ (setq ezk-keymap-path (concat user-emacs-directory "init.el"))
+ (require 'ezkeys)
+ 
++
++;;;; ===========================================================================
++;;;;                                 windows-patch 
 +(defun counsel-locate-action-extern (x)
 +  "Pass X to `xdg-open' or equivalent command via the shell."
 +  (interactive "FFile: ")
@@ -171,56 +246,71 @@ index cabd194..efa4470 100644
 +(define-key dired-mode-map (kbd "C-i") #'dired-open-in-vs)
 +
 +
-+(defun assoc-delete-all (key alist &optional test)
-+  "Broken in wsl for some reason, so manually defining"
-+  (unless test (setq test #'equal))
-+  (while (and (consp (car alist))
-+	      (funcall test (caar alist) key))
-+    (setq alist (cdr alist)))
-+  (let ((tail alist) tail-cdr)
-+    (while (setq tail-cdr (cdr tail))
-+      (if (and (consp (car tail-cdr))
-+               (funcall test (caar tail-cdr) key))
-+          (setcdr tail (cdr tail-cdr))
-+        (setq tail tail-cdr))))
-+  alist)
++
++;;;; ===========================================================================
++;;;;                                     keymap 
 +
-+
-+
-+
-+
-+
-+
- ;;;; ===========================================================================
- ;;;;                                    desktop
- ;; (set-face-attribute 'default nil :font "fixedsys" :height 80)
-@@ -22,7 +91,7 @@
- 
- ;;;; ===========================================================================
- ;;;;                                     mobile
--(set-face-attribute 'default nil :font "fixedsys" :height 110)
-+;; (set-face-attribute 'default nil :font "fixedsys" :height 110)
- ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
- 
- 
-@@ -52,8 +121,9 @@
- 				 packages)))
-   (when notinstalled
-     (message "==The following packages will be installed: %s" (format "%S" notinstalled))
--    (package-refresh-contents)
--    (mapc #'package-install notinstalled)))
-+    ;(package-refresh-contents)
-+    ;(mapc #'package-install notinstalled)
-+))
- 
- ;;;; ===========================================================================
- ;;;;                                   load-path 
-@@ -264,7 +334,7 @@
-  '(ibuffer-marked-face 'dired-marked)
-  '(ibuffer-title-face 'dired-header)
+ (ezk-defkeymaps
+  ;; precedence
+  (c-mode
+@@ -241,12 +334,16 @@
+  '(ansi-color-faces-vector
+    [default default default italic underline success warning error])
+  '(custom-safe-themes
+-   '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "4cf9ed30ea575fb0ca3cff6ef34b1b87192965245776afa9e9e20c17d115f3fb" "d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" "ffba0482d3548c9494e84c1324d527f73ea4e43fff8dfd0e48faa8fc6d5c2bc7" "123a8dabd1a0eff6e0c48a03dc6fb2c5e03ebc7062ba531543dfbce587e86f2a" "a06658a45f043cd95549d6845454ad1c1d6e24a99271676ae56157619952394a" "939ea070fb0141cd035608b2baabc4bd50d8ecc86af8528df9d41f4d83664c6a" "4c0739c6ad6fd91ebd737f8f40527d279cc5f85bc286a7c0d7467b4a6ba53166" "d97baf5a34c87b05508739505cad03438cde8efa2a0d350c7773f2a8bc26a50d" "8f5b54bf6a36fe1c138219960dd324aad8ab1f62f543bed73ef5ad60956e36ae" "cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" "2b9dc43b786e36f68a9fd4b36dd050509a0e32fe3b0a803310661edb7402b8b6" "8e797edd9fa9afec181efbfeeebf96aeafbd11b69c4c85fa229bb5b9f7f7e66c" "585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739" "8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" "a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0" "b583823b9ee1573074e7cbfd63623fe844030d911e9279a7c8a5d16de7df0ed0" default))
+- '(flymake-error-bitmap '(flymake-double-exclamation-mark modus-theme-fringe-red))
+- '(flymake-note-bitmap '(exclamation-mark modus-theme-fringe-cyan))
+- '(flymake-warning-bitmap '(exclamation-mark modus-theme-fringe-yellow))
++   (quote
++    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "4cf9ed30ea575fb0ca3cff6ef34b1b87192965245776afa9e9e20c17d115f3fb" "d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" "ffba0482d3548c9494e84c1324d527f73ea4e43fff8dfd0e48faa8fc6d5c2bc7" "123a8dabd1a0eff6e0c48a03dc6fb2c5e03ebc7062ba531543dfbce587e86f2a" "a06658a45f043cd95549d6845454ad1c1d6e24a99271676ae56157619952394a" "939ea070fb0141cd035608b2baabc4bd50d8ecc86af8528df9d41f4d83664c6a" "4c0739c6ad6fd91ebd737f8f40527d279cc5f85bc286a7c0d7467b4a6ba53166" "d97baf5a34c87b05508739505cad03438cde8efa2a0d350c7773f2a8bc26a50d" "8f5b54bf6a36fe1c138219960dd324aad8ab1f62f543bed73ef5ad60956e36ae" "cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" "2b9dc43b786e36f68a9fd4b36dd050509a0e32fe3b0a803310661edb7402b8b6" "8e797edd9fa9afec181efbfeeebf96aeafbd11b69c4c85fa229bb5b9f7f7e66c" "585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739" "8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" "a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0" "b583823b9ee1573074e7cbfd63623fe844030d911e9279a7c8a5d16de7df0ed0" default)))
++ '(flymake-error-bitmap
++   (quote
++    (flymake-double-exclamation-mark modus-theme-fringe-red)))
++ '(flymake-note-bitmap (quote (exclamation-mark modus-theme-fringe-cyan)))
++ '(flymake-warning-bitmap (quote (exclamation-mark modus-theme-fringe-yellow)))
+  '(hl-todo-keyword-faces
+-   '(("TODO" . "#dc752f")
++   (quote
++    (("TODO" . "#dc752f")
+      ("NEXT" . "#dc752f")
+      ("THEM" . "#2d9574")
+      ("PROG" . "#4f97d7")
+@@ -260,18 +357,21 @@
+      ("TEMP" . "#b1951d")
+      ("FIXME" . "#dc752f")
+      ("XXX+" . "#dc752f")
+-     ("\\?\\?\\?+" . "#dc752f")))
+- '(ibuffer-deletion-face 'dired-flagged)
+- '(ibuffer-filter-group-name-face 'dired-mark)
+- '(ibuffer-marked-face 'dired-marked)
+- '(ibuffer-title-face 'dired-header)
++     ("\\?\\?\\?+" . "#dc752f"))))
++ '(ibuffer-deletion-face (quote dired-flagged))
++ '(ibuffer-filter-group-name-face (quote dired-mark))
++ '(ibuffer-marked-face (quote dired-marked))
++ '(ibuffer-title-face (quote dired-header))
   '(package-selected-packages
 -   '(lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
-+   '(lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-collapse diminish company beacon ace-window))
-  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
+- '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
++   (quote
++    (lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-collapse diminish company beacon ace-window)))
++ '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#1d2021")))
++ '(require-final-newline nil)
   '(vc-annotate-background "#ffffff")
   '(vc-annotate-background-mode nil)
+  '(vc-annotate-color-map
+-   '((20 . "#ab4642")
++   (quote
++    ((20 . "#ab4642")
+      (50 . "#dc9656")
+      (80 . "#f7ca88")
+      (110 . "#a1b56c")
+@@ -282,7 +382,7 @@
+      (260 . "#181818")
+      (290 . "#282828")
+      (320 . "#383838")
+-     (350 . "#585858")))
++     (350 . "#585858"))))
+  '(vc-annotate-very-old-color "#585858")
+  '(which-key-mode t)
+  '(xterm-color-names

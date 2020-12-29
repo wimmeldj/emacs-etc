@@ -43,11 +43,11 @@
       (bear-exit (call-process "which" nil nil nil "bear"))
       (cmake-exit (call-process "which" nil nil nil "cmake")))
   (when (not (= clangd-exit 0))
-    (message "==clang not found in PATH. Need this for lsp-mode completion of c/c++"))
+    (message "==LSP: clang not found in PATH. Need this for lsp-mode completion of c/c++"))
   (when (not (= bear-exit 0))
-    (message "==bear not found in PATH. Need this for clangd project setup of projects build with make. See https://clangd.llvm.org/installation.html"))
+    (message "==LSP: bear not found in PATH. Need this for clangd project setup of projects built with make. See https://clangd.llvm.org/installation.html"))
   (when (not (= cmake-exit 0))
-    (message "==cmake not found in PATH. Need this for clangd project setup of projects build with cmake. See https://clangd.llvm.org/installation.html")))
+    (message "==LSP: cmake not found in PATH. Need this for clangd project setup of projects built with cmake. See https://clangd.llvm.org/installation.html")))
 
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
@@ -122,8 +122,8 @@
       (if (= res 0)
           (message "==inferior lisp, %s, located at %s" name
                    (setq inferior-lisp-program output))
-        (message "%S SLIME: tried to located inferior lisp, %s, but got the following error [%s]"
-                 res name output)))))
+        (message "==SLIME: tried to located inferior lisp, %s, but got the following error [%s]"
+                 name output)))))
 
 (use-package slime
   :ensure t

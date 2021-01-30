@@ -85,7 +85,6 @@
 
  ("M-u" (universal-argument G))
  ("M-x" (counsel-M-x G))
- ("M-a" (avy-goto-line G))
 
  ("C-s" (counsel-grep-or-swiper G))
 
@@ -112,7 +111,9 @@
  ("C-;"
     ("m"
        ("m" (magit-status G))
-       ("f" (magit-find-file G)))
+       ("f" (magit-find-file G))
+       ("c" (magit-file-checkout G)))
+    ("a" (avy-goto-line G))
     ("C-f" (fzf G))
     ("C-/" (company-files G))
     ("C-s" (counsel-ag G))

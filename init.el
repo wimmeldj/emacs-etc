@@ -112,7 +112,8 @@
     ("m"
        ("m" (magit-status G))
        ("f" (magit-find-file G))
-       ("c" (magit-file-checkout G)))
+       ("c" (magit-file-checkout G))
+       ("l" (magit-log-buffer-file G)))
     ("a" (avy-goto-line G))
     ("C-f" (fzf G))
     ("C-/" (company-files G))

@@ -11,7 +11,12 @@
                                                    :height 1.3)))))
 
 (use-package magit
-  :ensure t)
+  :ensure t
+  :config
+  (setq magit-diff-refine-hunk 'all     ;word-level diff in magit-status buffers
+        magit-diff-paint-whitespace t
+        magit-diff-highlight-trailing t
+        ) )
 
 (setq electric-pair-pairs '((?\( . ?\))
                             (?\[ . ?\])

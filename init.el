@@ -17,14 +17,15 @@
 
 ;;;; ===========================================================================
 ;;;;                                    desktop
-;; (set-face-attribute 'default nil :font "fixedsys" :height 80)
-;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 70)
+;; (set-face-attribute 'default nil :font "fixedsys" :height 120)
+;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 120)
+(set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
 
 ;;;; ===========================================================================
 ;;;;                                     mobile
-(set-face-attribute 'default nil :font "fixedsys" :height 110)
+;; (set-face-attribute 'default nil :font "fixedsys" :height 110)
 ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
-
+(set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
 
 ;;;; ===========================================================================
 ;;;;                    pacakges installed without `use-package' 

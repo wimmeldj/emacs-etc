@@ -129,18 +129,8 @@
 
  ("C-w" ("C-h" (winner-undo G))
         ("C-l" (winner-redo G)))
-
  )
 
-
-
-
-
-;;;; ===========================================================================
-;;;;                                   config.org 
-;; (when (file-readable-p "~/.emacs.d/config.org")
-;;   (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
-;; (load "~/.emacs.d/config")          ;byte compiling seems to have no effect on startup time
 
 
 

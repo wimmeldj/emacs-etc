@@ -240,19 +240,6 @@
 (require 'eshell-ring)
 (global-eshring-mode 1)
 
-(require 'd-eshell-hacks)
-(lexical-let ((eshell-aliases-src "~/.zshrc"))
-  (defun d-write-eshell-aliases () 
-    (interactive)
-    (f-write (d-eshell-parse-aliases eshell-aliases-src
-                                   '(("ls" . ("--classify"
-                                              "--color=[[:word:]]+"))
-                                     ("top" . nil))
-                                   ;; "alias top (helm-top)"
-                                   "alias up eshell-up $1"
-                                   "alias pk eshell-up-peek $1")
-             'utf-8 eshell-aliases-file)))
-
 ;; *SLOW* This adds about 3 seconds to startup because of all the shell commands. Maybe we should
 ;; cache? From https://www.emacswiki.org/emacs/EshellCompletion. Fixes eshell's noncompletion of
 ;; sub-commands

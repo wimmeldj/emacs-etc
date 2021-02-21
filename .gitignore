@@ -3,7 +3,8 @@
 /auto-save-list/
 /backups/
 /elpa/
-/eshell/
+/eshell/*
+!/eshell/alias
 /recentf
 /smex-items
 /tramp

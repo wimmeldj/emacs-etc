@@ -1,3 +1,5 @@
+(require 'better-theme-switching "better-theme-switching")
+
 ;; get rid of greeting screen
 (setq inhibit-startup-message t)
 (setq inhibit-startup-screen 1)
@@ -70,7 +72,6 @@
 ;; (use-package modus-vivendi-theme :ensure t)
 ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/gruvbox")
 
-(require 'better-theme-switching)
 (d-defthemes
  (leuven
   :before

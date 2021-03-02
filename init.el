@@ -7,10 +7,10 @@
 
 (package-initialize)
 
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "http://melpa.org/packages/")
-			 ("melpa-stable" . "http://stable.melpa.org/packages/")
-			 ("org" . "http://orgmode.org/elpa/")
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+			 ("melpa" . "https://melpa.org/packages/")
+			 ("melpa-stable" . "https://stable.melpa.org/packages/")
+			 ;; ("org" . "http://orgmode.org/elpa/")
 ;;			 ("marmalade" . "http://marmalade-repo.org/packages/")
 			 ))
 

@@ -19,13 +19,13 @@
 ;;;;                                    desktop
 ;; (set-face-attribute 'default nil :font "fixedsys" :height 120)
 ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 120)
-(set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
+(set-face-attribute 'default nil :font "IBM Plex Mono" :height 90)
 
 ;;;; ===========================================================================
 ;;;;                                     mobile
 ;; (set-face-attribute 'default nil :font "fixedsys" :height 110)
 ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
-(set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
+;; (set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
 
 ;;;; ===========================================================================
 ;;;;                    pacakges installed without `use-package' 
@@ -86,8 +86,9 @@
 
  ("M-u" (universal-argument G))
  ("M-x" (counsel-M-x G))
+ ("M-X" (smex-major-mode-commands G))
+ ;; ("M-x" (smex G))
 
- ("C-s" (counsel-grep-or-swiper G))
 
  ("C-x"
     ("o" (ace-window G))
@@ -95,7 +96,7 @@
     ("C-f" (counsel-find-file G))
     ("u" (undo-tree-visualize G))
     ("b" (ivy-switch-buffer G))
-    ("r i" (counsel-register G))
+    ;; ("r i" (counsel-register G))
     )
 
  ("C-c"
@@ -107,6 +108,7 @@
     ("f" (counsel-describe-function G))
     ("l" (counsel-find-library G))
     ("S" (counsel-info-lookup-symbol G))
+    ("l" (find-library G))
     )
 
  ("C-;"
@@ -117,6 +119,7 @@
        ("l" (magit-log-buffer-file G)))
     ("a" (avy-goto-line G))
     ("C-f" (fzf G))
+    ;; ("C-f" (counsel-fzf G))
     ("C-/" (company-files G))
     ("C-s" (counsel-ag G))
     ("u" (browse-url G))
@@ -126,9 +129,10 @@
     ("C-d" (d-dired-dotfiles-toggle dired-mode))
     )
 
+ ;; ("C-w" ("C-h" (winner-undo G))
+ ;;        ("C-l" (winner-redo G)))
 
- ("C-w" ("C-h" (winner-undo G))
-        ("C-l" (winner-redo G)))
+ ("C-S-s" (occur G))
  )
 
 

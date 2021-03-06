@@ -33,6 +33,8 @@
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . conf-mode))
 (add-to-list 'auto-mode-alist '("\\.ps1\\'" . conf-mode))
 (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\PKGBUILD\\'" . shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\.conf\\'" . conf-mode))
 
 
 
@@ -50,7 +52,7 @@
 (setq select-enable-clipboard t)
 (setq x-select-enable-clipboard-manager t)
 
-(setq ring-bell-function 'ignore)
+;; (setq ring-bell-function 'ignore)
 
 ;; alias yes-or-no-p function to y-or-n-p function
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -61,7 +63,7 @@
 ;; make 80 the horizontal char limit
 (setq-default fill-column 80)
 
-(setq browse-url-generic-program "chromium"
+(setq browse-url-generic-program "firefox"
       browse-url-browser-function #'browse-url-generic)
 
 (setq enable-recursive-minibuffers t)
@@ -149,7 +151,7 @@
 
 
 ;;;; ===========================================================================
-;;;;                            ivy completion framework 
+;;;;                            ivy completion framework
 
 (use-package ivy
   :ensure t
@@ -169,8 +171,33 @@
 (use-package counsel
   :ensure t
   :config
-  (setq counsel-find-file-at-point t)
-  :after (ivy swiper))
+  (setq counsel-find-file-at-point t))
+
+;; (require 'ido)
+;; (require 'ido-hacks)
+;; (ido-mode 1)
+;; (ido-hacks-mode)
+
+;; (setq ido-enable-flex-matching t
+;;       ido-everywhere t
+;;       ido-use-filename-at-point 'guess
+;;       ido-create-new-buffer 'always
+;;       ido-virtual-buffers t
+;;       ido-max-window-height 0.50
+;;       ido-show-dot-for-dired t          ;first item is always dired
+;;       ido-use-url-at-point t
+;;       ido-enable-regexp t
+;;       ido-max-prospects 100
+;;       )
+
+;; (setf (elt ido-decorations 2) "\n"
+;;       (elt ido-decorations 3) "\n")
+
+;; ;; C-n/C-p for next/prev completion
+;; (define-key ido-common-completion-map (kbd "C-n") #'ido-next-match)
+;; (define-key ido-common-completion-map (kbd "C-p") #'ido-prev-match)
+
+;; (require 'smex)
 
 
 

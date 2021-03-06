@@ -213,13 +213,13 @@
 (require 'fzf)
 
 ;; no evil mode in fzf
-(advice-add 'fzf :after 'turn-off-evil-mode)
-(advice-add 'fzf-git :after 'turn-off-evil-mode)
-(advice-add 'fzf-git-grep :after 'turn-off-evil-mode)
-(advice-add 'fzf-git-files :after 'turn-off-evil-mode)
-(advice-add 'fzf-hg :after 'turn-off-evil-mode)
-(advice-add 'fzf-directory :after 'turn-off-evil-mode)
-(advice-add 'fzf-projectile :after 'turn-off-evil-mode)
+;; (advice-add 'fzf :after 'turn-off-evil-mode)
+;; (advice-add 'fzf-git :after 'turn-off-evil-mode)
+;; (advice-add 'fzf-git-grep :after 'turn-off-evil-mode)
+;; (advice-add 'fzf-git-files :after 'turn-off-evil-mode)
+;; (advice-add 'fzf-hg :after 'turn-off-evil-mode)
+;; (advice-add 'fzf-directory :after 'turn-off-evil-mode)
+;; (advice-add 'fzf-projectile :after 'turn-off-evil-mode)
 
 
 
@@ -343,9 +343,9 @@
   (setq undo-tree-visualizer-timestamps t)
 
   ;; evil provides bindings for these, so they're unnecessary
-  (define-key undo-tree-map (kbd "C-/") nil)
-  (define-key undo-tree-map (kbd "C-_") nil)
-  (define-key undo-tree-map (kbd "M-_") nil)
+  ;; (define-key undo-tree-map (kbd "C-/") nil)
+  ;; (define-key undo-tree-map (kbd "C-_") nil)
+  ;; (define-key undo-tree-map (kbd "M-_") nil)
   (diminish 'undo-tree-mode)
   :after (diminish))
 
@@ -356,77 +356,77 @@
 
 (require 'evil-numbers)
 
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-C-u-scroll t  ;set C-u to function as scroll up in evil mode
-        evil-want-C-i-jump nil  ;this should fix issues with evil tabbing in org
-        evil-want-fine-undo t   ;finer granularity for undo
-        evil-want-Y-yank-to-eol t   ;Y yanks to eol instead of stupid whole line
-        ;; evil-want-minibuffer t
-        )
-  :config
-  (evil-mode 1)
-  (setq evil-echo-state nil) ;turn off -- INSERT --, -- VISUAL --, because it ruins eldoc.
+;; (use-package evil
+;;   :ensure t
+;;   :init
+;;   (setq evil-want-C-u-scroll t  ;set C-u to function as scroll up in evil mode
+;;         evil-want-C-i-jump nil  ;this should fix issues with evil tabbing in org
+;;         evil-want-fine-undo t   ;finer granularity for undo
+;;         evil-want-Y-yank-to-eol t   ;Y yanks to eol instead of stupid whole line
+;;         ;; evil-want-minibuffer t
+;;         )
+;;   :config
+;;   ;; (evil-mode 1)
+;;   (setq evil-echo-state nil) ;turn off -- INSERT --, -- VISUAL --, because it ruins eldoc.
 
-  ;; INSERT STATE
-  ;; escape from insert state with M-i
-  (define-key evil-insert-state-map
-    (kbd "M-i") #'evil-normal-state)
-  ;; VISUAL STATE
-  (define-key evil-visual-state-map
-    (kbd "M-i") #'evil-normal-state)
-  ;; NORMAL STATE
-  ;; set vimish-fold-avy as default action for zf
-  (define-key evil-normal-state-map
-    (kbd "zf") #'vimish-fold-avy)
-  (define-key evil-normal-state-map
-    (kbd "M-i") #'evil-normal-state-map)
-  ;; don't overwrite `xref-find-definitions'
-  (define-key evil-normal-state-map
-    (kbd "M-.") nil)
-  ;; evil-numbers increment and decrement functionality
-  (define-key evil-normal-state-map
-    (kbd "C-c C-=") #'evil-numbers/inc-at-pt)
-  (define-key evil-normal-state-map
-    (kbd "C-c +") #'evil-numbers/inc-at-pt)
-  (define-key evil-normal-state-map
-    (kbd "C-c C--") #'evil-numbers/dec-at-pt)
-  ;; MOTION STATE
-  ;; have already redefined C-u to `evil-scroll-page-up'
-  (define-key evil-motion-state-map
-    (kbd "C-b") nil)
+;;   ;; INSERT STATE
+;;   ;; escape from insert state with M-i
+;;   (define-key evil-insert-state-map
+;;     (kbd "M-i") #'evil-normal-state)
+;;   ;; VISUAL STATE
+;;   (define-key evil-visual-state-map
+;;     (kbd "M-i") #'evil-normal-state)
+;;   ;; NORMAL STATE
+;;   ;; set vimish-fold-avy as default action for zf
+;;   (define-key evil-normal-state-map
+;;     (kbd "zf") #'vimish-fold-avy)
+;;   (define-key evil-normal-state-map
+;;     (kbd "M-i") #'evil-normal-state-map)
+;;   ;; don't overwrite `xref-find-definitions'
+;;   (define-key evil-normal-state-map
+;;     (kbd "M-.") nil)
+;;   ;; evil-numbers increment and decrement functionality
+;;   (define-key evil-normal-state-map
+;;     (kbd "C-c C-=") #'evil-numbers/inc-at-pt)
+;;   (define-key evil-normal-state-map
+;;     (kbd "C-c +") #'evil-numbers/inc-at-pt)
+;;   (define-key evil-normal-state-map
+;;     (kbd "C-c C--") #'evil-numbers/dec-at-pt)
+;;   ;; MOTION STATE
+;;   ;; have already redefined C-u to `evil-scroll-page-up'
+;;   (define-key evil-motion-state-map
+;;     (kbd "C-b") nil)
 
-  ;; tell evil to not run in these modes
-  (nconc evil-emacs-state-modes
-         '(dired-mode)
-         '(image-mode)
-         '(ivy-occur-mode)
-         '(epa-key-list-mode epa-key-mode epa-info-mode) ;easy pgp
-         )
+;;   ;; tell evil to not run in these modes
+;;   (nconc evil-emacs-state-modes
+;;          '(dired-mode)
+;;          '(image-mode)
+;;          '(ivy-occur-mode)
+;;          '(epa-key-list-mode epa-key-mode epa-info-mode) ;easy pgp
+;;          )
 
-  ;; force nomral evil state in these modes
-  (require 'ivy)
-  (setq evil-normal-state-modes
-        '(
-          grep-mode                   ;so we can use evil to edit with `wgrep'
-          ivy-occur-grep-mode         ;so the above works in counsel-ag too
-          ))
+;;   ;; force nomral evil state in these modes
+;;   (require 'ivy)
+;;   (setq evil-normal-state-modes
+;;         '(
+;;           grep-mode                   ;so we can use evil to edit with `wgrep'
+;;           ivy-occur-grep-mode         ;so the above works in counsel-ag too
+;;           ))
 
-  :after (ivy))
+;;   :after (ivy))
 
 ;; vimish fold
 (use-package vimish-fold
   :ensure t)
 
 ;; evil keybindings to vimish fold zf, za, zd, &c
-(use-package evil-vimish-fold
-  :ensure t
-  :after (vimish-fold)
-  :config
-  (evil-vimish-fold-mode)
-  (diminish 'evil-vimish-fold-mode)
-  :after (diminish evil))
+;; (use-package evil-vimish-fold
+;;   :ensure t
+;;   :after (vimish-fold)
+;;   :config
+;;   (evil-vimish-fold-mode)
+;;   (diminish 'evil-vimish-fold-mode)
+;;   :after (diminish evil))
 
 
 

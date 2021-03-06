@@ -84,7 +84,7 @@
  ;; map
  ("M-<f12>" (d-load-next-theme G))
 
- ("M-u" (universal-argument G))
+ ;; ("M-u" (universal-argument G))
  ("M-x" (counsel-M-x G))
  ("M-X" (smex-major-mode-commands G))
  ;; ("M-x" (smex G))

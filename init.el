@@ -108,7 +108,7 @@
     ("f" (counsel-describe-function G))
     ("l" (counsel-find-library G))
     ("S" (counsel-info-lookup-symbol G))
-    ("l" (find-library G))
+    ;; ("l" (find-library G))
     )
 
  ("C-;"

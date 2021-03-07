@@ -11,6 +11,13 @@
 ;; (display-battery-mode 1)
 ;; (display-time-mode 1)
 
+;; scrolling
+(setq mouse-wheel-scroll-amount '(1)    ;1 line at a time
+      inhibit-compacting-font-caches t  ;some gc thing
+      scroll-conservatively 101         ;
+      mouse-wheel-progressive-speed t   ;faster mouse wheel -> faster text scrolling
+      )
+
 ;; show column numbers
 (column-number-mode)
 
@@ -37,10 +44,10 @@
 
 (require 'org)
 ;; terminus doens't have italics or bold
-(add-to-list 'org-emphasis-alist
-            '("*" . ((t (:background "yellow" :foreground "black"))))) ;org bold
-(add-to-list 'org-emphasis-alist
-            '("~" . ((t (:background "black" :foreground "green"))))) ;org code
+;; (add-to-list 'org-emphasis-alist
+;;             '("*" . ((t (:background "yellow" :foreground "black"))))) ;org bold
+;; (add-to-list 'org-emphasis-alist
+;;             '("~" . ((t (:background "black" :foreground "green"))))) ;org code
 
 (use-package which-key
   :ensure t

@@ -1,5 +1,6 @@
 ;;;; ===========================================================================
-;;;;                                    general 
+;;;;                                    general
+(global-subword-mode 1)
 (setq global-eldoc-mode t
       eldoc-idle-delay 0.00        ;reduce time it takes for eldoc to pop up
       eldoc-print-after-edit nil   ;documentation is show even when not editing

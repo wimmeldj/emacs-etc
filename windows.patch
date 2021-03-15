@@ -1,8 +1,8 @@
 diff --git a/config/langs.el b/config/langs.el
-index d853d3d..8e501fa 100644
+index 6ee7f84..aa1fd42 100644
 --- a/config/langs.el
 +++ b/config/langs.el
-@@ -160,23 +160,23 @@
+@@ -166,23 +166,23 @@
  ;;;;                                     scheme 
  
  ;; get a repl up with C-C C-z
@@ -38,7 +38,7 @@ index d853d3d..8e501fa 100644
  
  
 diff --git a/config/main.el b/config/main.el
-index 7a13ab7..ac5d1c7 100644
+index 81b42bc..01d5e54 100644
 --- a/config/main.el
 +++ b/config/main.el
 @@ -7,14 +7,14 @@
@@ -64,11 +64,11 @@ index 7a13ab7..ac5d1c7 100644
  (use-package gnuplot :ensure t)
  (use-package restclient
    :ensure t
-@@ -61,13 +61,13 @@
+@@ -63,13 +63,13 @@
  ;; make 80 the horizontal char limit
  (setq-default fill-column 80)
  
--(setq browse-url-generic-program "chromium"
+-(setq browse-url-generic-program "firefox"
 +(setq browse-url-generic-program "chrome.exe"
        browse-url-browser-function #'browse-url-generic)
  
@@ -80,7 +80,7 @@ index 7a13ab7..ac5d1c7 100644
  
  ;; not autosave and no lock files. But do backup to specific dir
  (setq make-backup-files t
-@@ -178,9 +178,9 @@
+@@ -205,9 +205,9 @@
  ;;;;                                      fzf 
  ;; set before requiring so as to trigger warning message when loaded and these
  ;; settings don't make sense
@@ -93,11 +93,22 @@ index 7a13ab7..ac5d1c7 100644
  
  ;; forked implementation of fzf
  (require 'fzf)
+@@ -264,8 +264,8 @@
+ ;; cycle through completions with TAB
+ (setq eshell-cmpl-cycle-completions t)
+ 
+-(require 'eshell-ring)
+-(global-eshring-mode 1)
++;; (require 'eshell-ring)
++;; (global-eshring-mode 1)
+ 
+ ;; *SLOW* This adds about 3 seconds to startup because of all the shell commands. Maybe we should
+ ;; cache? From https://www.emacswiki.org/emacs/EshellCompletion. Fixes eshell's noncompletion of
 diff --git a/config/visual.el b/config/visual.el
-index 8fd6ff9..911cf1e 100644
+index fda6a92..089395d 100644
 --- a/config/visual.el
 +++ b/config/visual.el
-@@ -27,11 +27,11 @@
+@@ -36,11 +36,11 @@
  
  ;; default window dimensions 130x150 and 200 pixels down. X unspecified. This
  ;; works for emacsclient as well
@@ -114,20 +125,28 @@ index 8fd6ff9..911cf1e 100644
  (require 'org)
  ;; terminus doens't have italics or bold
 diff --git a/init.el b/init.el
-index edc3f39..97b51f2 100644
+index 4348201..f9cf854 100644
 --- a/init.el
 +++ b/init.el
-@@ -15,17 +15,65 @@
+@@ -15,18 +15,75 @@
  			 ))
  
  
 +
  ;;;; ===========================================================================
--;;;;                                    desktop
--;; (set-face-attribute 'default nil :font "fixedsys" :height 80)
--;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 70)
+ ;;;;                                    desktop
+ ;; (set-face-attribute 'default nil :font "fixedsys" :height 120)
+ ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 120)
+-(set-face-attribute 'default nil :font "IBM Plex Mono" :height 90)
++;; (set-face-attribute 'default nil :font "IBM Plex Mono" :height 90)
+ 
+ ;;;; ===========================================================================
+ ;;;;                                     mobile
+ ;; (set-face-attribute 'default nil :font "fixedsys" :height 110)
+ ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
+ ;; (set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
 +;;;;                                 windows patch
-+
+ 
 +
 +;; Add these:
 +;; export DISPLAY=localhost:0.0
@@ -158,11 +177,8 @@ index edc3f39..97b51f2 100644
 +(setq mode-require-final-newline nil)
 +
 +
- 
- ;;;; ===========================================================================
--;;;;                                     mobile
--(set-face-attribute 'default nil :font "fixedsys" :height 110)
--;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
++
++;;;; ===========================================================================
 +;;;;                                 windows-patch 
 +;; In WSL add something like this to /etc/fonts/local.conf
 +;; To make fonts installed in windows available to wsl
@@ -175,10 +191,10 @@ index edc3f39..97b51f2 100644
 +;;
 +;; verify they're available with
 +;; $ fc-list
- 
++
 +;; (set-face-attribute 'default nil :font "fixedsys" :height 130)
 +;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 130)
- 
++
 +;; have to modify json a lot and we use 2 spaces. For `json-pretty-print'
 +(setq js-indent-level 2)
 +
@@ -189,7 +205,7 @@ index edc3f39..97b51f2 100644
  ;;;; ===========================================================================
  ;;;;                    pacakges installed without `use-package' 
  (require 'package)
-@@ -52,9 +100,11 @@
+@@ -53,9 +110,11 @@
  				 packages)))
    (when notinstalled
      (message "==The following packages will be installed: %s" (format "%S" notinstalled))
@@ -203,7 +219,7 @@ index edc3f39..97b51f2 100644
  ;;;; ===========================================================================
  ;;;;                                   load-path 
  
-@@ -71,6 +121,49 @@
+@@ -72,6 +131,49 @@
  (setq ezk-keymap-path (concat user-emacs-directory "init.el"))
  (require 'ezkeys)
  
@@ -253,7 +269,7 @@ index edc3f39..97b51f2 100644
  (ezk-defkeymaps
   ;; precedence
   (c-mode
-@@ -241,12 +334,16 @@
+@@ -238,12 +340,16 @@
   '(ansi-color-faces-vector
     [default default default italic underline success warning error])
   '(custom-safe-themes
@@ -275,7 +291,7 @@ index edc3f39..97b51f2 100644
       ("NEXT" . "#dc752f")
       ("THEM" . "#2d9574")
       ("PROG" . "#4f97d7")
-@@ -260,18 +357,21 @@
+@@ -257,18 +363,21 @@
       ("TEMP" . "#b1951d")
       ("FIXME" . "#dc752f")
       ("XXX+" . "#dc752f")
@@ -305,7 +321,7 @@ index edc3f39..97b51f2 100644
       (50 . "#dc9656")
       (80 . "#f7ca88")
       (110 . "#a1b56c")
-@@ -282,7 +382,7 @@
+@@ -279,7 +388,7 @@
       (260 . "#181818")
       (290 . "#282828")
       (320 . "#383838")
@@ -314,3 +330,8 @@ index edc3f39..97b51f2 100644
   '(vc-annotate-very-old-color "#585858")
   '(which-key-mode t)
   '(xterm-color-names
+@@ -296,3 +405,4 @@
+  '(mode-line-inactive ((((class color) (min-colors 89)) (:foreground "#655370" :background "#fbf8ef" :box (:color "#b3b9be" :line-width 1))))))
+ (put 'dired-find-alternate-file 'disabled nil)
+ (put 'narrow-to-region 'disabled nil)
++(put 'upcase-region 'disabled nil)

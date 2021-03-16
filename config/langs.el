@@ -1,6 +1,9 @@
 ;;;; ===========================================================================
 ;;;;                                    general
-(global-subword-mode 1)
+
+(global-subword-mode 1)                 ;word defn is finer grained. e.g. camelCase - 2 words
+(delete-selection-mode 1)               ;highlighted region gets deleted on input
+
 (setq global-eldoc-mode t
       eldoc-idle-delay 0.00        ;reduce time it takes for eldoc to pop up
       eldoc-print-after-edit nil   ;documentation is show even when not editing

@@ -95,6 +95,9 @@
 (setq bookmark-save-flag t
       bookmark-use-annotations t)
 
+;; provides vim-like `forward-to-word' `backward-to-word'
+(require 'misc)
+
 
 ;;;; ===========================================================================
 ;;;;                             navigation and windows

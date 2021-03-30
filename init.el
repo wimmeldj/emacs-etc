@@ -81,6 +81,9 @@
   (CC c-mode c++-mode)
   (LISP emacs-lisp-mode scheme-mode-hook lisp-mode))
 
+ ("M-f" (forward-to-word G))
+ ("M-b" (backward-to-word G))
+
  ;; map
  ("M-<f12>" (d-load-next-theme G))
 

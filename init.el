@@ -81,8 +81,14 @@
   (CC c-mode c++-mode)
   (LISP emacs-lisp-mode scheme-mode-hook lisp-mode))
 
- ("M-f" (forward-to-word G))
- ("M-b" (backward-to-word G))
+ ;; overrides `subword-mode' :(
+ ;; ("M-f" (forward-to-word G))
+ ;; ("M-b" (backward-to-word G))
+
+ ("C-k"
+    ("C-k"(kill-line G))
+    ("C-w" (delete-trailing-whitespace G))
+    )
 
  ;; map
  ("M-<f12>" (d-load-next-theme G))

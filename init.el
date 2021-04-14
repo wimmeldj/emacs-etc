@@ -28,7 +28,7 @@
 ;; (set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
 
 ;;;; ===========================================================================
-;;;;                    pacakges installed without `use-package' 
+;;;;                    pacakges installed without `use-package'
 (require 'package)
 (require 'seq)
 (let* ((packages '(use-package
@@ -57,7 +57,7 @@
     (mapc #'package-install notinstalled)))
 
 ;;;; ===========================================================================
-;;;;                                   load-path 
+;;;;                                   load-path
 
 (add-to-list 'load-path (concat user-emacs-directory "config/"))
 (add-to-list 'load-path (concat user-emacs-directory "config/hacks/"))
@@ -84,11 +84,6 @@
  ;; overrides `subword-mode' :(
  ;; ("M-f" (forward-to-word G))
  ;; ("M-b" (backward-to-word G))
-
- ("C-k"
-    ("C-k"(kill-line G))
-    ("C-w" (delete-trailing-whitespace G))
-    )
 
  ;; map
  ("M-<f12>" (d-load-next-theme G))
@@ -148,7 +143,7 @@
 
 
 ;;;; ===========================================================================
-;;;;                        evil hack to work with `ezkeys' 
+;;;;                        evil hack to work with `ezkeys'
 ;; (define-minor-mode evil-local-mode
 ;;   "Minor mode for setting up Evil in a single buffer."
 ;;   :init-value nil

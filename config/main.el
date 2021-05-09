@@ -461,6 +461,7 @@
                  (require 'woman)
                  (list (woman-file-name nil)))))
 
+(setq Man-notify-method 'pushy)         ;man opens selected page in current buffer
 
 
 ;;;; ===========================================================================

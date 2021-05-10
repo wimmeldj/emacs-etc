@@ -1,8 +1,8 @@
 diff --git a/config/langs.el b/config/langs.el
-index 6ee7f84..aa1fd42 100644
+index f98343b..0801227 100644
 --- a/config/langs.el
 +++ b/config/langs.el
-@@ -166,23 +166,23 @@
+@@ -169,23 +169,23 @@
  ;;;;                                     scheme 
  
  ;; get a repl up with C-C C-z
@@ -38,7 +38,7 @@ index 6ee7f84..aa1fd42 100644
  
  
 diff --git a/config/main.el b/config/main.el
-index 81b42bc..01d5e54 100644
+index 0546593..358e496 100644
 --- a/config/main.el
 +++ b/config/main.el
 @@ -7,14 +7,14 @@
@@ -80,7 +80,7 @@ index 81b42bc..01d5e54 100644
  
  ;; not autosave and no lock files. But do backup to specific dir
  (setq make-backup-files t
-@@ -205,9 +205,9 @@
+@@ -210,9 +210,9 @@
  ;;;;                                      fzf 
  ;; set before requiring so as to trigger warning message when loaded and these
  ;; settings don't make sense
@@ -93,7 +93,7 @@ index 81b42bc..01d5e54 100644
  
  ;; forked implementation of fzf
  (require 'fzf)
-@@ -264,8 +264,8 @@
+@@ -269,8 +269,8 @@
  ;; cycle through completions with TAB
  (setq eshell-cmpl-cycle-completions t)
  
@@ -125,10 +125,10 @@ index fda6a92..089395d 100644
  (require 'org)
  ;; terminus doens't have italics or bold
 diff --git a/init.el b/init.el
-index 4348201..f9cf854 100644
+index 64a8d9a..ed4cf4f 100644
 --- a/init.el
 +++ b/init.el
-@@ -15,18 +15,75 @@
+@@ -15,20 +15,77 @@
  			 ))
  
  
@@ -146,7 +146,7 @@ index 4348201..f9cf854 100644
  ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
  ;; (set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
 +;;;;                                 windows patch
- 
++
 +
 +;; Add these:
 +;; export DISPLAY=localhost:0.0
@@ -177,8 +177,9 @@ index 4348201..f9cf854 100644
 +(setq mode-require-final-newline nil)
 +
 +
-+
-+;;;; ===========================================================================
+ 
+ ;;;; ===========================================================================
+-;;;;                    pacakges installed without `use-package'
 +;;;;                                 windows-patch 
 +;; In WSL add something like this to /etc/fonts/local.conf
 +;; To make fonts installed in windows available to wsl
@@ -202,10 +203,12 @@ index 4348201..f9cf854 100644
 +
 +
 +
- ;;;; ===========================================================================
- ;;;;                    pacakges installed without `use-package' 
++;;;; ===========================================================================
++;;;;                    pacakges installed without `use-package' 
  (require 'package)
-@@ -53,9 +110,11 @@
+ (require 'seq)
+ (let* ((packages '(use-package
+@@ -53,11 +110,13 @@
  				 packages)))
    (when notinstalled
      (message "==The following packages will be installed: %s" (format "%S" notinstalled))
@@ -217,8 +220,11 @@ index 4348201..f9cf854 100644
  
 +
  ;;;; ===========================================================================
- ;;;;                                   load-path 
+-;;;;                                   load-path
++;;;;                                   load-path 
  
+ (add-to-list 'load-path (concat user-emacs-directory "config/"))
+ (add-to-list 'load-path (concat user-emacs-directory "config/hacks/"))
 @@ -72,6 +131,49 @@
  (setq ezk-keymap-path (concat user-emacs-directory "init.el"))
  (require 'ezkeys)
@@ -269,69 +275,3 @@ index 4348201..f9cf854 100644
  (ezk-defkeymaps
   ;; precedence
   (c-mode
-@@ -238,12 +340,16 @@
-  '(ansi-color-faces-vector
-    [default default default italic underline success warning error])
-  '(custom-safe-themes
--   '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "4cf9ed30ea575fb0ca3cff6ef34b1b87192965245776afa9e9e20c17d115f3fb" "d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" "ffba0482d3548c9494e84c1324d527f73ea4e43fff8dfd0e48faa8fc6d5c2bc7" "123a8dabd1a0eff6e0c48a03dc6fb2c5e03ebc7062ba531543dfbce587e86f2a" "a06658a45f043cd95549d6845454ad1c1d6e24a99271676ae56157619952394a" "939ea070fb0141cd035608b2baabc4bd50d8ecc86af8528df9d41f4d83664c6a" "4c0739c6ad6fd91ebd737f8f40527d279cc5f85bc286a7c0d7467b4a6ba53166" "d97baf5a34c87b05508739505cad03438cde8efa2a0d350c7773f2a8bc26a50d" "8f5b54bf6a36fe1c138219960dd324aad8ab1f62f543bed73ef5ad60956e36ae" "cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" "2b9dc43b786e36f68a9fd4b36dd050509a0e32fe3b0a803310661edb7402b8b6" "8e797edd9fa9afec181efbfeeebf96aeafbd11b69c4c85fa229bb5b9f7f7e66c" "585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739" "8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" "a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0" "b583823b9ee1573074e7cbfd63623fe844030d911e9279a7c8a5d16de7df0ed0" default))
-- '(flymake-error-bitmap '(flymake-double-exclamation-mark modus-theme-fringe-red))
-- '(flymake-note-bitmap '(exclamation-mark modus-theme-fringe-cyan))
-- '(flymake-warning-bitmap '(exclamation-mark modus-theme-fringe-yellow))
-+   (quote
-+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "4cf9ed30ea575fb0ca3cff6ef34b1b87192965245776afa9e9e20c17d115f3fb" "d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" "ffba0482d3548c9494e84c1324d527f73ea4e43fff8dfd0e48faa8fc6d5c2bc7" "123a8dabd1a0eff6e0c48a03dc6fb2c5e03ebc7062ba531543dfbce587e86f2a" "a06658a45f043cd95549d6845454ad1c1d6e24a99271676ae56157619952394a" "939ea070fb0141cd035608b2baabc4bd50d8ecc86af8528df9d41f4d83664c6a" "4c0739c6ad6fd91ebd737f8f40527d279cc5f85bc286a7c0d7467b4a6ba53166" "d97baf5a34c87b05508739505cad03438cde8efa2a0d350c7773f2a8bc26a50d" "8f5b54bf6a36fe1c138219960dd324aad8ab1f62f543bed73ef5ad60956e36ae" "cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" "2b9dc43b786e36f68a9fd4b36dd050509a0e32fe3b0a803310661edb7402b8b6" "8e797edd9fa9afec181efbfeeebf96aeafbd11b69c4c85fa229bb5b9f7f7e66c" "585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739" "8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" "a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0" "b583823b9ee1573074e7cbfd63623fe844030d911e9279a7c8a5d16de7df0ed0" default)))
-+ '(flymake-error-bitmap
-+   (quote
-+    (flymake-double-exclamation-mark modus-theme-fringe-red)))
-+ '(flymake-note-bitmap (quote (exclamation-mark modus-theme-fringe-cyan)))
-+ '(flymake-warning-bitmap (quote (exclamation-mark modus-theme-fringe-yellow)))
-  '(hl-todo-keyword-faces
--   '(("TODO" . "#dc752f")
-+   (quote
-+    (("TODO" . "#dc752f")
-      ("NEXT" . "#dc752f")
-      ("THEM" . "#2d9574")
-      ("PROG" . "#4f97d7")
-@@ -257,18 +363,21 @@
-      ("TEMP" . "#b1951d")
-      ("FIXME" . "#dc752f")
-      ("XXX+" . "#dc752f")
--     ("\\?\\?\\?+" . "#dc752f")))
-- '(ibuffer-deletion-face 'dired-flagged)
-- '(ibuffer-filter-group-name-face 'dired-mark)
-- '(ibuffer-marked-face 'dired-marked)
-- '(ibuffer-title-face 'dired-header)
-+     ("\\?\\?\\?+" . "#dc752f"))))
-+ '(ibuffer-deletion-face (quote dired-flagged))
-+ '(ibuffer-filter-group-name-face (quote dired-mark))
-+ '(ibuffer-marked-face (quote dired-marked))
-+ '(ibuffer-title-face (quote dired-header))
-  '(package-selected-packages
--   '(lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
-- '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
-+   (quote
-+    (lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-collapse diminish company beacon ace-window)))
-+ '(pdf-view-midnight-colors (quote ("#fdf4c1" . "#1d2021")))
-+ '(require-final-newline nil)
-  '(vc-annotate-background "#ffffff")
-  '(vc-annotate-background-mode nil)
-  '(vc-annotate-color-map
--   '((20 . "#ab4642")
-+   (quote
-+    ((20 . "#ab4642")
-      (50 . "#dc9656")
-      (80 . "#f7ca88")
-      (110 . "#a1b56c")
-@@ -279,7 +388,7 @@
-      (260 . "#181818")
-      (290 . "#282828")
-      (320 . "#383838")
--     (350 . "#585858")))
-+     (350 . "#585858"))))
-  '(vc-annotate-very-old-color "#585858")
-  '(which-key-mode t)
-  '(xterm-color-names
-@@ -296,3 +405,4 @@
-  '(mode-line-inactive ((((class color) (min-colors 89)) (:foreground "#655370" :background "#fbf8ef" :box (:color "#b3b9be" :line-width 1))))))
- (put 'dired-find-alternate-file 'disabled nil)
- (put 'narrow-to-region 'disabled nil)
-+(put 'upcase-region 'disabled nil)

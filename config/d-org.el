@@ -9,10 +9,11 @@
             (setq fill-column 100
                   ;; redefines org's definition of paragraph start and end to be compatible with
                   ;; evil mode's notion of "a paragraph"
-                  paragraph-start "\\|[         ]*$"
-                  paragraph-separate "[   ]*$"
+                  ;; paragraph-start "\\|[         ]*$"
+                  ;; paragraph-separate "[   ]*$"
                   )
             (auto-fill-mode 1)
+            (org-indent-mode 1) ;soft indentation.
             ))
 
 (setq fill-column 100
@@ -21,8 +22,11 @@
       org-startup-with-inline-images t
       org-todo-keywords '((sequence "TODO" "DOING" "DONE"))
       org-todo-keyword-faces '(("DOING" . "yellow"))
-      org-confirm-babel-evaluate nil)      ;don't confirm eval of src code block
-      
+      org-confirm-babel-evaluate nil    ;don't confirm eval of src code block
+      org-adapt-indentation nil         ;disable hard indentation
+      org-hide-leading-stars nil
+      )
+
 (setq d/org-default-setup-file (concat user-emacs-directory "org-default-setup.org/"))
 
 (setq org-babel-python-command "python3")

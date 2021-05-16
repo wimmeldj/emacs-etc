@@ -188,5 +188,12 @@
   (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
 
 
+
+;;;; ===========================================================================
+;;;;                                       sh
+
+(add-hook 'sh-mode
+          (lambda () (sh-electric-here-document-mode -1)) ;poorly implemented
+          )
 
 (provide 'langs)

@@ -98,7 +98,7 @@
 ;; provides vim-like `forward-to-word' `backward-to-word'
 (require 'misc)
 
-(setq delete-by-moving-to-trash t)
+(setq delete-by-moving-to-trash nil)
 
 
 ;;;; ===========================================================================

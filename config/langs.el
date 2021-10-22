@@ -47,6 +47,7 @@
 
 (require 'cc-vars)
 (push '(c-mode . "k&r") c-default-style)
+(push '(c++-mode . "k&r") c-default-style)
 
 (let ((clangd-exit (call-process "which" nil nil nil "clangd"))
       (bear-exit (call-process "which" nil nil nil "bear"))

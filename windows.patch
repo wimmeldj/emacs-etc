@@ -1,85 +1,29 @@
-diff --git a/config/langs.el b/config/langs.el
-index f98343b..0801227 100644
---- a/config/langs.el
-+++ b/config/langs.el
-@@ -169,23 +169,23 @@
- ;;;;                                     scheme 
- 
- ;; get a repl up with C-C C-z
--(use-package geiser
--  :ensure t
--  :config
--  (setq geiser-active-implementations '(chez))
--  (setq geiser-default-implementation 'chez)
--  (add-hook 'scheme-mode-hook #'geiser-mode))
-+;; (use-package geiser
-+;;   :ensure t
-+;;   :config
-+;;   (setq geiser-active-implementations '(chez))
-+;;   (setq geiser-default-implementation 'chez)
-+;;   (add-hook 'scheme-mode-hook #'geiser-mode))
- 
- 
- 
- ;;;; ===========================================================================
- ;;;;                                       js 
- 
--(use-package js2-mode
--  :ensure t
--  :config
--  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
--  (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
-+;; (use-package js2-mode
-+;;   :ensure t
-+;;   :config
-+;;   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-+;;   (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
- 
- 
- 
 diff --git a/config/main.el b/config/main.el
-index 0546593..358e496 100644
+index dfcd73e..c8b180e 100644
 --- a/config/main.el
 +++ b/config/main.el
-@@ -7,14 +7,14 @@
- ;;;; ===========================================================================
- ;;;;                                   trying out 
- 
--(use-package dired-rsync
--  :ensure t)
--(use-package rainbow-blocks
--  :ensure t
--  :config (rainbow-blocks-mode 1))
+@@ -12,9 +12,9 @@
+ (use-package rainbow-blocks
+   :ensure t
+   :config (rainbow-blocks-mode 1))
 -(use-package blimp :ensure t
 -  :config
 -  (add-hook 'image-minor-mode-hook 'blimp-mode))
-+;; (use-package dired-rsync
-+;;   :ensure t)
-+;; (use-package rainbow-blocks
-+;;   :ensure t
-+;;   :config (rainbow-blocks-mode 1))
 +;; (use-package blimp :ensure t
 +;;   :config
 +;;   (add-hook 'image-minor-mode-hook 'blimp-mode))
  (use-package gnuplot :ensure t)
  (use-package restclient
    :ensure t
-@@ -63,13 +63,13 @@
- ;; make 80 the horizontal char limit
- (setq-default fill-column 80)
+@@ -52,7 +52,7 @@
+ (setq select-enable-clipboard t)
+ (setq x-select-enable-clipboard-manager t)
  
--(setq browse-url-generic-program "firefox"
-+(setq browse-url-generic-program "chrome.exe"
-       browse-url-browser-function #'browse-url-generic)
+-;; (setq ring-bell-function 'ignore)
++(setq ring-bell-function 'ignore)
  
- (setq enable-recursive-minibuffers t)
- 
- ;; hack in emacs 27.1 to make buffers with really long lines not cause ruin
--(global-so-long-mode)
-+;(global-so-long-mode)
- 
- ;; not autosave and no lock files. But do backup to specific dir
- (setq make-backup-files t
+ ;; alias yes-or-no-p function to y-or-n-p function
+ (defalias 'yes-or-no-p 'y-or-n-p)
 @@ -210,9 +210,9 @@
  ;;;;                                      fzf 
  ;; set before requiring so as to trigger warning message when loaded and these
@@ -125,91 +69,45 @@ index fda6a92..089395d 100644
  (require 'org)
  ;; terminus doens't have italics or bold
 diff --git a/init.el b/init.el
-index 64a8d9a..ed4cf4f 100644
+index 64a8d9a..885ffbb 100644
 --- a/init.el
 +++ b/init.el
-@@ -15,20 +15,77 @@
- 			 ))
+@@ -8,11 +8,11 @@
+ (package-initialize)
  
+ (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+-			 ("melpa" . "https://melpa.org/packages/")
+-			 ("melpa-stable" . "https://stable.melpa.org/packages/")
+-			 ;; ("org" . "http://orgmode.org/elpa/")
++                         ("melpa" . "https://melpa.org/packages/")
++                         ("melpa-stable" . "https://stable.melpa.org/packages/")
++                         ;; ("org" . "http://orgmode.org/elpa/")
+ ;;			 ("marmalade" . "http://marmalade-repo.org/packages/")
+-			 ))
++                         ))
  
-+
- ;;;; ===========================================================================
- ;;;;                                    desktop
- ;; (set-face-attribute 'default nil :font "fixedsys" :height 120)
- ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 120)
--(set-face-attribute 'default nil :font "IBM Plex Mono" :height 90)
-+;; (set-face-attribute 'default nil :font "IBM Plex Mono" :height 90)
- 
- ;;;; ===========================================================================
- ;;;;                                     mobile
- ;; (set-face-attribute 'default nil :font "fixedsys" :height 110)
- ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 110)
- ;; (set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
-+;;;;                                 windows patch
-+
-+
-+;; Add these:
-+;; export DISPLAY=localhost:0.0
-+;; alias emacsd="emacs-gtk --daemon"
-+;; alias ecl="emacsclient -c -n -d=${DISPLAY}"
-+
-+;; (setq-default buffer-file-coding-system 'utf-8-dos)
-+;; (setq-default default-buffer-file-coding-system 'utf-8-dos)
-+;; (set-default-coding-systems 'utf-8-dos)
-+;; (prefer-coding-system 'utf-8-dos)
-+
-+
-+(defun assoc-delete-all (key alist &optional test)
-+  "Broken in wsl for some reason, so manually defining"
-+  (unless test (setq test #'equal))
-+  (while (and (consp (car alist))
-+	      (funcall test (caar alist) key))
-+    (setq alist (cdr alist)))
-+  (let ((tail alist) tail-cdr)
-+    (while (setq tail-cdr (cdr tail))
-+      (if (and (consp (car tail-cdr))
-+               (funcall test (caar tail-cdr) key))
-+          (setcdr tail (cdr tail-cdr))
-+        (setq tail tail-cdr))))
-+  alist)
-+
-+(setq require-final-newline nil)
-+(setq mode-require-final-newline nil)
-+
-+
  
  ;;;; ===========================================================================
--;;;;                    pacakges installed without `use-package'
-+;;;;                                 windows-patch 
-+;; In WSL add something like this to /etc/fonts/local.conf
-+;; To make fonts installed in windows available to wsl
-+;; <?xml version="1.0"?>
-+;; <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-+;; <fontconfig>
-+;; 	<dir>/mnt/c/Windows/Fonts</dir>
-+;; 	<dir>/mnt/c/Users/dwimmel/AppData/Local/Microsoft/Windows/Fonts</dir>
-+;; </fontconfig>
-+;;
-+;; verify they're available with
-+;; $ fc-list
-+
-+;; (set-face-attribute 'default nil :font "fixedsys" :height 130)
-+;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 130)
-+
-+;; have to modify json a lot and we use 2 spaces. For `json-pretty-print'
-+(setq js-indent-level 2)
-+
-+
-+
-+
-+
-+;;;; ===========================================================================
-+;;;;                    pacakges installed without `use-package' 
+@@ -32,8 +32,8 @@
  (require 'package)
  (require 'seq)
  (let* ((packages '(use-package
-@@ -53,11 +110,13 @@
- 				 packages)))
+-		    helm
+-		    spacemacs-theme
++                    helm
++                    spacemacs-theme
+                     ;; from https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/
+                     ;; figure out what you really want to keep later
+                     lsp-mode
+@@ -48,20 +48,22 @@
+                     which-key
+                     helm-xref
+                     dap-mode
+-		    ))
++                    ))
+        (notinstalled (seq-filter #'(lambda (pkg) (not (package-installed-p pkg)))
+-				 packages)))
++                                 packages)))
    (when notinstalled
      (message "==The following packages will be installed: %s" (format "%S" notinstalled))
 -    (package-refresh-contents)
@@ -220,18 +118,22 @@ index 64a8d9a..ed4cf4f 100644
  
 +
  ;;;; ===========================================================================
--;;;;                                   load-path
-+;;;;                                   load-path 
+ ;;;;                                   load-path
  
  (add-to-list 'load-path (concat user-emacs-directory "config/"))
  (add-to-list 'load-path (concat user-emacs-directory "config/hacks/"))
-@@ -72,6 +131,49 @@
- (setq ezk-keymap-path (concat user-emacs-directory "init.el"))
- (require 'ezkeys)
+-(add-to-list 'load-path (concat user-emacs-directory "eshell-ring/"))
++;; (add-to-list 'load-path (concat user-emacs-directory "eshell-ring/"))
+ (add-to-list 'load-path (concat user-emacs-directory "ezkeys/"))
+ (add-to-list 'load-path (concat user-emacs-directory "evil-numbers/"))
+ (add-to-list 'load-path (concat user-emacs-directory "fzf/"))
+@@ -69,6 +71,54 @@
+ 
+ (require 'main)
  
 +
 +;;;; ===========================================================================
-+;;;;                                 windows-patch 
++;;;;                                 windows-patch
 +(defun counsel-locate-action-extern (x)
 +  "Pass X to `xdg-open' or equivalent command via the shell."
 +  (interactive "FFile: ")
@@ -242,13 +144,13 @@ index 64a8d9a..ed4cf4f 100644
 +                     (cl-case system-type
 +                       (darwin "open")
 +                       (cygwin "cygstart")
-+                       (t "wsl-open"))
++                       (t "~/.emacs.d/win-bins/wsl-open"))
 +                     (shell-quote-argument x)))
 +    (call-process-shell-command (format "%s %s"
 +                                        (cl-case system-type
 +                                          (darwin "open")
 +                                          (cygwin "cygstart")
-+                                          (t "wsl-open"))
++                                          (t "~/.emacs.d/win-bins/wsl-open"))
 +                                        (shell-quote-argument x))
 +                                nil 0)))
 +
@@ -267,11 +169,16 @@ index 64a8d9a..ed4cf4f 100644
 +(require 'dired)
 +(define-key dired-mode-map (kbd "C-i") #'dired-open-in-vs)
 +
++;; without this, opening a file in windows os source (controlled by Git-VFS) is /very/ slow
++(magit-auto-revert-mode -1)
++(setq vc-handled-backends nil)
++(setq find-file-hook
++      (cl-remove-if (lambda (elt) (eq elt 'vc-refresh-state))
++              find-file-hook))
 +
 +
 +;;;; ===========================================================================
-+;;;;                                     keymap 
-+
- (ezk-defkeymaps
-  ;; precedence
-  (c-mode
++;;;;                                     keymap
+ (setq ezk-keymap-path (concat user-emacs-directory "init.el"))
+ (require 'ezkeys)
+ 

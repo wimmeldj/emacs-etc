@@ -36,9 +36,9 @@ it's called."
   (let* ((theme (if d/current-theme
                     (ring-next d/theme-ring d/current-theme)
                   (ring-ref d/theme-ring 0)))
-         (theme-name (first theme))
-         (before (second theme))
-         (after (third theme)))
+         (theme-name (car theme))
+         (before (cadr theme))
+         (after (caddr theme)))
     (mapc #'eval before)
     (load-theme theme-name t)
     (mapc #'eval after)

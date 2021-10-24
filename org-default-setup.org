@@ -32,6 +32,6 @@ Put your css in this block. When finished, execute [[embedded]].
 #+END_SRC
 
 #+RESULTS: embedded
-:RESULTS:
+:results:
 #+HTML_HEAD: <style type='text/css'>table {    margin-left: auto;    margin-right: auto;}.nobreak {    break-inside: avoid;   /* don't break inside a table */}</style>
-:END:
+:end:

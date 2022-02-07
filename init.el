@@ -38,7 +38,7 @@
                     ;; figure out what you really want to keep later
                     lsp-mode
                     lsp-treemacs
-                    helm-lsp       ;`helm-lsp-workspace-symbol' `helm-lsp-global-workspace-symbol' and `helm-lsp-code-actions'
+                    ;; helm-lsp       ;`helm-lsp-workspace-symbol' `helm-lsp-global-workspace-symbol' and `helm-lsp-code-actions'
                     lsp-ivy        ;`lsp-ivy-workspace-symbol' and `lsp-ivy-global-workspace-symbol'
                     projectile
                     hydra
@@ -46,7 +46,7 @@
                     company
                     avy
                     which-key
-                    helm-xref
+                    ;; helm-xref
                     dap-mode
 		    ))
        (notinstalled (seq-filter #'(lambda (pkg) (not (package-installed-p pkg)))
@@ -270,7 +270,7 @@
  '(ibuffer-marked-face 'dired-marked)
  '(ibuffer-title-face 'dired-header)
  '(package-selected-packages
-   '(nasm-mode god-mode lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
+   '(haskell-mode tide-mode solidity-mode nasm-mode god-mode lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
  '(safe-local-variable-values '((explicit-shell-file-name . /bin/bash)))
  '(vc-annotate-background "#ffffff")

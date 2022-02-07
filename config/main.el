@@ -52,7 +52,7 @@
 (setq select-enable-clipboard t)
 (setq x-select-enable-clipboard-manager t)
 
-;; (setq ring-bell-function 'ignore)
+(setq ring-bell-function 'ignore)
 
 ;; alias yes-or-no-p function to y-or-n-p function
 (defalias 'yes-or-no-p 'y-or-n-p)

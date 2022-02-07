@@ -186,7 +186,8 @@
   :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-  (add-to-list 'interpreter-mode-alist '("node" . js2-mode)))
+  (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . js2-mode)))
 
 
 
@@ -240,3 +241,9 @@
    ;; The rest goes at column 4
    (or 4)))
   ))
+
+
+;;;; ===========================================================================
+;;;;                                    solidity
+(use-package solidity-mode
+  :ensure t)

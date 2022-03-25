@@ -39,7 +39,7 @@
 (when (display-graphic-p)
   (setq default-frame-alist
         '((width . 130)
-          (height . 150)
+          (height . 100)
           (top . 200))))
 
 (require 'org)

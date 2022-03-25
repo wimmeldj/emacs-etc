@@ -64,10 +64,12 @@
 (add-to-list 'load-path (concat user-emacs-directory "eshell-ring/"))
 (add-to-list 'load-path (concat user-emacs-directory "ezkeys/"))
 (add-to-list 'load-path (concat user-emacs-directory "evil-numbers/"))
-(add-to-list 'load-path (concat user-emacs-directory "fzf/"))
+;; (add-to-list 'load-path (concat user-emacs-directory "fzf/"))
+(add-to-list 'load-path (concat user-emacs-directory "hoon-mode.el/"))
 
 
-(require 'main)
+;; (require 'main)
+(require 'visual)
 
 (setq ezk-keymap-path (concat user-emacs-directory "init.el"))
 (require 'ezkeys)
@@ -79,7 +81,8 @@
  ;; groups
  ((G GLOBAL)
   (CC c-mode c++-mode)
-  (LISP emacs-lisp-mode scheme-mode-hook lisp-mode))
+  (LISP emacs-lisp-mode scheme-mode-hook lisp-mode)
+  (HOON hoon-mode))
 
  ;; overrides `subword-mode' :(
  ;; ("M-f" (forward-to-word G))
@@ -88,19 +91,16 @@
  ;; map
  ("M-<f12>" (d-load-next-theme G))
 
- ;; ("M-u" (universal-argument G))
- ("M-x" (counsel-M-x G))
- ("M-X" (smex-major-mode-commands G))
- ;; ("M-x" (smex G))
-
+ ;; ("M-x" (counsel-M-x G))
+ ;; ("M-X" (smex-major-mode-commands G))
+ 
 
  ("C-x"
     ("o" (ace-window G))
     ("C-b" (ibuffer G))
-    ("C-f" (counsel-find-file G))
-    ("u" (undo-tree-visualize G))
-    ("b" (ivy-switch-buffer G))
-    ;; ("r i" (counsel-register G))
+    ;; ("C-f" (counsel-find-file G))
+    ;; ("u" (undo-tree-visualize G))
+    ;; ("b" (ivy-switch-buffer G))
     ("x g" (revert-buffer G))
     )
 
@@ -108,13 +108,12 @@
     ("C-r" (ivy-resume G))
     )
 
- ("C-h"
-    ("v" (counsel-describe-variable G))
-    ("f" (counsel-describe-function G))
-    ("l" (counsel-find-library G))
-    ("S" (counsel-info-lookup-symbol G))
-    ;; ("l" (find-library G))
-    )
+ ;; ("C-h"
+ ;;    ("v" (counsel-describe-variable G))
+ ;;    ("f" (counsel-describe-function G))
+ ;;    ("l" (counsel-find-library G))
+ ;;    ("S" (counsel-info-lookup-symbol G))
+ ;;     )
 
  ("C-;"
     ("m"
@@ -123,9 +122,8 @@
        ("c" (magit-file-checkout G))
        ("l" (magit-log-buffer-file G)))
     ("a" (avy-goto-line G))
-    ("C-f" (fzf G))
-    ;; ("C-f" (counsel-fzf G))
-    ("C-/" (company-files G))
+    ("C-f" (find-dired G))
+    ;; ("C-/" (company-files G))
     ("C-s" (counsel-ag G))
     ("u" (browse-url G))
 
@@ -134,12 +132,10 @@
     ("C-d" (d-dired-dotfiles-toggle dired-mode))
     )
 
- ;; ("C-w" ("C-h" (winner-undo G))
- ;;        ("C-l" (winner-redo G)))
+  ("C-S-s" (occur G))
 
  ("C-S-s" (occur G))
  )
-
 
 
 
@@ -184,18 +180,87 @@
 ;;     (evil-change-state nil))))
 
 
+;; TODO, put somewhere else
+(defun increment-char-at-point ()
+  "Increment number or character at point."
+  (interactive)
+  (condition-case nil
+      (save-excursion
+        (let ((chr  (1+ (char-after))))
+          (unless (characterp chr) (error "Cannot increment char by one"))
+          (delete-char 1)
+          (insert chr)))
+    (error (error "No character at point"))))
 
 
+(setq garbage-collection-messages t)
+(setq ring-bell-function 'ignore)
 
+(defun save-buffer (&optional arg)
+  "Save current buffer in visited file if modified.
+Variations are described below.
 
+By default, makes the previous version into a backup file
+ if previously requested or if this is the first save.
+Prefixed with one \\[universal-argument], marks this version
+ to become a backup when the next save is done.
+Prefixed with two \\[universal-argument]'s,
+ makes the previous version into a backup file.
+Prefixed with three \\[universal-argument]'s, marks this version
+ to become a backup when the next save is done,
+ and makes the previous version into a backup file.
 
+With a numeric prefix argument of 0, never make the previous version
+into a backup file.
 
+Note that the various variables that control backups, such
+as `version-control', `backup-enable-predicate', `vc-make-backup-files',
+and `backup-inhibited', to name just the more popular ones, still
+control whether a backup will actually be produced, even when you
+invoke this command prefixed with two or three \\[universal-argument]'s.
 
+If a file's name is FOO, the names of its numbered backup versions are
+ FOO.~i~ for various integers i.  A non-numbered backup file is called FOO~.
+Numeric backups (rather than FOO~) will be made if value of
+ `version-control' is not the atom `never' and either there are already
+ numeric versions of the file being backed up, or `version-control' is
+ non-nil.
+We don't want excessive versions piling up, so there are variables
+ `kept-old-versions', which tells Emacs how many oldest versions to keep,
+ and `kept-new-versions', which tells how many newest versions to keep.
+ Defaults are 2 old versions and 2 new.
+`dired-kept-versions' controls dired's clean-directory (.) command.
+If `delete-old-versions' is nil, system will query user
+ before trimming versions.  Otherwise it does it silently.
 
+If `vc-make-backup-files' is nil, which is the default,
+ no backup files are made for files managed by version control.
+ (This is because the version control system itself records previous versions.)
 
+See the subroutine `basic-save-buffer' for more information."
+  (interactive "p")
+  ;; (profiler-start 'cpu)
+  (let ((modp (buffer-modified-p))
+	(make-backup-files (or (and make-backup-files (not (eq arg 0)))
+			       (memq arg '(16 64)))))
+    (and modp (memq arg '(16 64)) (setq buffer-backed-up nil))
+    ;; We used to display the message below only for files > 50KB, but
+    ;; then Rmail-mbox never displays it due to buffer swapping.  If
+    ;; the test is ever re-introduced, be sure to handle saving of
+    ;; Rmail files.
+    (if (and modp
+             (buffer-file-name)
+             (not noninteractive)
+             (not save-silently))
+	(message "Saving file %s..." (buffer-file-name)))
+    (basic-save-buffer (called-interactively-p 'any))
+    (and modp (memq arg '(4 64)) (setq buffer-backed-up nil)))
+  ;; (profiler-stop)
+  )
 
-
-
+(require 'elp)
+(elp-instrument-function 'save-buffer)
+(elp-instrument-function 'basic-save-buffer)
 
 
 
@@ -270,7 +335,7 @@
  '(ibuffer-marked-face 'dired-marked)
  '(ibuffer-title-face 'dired-header)
  '(package-selected-packages
-   '(haskell-mode tide-mode solidity-mode nasm-mode god-mode lsp-ivy ivy-lsp dap-mode helm-xref projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
+   '(nix-mode haskell-mode hoon-mode tide-mode solidity-mode nasm-mode god-mode lsp-ivy ivy-lsp dap-mode projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
  '(safe-local-variable-values '((explicit-shell-file-name . /bin/bash)))
  '(vc-annotate-background "#ffffff")
@@ -289,6 +354,7 @@
      (320 . "#383838")
      (350 . "#585858")))
  '(vc-annotate-very-old-color "#585858")
+ '(warning-suppress-log-types '((comp)))
  '(which-key-mode t)
  '(xterm-color-names
    ["#000000" "#ff8059" "#44bc44" "#eecc00" "#33beff" "#feacd0" "#00d3d0" "#a8a8a8"])
@@ -299,6 +365,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(eldoc-highlight-function-argument ((t (:inherit bold :foreground "#98971a" :height 1.3)))))
+ '(eldoc-highlight-function-argument ((t (:inherit bold :foreground "#98971a" :height 1.3))))
+ '(ivy-current-match ((((class color) (background light)) (:background "#1a4b77" :foreground "white" :extend t)) (((class color) (background dark)) (:background "#65a7e2" :foreground "black" :extend t)))))
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'narrow-to-region 'disabled nil)

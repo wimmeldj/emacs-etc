@@ -73,7 +73,7 @@
 
 ;; not autosave and no lock files. But do backup to specific dir
 (setq make-backup-files t
-      auto-save-default nil
+      auto-save-default t
       create-lockfiles nil)
 
 ;; don't autosave and no lock files, but /do/ backup to /backups
@@ -210,12 +210,14 @@
 ;;;;                                      fzf 
 ;; set before requiring so as to trigger warning message when loaded and these
 ;; settings don't make sense
-(setq fzf/executable "fzf")
-(setq fzf/wsl nil)                      ;set wsl flag
-(setq fzf/args "-x --prompt='? ' --print-query --query='!^bin !^obj '")
 
-;; forked implementation of fzf
-(require 'fzf)
+;; disabling. fzf needs to be updated for emacs28, but I don't really use it much.
+;; (setq fzf/executable "fzf")
+;; (setq fzf/wsl nil)                      ;set wsl flag
+;; (setq fzf/args "-x --prompt='? ' --print-query --query='!^bin !^obj '")
+
+;; ;; forked implementation of fzf
+;; (require 'fzf)
 
 ;; no evil mode in fzf
 ;; (advice-add 'fzf :after 'turn-off-evil-mode)
@@ -328,31 +330,32 @@
 ;;;; ===========================================================================
 ;;;;                                   undo-tree 
 
-(use-package undo-tree
-  :load-path "~/.emacs.d/undo-tree/"
-  :ensure t
-  :init
-  (when (not (file-exists-p "~/.emacs.d/undo-tree-hist"))
-    (mkdir "~/.emacs.d/undo-tree-hist"))
-  :config
-  (global-undo-tree-mode 1)
+;; qdwimmel TODO restore undo tree settings
+;; (use-package undo-tree
+;;   :load-path "~/.emacs.d/undo-tree/"
+;;   :ensure t
+;;   :init
+;;   (when (not (file-exists-p "~/.emacs.d/undo-tree-hist"))
+;;     (mkdir "~/.emacs.d/undo-tree-hist"))
+;;   :config
+;;   (global-undo-tree-mode 1)
 
-  (defalias #'redo #'undo-tree-redo)
-  (defalias #'undo #'undo-tree-undo)
+;;   (defalias #'redo #'undo-tree-redo)
+;;   (defalias #'undo #'undo-tree-undo)
 
-  ;; sets directory where persistent undo history is stored
-  (setq undo-tree-history-directory-alist
-        '(("." . "~/.emacs.d/undo-tree-hist")))
-  (setq undo-tree-auto-save-history t)
-  (setq undo-tree-visualizer-diff t)
-  (setq undo-tree-visualizer-timestamps t)
+;;   ;; sets directory where persistent undo history is stored
+;;   (setq undo-tree-history-directory-alist
+;;         '(("." . "~/.emacs.d/undo-tree-hist")))
+;;   (setq undo-tree-auto-save-history t)
+;;   (setq undo-tree-visualizer-diff t)
+;;   (setq undo-tree-visualizer-timestamps t)
 
-  ;; evil provides bindings for these, so they're unnecessary
-  ;; (define-key undo-tree-map (kbd "C-/") nil)
-  ;; (define-key undo-tree-map (kbd "C-_") nil)
-  ;; (define-key undo-tree-map (kbd "M-_") nil)
-  (diminish 'undo-tree-mode)
-  :after (diminish))
+;;   ;; evil provides bindings for these, so they're unnecessary
+;;   ;; (define-key undo-tree-map (kbd "C-/") nil)
+;;   ;; (define-key undo-tree-map (kbd "C-_") nil)
+;;   ;; (define-key undo-tree-map (kbd "M-_") nil)
+;;   (diminish 'undo-tree-mode)
+;;   :after (diminish))
 
 
 
@@ -507,8 +510,13 @@
 
 
 (require 'visual)
-(require 'langs)
-(require 'd-org)
-(require 'interactive)
+;; (require 'langs)
+;; (require 'd-org)
+;; (require 'interactive)
 
 (provide 'main)
+
+
+;;;; ===========================================================================
+;;;;                                    ibuffer
+;; c-h v 'ibuffer-formats

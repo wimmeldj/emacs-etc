@@ -1,8 +1,8 @@
 (require 'org)
 
 ;; used by org to produce html files
-(use-package htmlize
-  :ensure t)
+;; (use-package htmlize
+;;   :ensure t)
 
 (add-hook 'org-mode-hook
           (lambda ()

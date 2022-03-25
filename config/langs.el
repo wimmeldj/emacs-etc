@@ -59,9 +59,10 @@
   (when (not (= cmake-exit 0))
     (message "==LSP: cmake not found in PATH. Need this for clangd project setup of projects built with cmake. See https://clangd.llvm.org/installation.html")))
 
-(add-hook 'c-mode-hook 'lsp)
-(add-hook 'c++-mode-hook 'lsp)
-(setq gc-cons-threshold (* 100 1024 1024)
+;; (add-hook 'c-mode-hook 'lsp)
+;; (add-hook 'c++-mode-hook 'lsp)
+(setq gc-cons-threshold 800000 ;(* 100 1024 1024)
+      gc-cons-threshold (* (expt 2 30) 2) ;2G
       read-process-output-max (* 1024 1024)
       treemacs-space-between-root-nodes nil
       company-minimum-prefix-length 1

@@ -337,6 +337,7 @@ See the subroutine `basic-save-buffer' for more information."
  '(package-selected-packages
    '(nix-mode haskell-mode hoon-mode tide-mode solidity-mode nasm-mode god-mode lsp-ivy ivy-lsp dap-mode projectile helm-lsp lsp-treemacs lsp-mode gruvbox-theme rainbow-blocks geiser omnisharp blimp gnuplot vlf htmlize not-a-package ace-window-mode dired-rsync wgrep-ag wgrep yasippet-snippets yasnippet js2-mode restclient smex web-mode evil-numbers pydoc counsel magit company-jedi slime-company company-web irony-eldoc company-irony which-key use-package tide slime rainbow-mode rainbow-delimiters pdf-tools org-bullets markdown-mode ivy helm golden-ratio evil-vimish-fold eshell-up editorconfig dired-quick-sort dired-collapse diminish company beacon ace-window))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
+ '(read-buffer-completion-ignore-case t)
  '(safe-local-variable-values '((explicit-shell-file-name . /bin/bash)))
  '(vc-annotate-background "#ffffff")
  '(vc-annotate-background-mode nil)

@@ -108,9 +108,9 @@
 ;; fzf in wsl should not include "--print-query" in `fzf/args', but on linux /should/
 (let ((prints-query (string-match-p "--print-query" fzf/args)))
   (if fzf/wsl
-      (assert (not prints-query) nil
+      (cl-assert (not prints-query) nil
 	      "When running in WSL, `fzf/args' must NOT include '--print-query'.")
-    (assert prints-query nil "When not running in WSL, `fzf/args' must include '--print-query'.")))
+    (cl-assert prints-query nil "When not running in WSL, `fzf/args' must include '--print-query'.")))
 
 (defun fzf/grep-cmd (cmd args)
   (format (concat cmd " " args)
@@ -123,11 +123,11 @@
   (let* ((text (buffer-substring-no-properties (point-min) (point-max)))
          (lines (split-string text "\n" t "\s*>\s+"))
          (line (if fzf/wsl
-                   (string-trim (second lines))
+                   (string-trim (cl-second lines))
                  (car (last (butlast lines 1)))))
          (selected (split-string line ":"))
-         (file (expand-file-name (first selected)))
-         (linenumber (second selected)))
+         (file (expand-file-name (cl-first selected)))
+         (linenumber (cl-second selected)))
     (kill-buffer "*fzf*")
     (jump-to-register :fzf-windows)
     (when (file-exists-p file)

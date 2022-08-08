@@ -41,9 +41,9 @@
 ;;;; ===========================================================================
 ;;;;                             general configuration 
 
-(require 'server)
-(unless (server-running-p)
-  (server-start))
+;; (require 'server)
+;; (unless (server-running-p)
+;;   (server-start))
 
 ;; only warn about file local variables when considered unsafe
 (setq enable-local-variables t)
@@ -155,54 +155,55 @@
 
 
 
-;;;; ===========================================================================
-;;;;                            ivy completion framework
+;; ;;;; ===========================================================================
+;; ;;;;                            ivy completion framework
 
 (use-package ivy
   :ensure t
   :config
-  (ivy-mode 1)
+  ;; (ivy-mode 1)
   (setq ivy-height 32)                  ;32 candidates
   (setq ivy-use-virtual-buffers t)
   (diminish 'ivy-mode)
   :after (diminish))
 
-(use-package swiper
-  :ensure t
-  :config
-  (setq ivy-use-group-face-if-no-groups nil) ;weird error if you don't do this
-  :after (ivy))
+;; (use-package swiper
+;;   :ensure t
+;;   :config
+;;   (setq ivy-use-group-face-if-no-groups nil) ;weird error if you don't do this
+;;   :after (ivy))
 
 (use-package counsel
   :ensure t
   :config
-  (setq counsel-find-file-at-point t))
+  (setq counsel-find-file-at-point t)
+  )
 
-;; (require 'ido)
-;; (require 'ido-hacks)
-;; (ido-mode 1)
-;; (ido-hacks-mode)
+;; ;; (require 'ido)
+;; ;; (require 'ido-hacks)
+;; ;; (ido-mode 1)
+;; ;; (ido-hacks-mode)
 
-;; (setq ido-enable-flex-matching t
-;;       ido-everywhere t
-;;       ido-use-filename-at-point 'guess
-;;       ido-create-new-buffer 'always
-;;       ido-virtual-buffers t
-;;       ido-max-window-height 0.50
-;;       ido-show-dot-for-dired t          ;first item is always dired
-;;       ido-use-url-at-point t
-;;       ido-enable-regexp t
-;;       ido-max-prospects 100
-;;       )
+;; ;; (setq ido-enable-flex-matching t
+;; ;;       ido-everywhere t
+;; ;;       ido-use-filename-at-point 'guess
+;; ;;       ido-create-new-buffer 'always
+;; ;;       ido-virtual-buffers t
+;; ;;       ido-max-window-height 0.50
+;; ;;       ido-show-dot-for-dired t          ;first item is always dired
+;; ;;       ido-use-url-at-point t
+;; ;;       ido-enable-regexp t
+;; ;;       ido-max-prospects 100
+;; ;;       )
 
-;; (setf (elt ido-decorations 2) "\n"
-;;       (elt ido-decorations 3) "\n")
+;; ;; (setf (elt ido-decorations 2) "\n"
+;; ;;       (elt ido-decorations 3) "\n")
 
-;; ;; C-n/C-p for next/prev completion
-;; (define-key ido-common-completion-map (kbd "C-n") #'ido-next-match)
-;; (define-key ido-common-completion-map (kbd "C-p") #'ido-prev-match)
+;; ;; ;; C-n/C-p for next/prev completion
+;; ;; (define-key ido-common-completion-map (kbd "C-n") #'ido-next-match)
+;; ;; (define-key ido-common-completion-map (kbd "C-p") #'ido-prev-match)
 
-;; (require 'smex)
+;; ;; (require 'smex)
 
 
 
@@ -271,8 +272,8 @@
 ;; cycle through completions with TAB
 (setq eshell-cmpl-cycle-completions t)
 
-(require 'eshell-ring)
-(global-eshring-mode 1)
+;; (require 'eshell-ring)
+;; (global-eshring-mode 1)
 
 ;; *SLOW* This adds about 3 seconds to startup because of all the shell commands. Maybe we should
 ;; cache? From https://www.emacswiki.org/emacs/EshellCompletion. Fixes eshell's noncompletion of
@@ -510,9 +511,9 @@
 
 
 (require 'visual)
-;; (require 'langs)
-;; (require 'd-org)
-;; (require 'interactive)
+(require 'langs)
+(require 'd:org)
+(require 'interactive)
 
 (provide 'main)
 
@@ -520,3 +521,6 @@
 ;;;; ===========================================================================
 ;;;;                                    ibuffer
 ;; c-h v 'ibuffer-formats
+
+
+

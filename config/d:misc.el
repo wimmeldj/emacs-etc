@@ -1,7 +1,25 @@
-;;;; ===========================================================================
-;;;;                             interactive functions 
 
-(defun d-switch-to-scratch-and-back (&optional arg)
+(defun d/ensure-dir-exists (path)
+  (when (not (file-exists-p path))
+    (mkdir path)))
+
+(defun d/increment-char-at-point ()
+  "Increment number or character at point."
+  (interactive)
+  (condition-case nil
+      (save-excursion
+        (let ((chr  (1+ (char-after))))
+          (unless (characterp chr) (error "Cannot increment char by one"))
+          (delete-char 1)
+          (insert chr)))
+    (error (error "No character at point"))))
+
+(defun d/copy-file:line ()
+  "Copy /full/path/file:line to clipboard"
+  (interactive)
+  (kill-new (format "%s:%d" (buffer-file-name) (line-number-at-pos))))
+
+(defun d/switch-to-scratch-and-back (&optional arg)
   "Toggle between *scratch-MODE* buffer and the current buffer.
 If a scratch buffer does not exist, create it with the major mode set to that
 of the buffer from where this function is called.
@@ -39,13 +57,11 @@ Return the scratch buffer opened."
 
 ;; Makes an independent buffer (yanking text of current and putting it in a new one)
 ;; applies the current mode to the new scratch buffer
-(defun make-scratch-buffer-from-current ()
+(defun d:make-scratch-buffer-from-current ()
   "Copied the current buffer, open scratch, paste it there."
   (interactive)
   (kill-ring-save (point-min) (point-max))
   (d-switch-to-scratch-and-back)
   (yank))
 
-
-
-(provide 'interactive)
+(provide 'd:misc)

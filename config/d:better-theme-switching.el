@@ -9,7 +9,7 @@
 (defun d/add-theme (theme before after)
   (ring-insert-at-beginning d/theme-ring (list theme before after))) ;last shall be last
 
-(defmacro d-defthemes (&rest themes)
+(defmacro d/defthemes (&rest themes)
   "a THEME is
 (THEME-NAME [:before SIDE-EFFECTS] [:after SIDE-EFFECTS])
 
@@ -28,7 +28,7 @@ theme is loaded."
                             (plist-get side-effects :after))))
            ',themes)))
 
-(defun d-load-next-theme ()
+(defun d/load-next-theme ()
   "Loads the next theme on `d/theme-ring' and evals the before
 and after side-effects. Loads the first member the first time
 it's called."
@@ -45,4 +45,4 @@ it's called."
     (setq d/current-theme theme)
     t))
 
-(provide 'better-theme-switching)
+(provide 'd:better-theme-switching)

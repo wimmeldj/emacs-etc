@@ -79,4 +79,4 @@
   "#+PROPERTY: header-args :results output"\n
   "#+FILETAGS: :ex1:ex2:")
 
-(provide 'd-org)
+(provide 'd:org)

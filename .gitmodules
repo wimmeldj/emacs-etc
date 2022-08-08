@@ -7,3 +7,6 @@
 [submodule "ezkeys"]
 	path = ezkeys
 	url = git@github.com:wimmeldj/ezkeys.el.git
+[submodule "hoon-mode.el"]
+	path = hoon-mode.el
+	url = git@github.com:urbit/hoon-mode.el.git

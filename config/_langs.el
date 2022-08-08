@@ -14,13 +14,13 @@
                                                    :foreground "#98971a"
                                                    :height 1.3)))))
 
-(use-package magit
-  :ensure t
-  :config
-  (setq magit-diff-refine-hunk 'all     ;word-level diff in magit-status buffers
-        magit-diff-paint-whitespace t
-        magit-diff-highlight-trailing t
-        ) )
+;; (use-package magit
+;;   :ensure t
+;;   :config
+;;   (setq magit-diff-refine-hunk 'all     ;word-level diff in magit-status buffers
+;;         magit-diff-paint-whitespace t
+;;         magit-diff-highlight-trailing t
+;;         ) )
 
 (setq electric-pair-pairs '((?\( . ?\))
                             (?\[ . ?\])
@@ -46,8 +46,8 @@
 
 
 (require 'cc-vars)
-(push '(c-mode . "k&r") c-default-style)
-(push '(c++-mode . "k&r") c-default-style)
+;; (push '(c-mode . "k&r") c-default-style)
+;; (push '(c++-mode . "k&r") c-default-style)
 
 (let ((clangd-exit (call-process "which" nil nil nil "clangd"))
       (bear-exit (call-process "which" nil nil nil "bear"))
@@ -61,17 +61,18 @@
 
 ;; (add-hook 'c-mode-hook 'lsp)
 ;; (add-hook 'c++-mode-hook 'lsp)
-(setq gc-cons-threshold 800000 ;(* 100 1024 1024)
-      gc-cons-threshold (* (expt 2 30) 2) ;2G
-      read-process-output-max (* 1024 1024)
-      treemacs-space-between-root-nodes nil
-      company-minimum-prefix-length 1
-      lsp-idle-delay 0.1
-      lsp-headerline-breadcrumb-enable t
-      lsp-keymap-prefix "M-l")
-(with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (require 'dap-cpptools))
+;; (setq gc-cons-threshold 800000 ;(* 100 1024 1024)
+;;       gc-cons-threshold (* (expt 2 30) 2) ;2G
+;;       read-process-output-max (* 1024 1024)
+;;       treemacs-space-between-root-nodes nil
+;;       company-minimum-prefix-length 1
+;;       lsp-idle-delay 0.1
+;;       lsp-headerline-breadcrumb-enable t
+;;       lsp-keymap-prefix "M-l")
+
+;; (with-eval-after-load 'lsp-mode
+;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+;;   (require 'dap-cpptools))
 
 
 
@@ -161,11 +162,6 @@
 (add-hook 'emacs-lisp-mode-hook
           (lambda () (setq-local fill-column 100)))
 
-(require 'pp)                           ;printy print
-(define-key emacs-lisp-mode-map (kbd "C-x C-e") #'eval-last-sexp)
-(define-key emacs-lisp-mode-map
-  (kbd "C-x e") #'pp-eval-last-sexp) ;with universal arg, inserts results at point
-
 
 ;;;; ===========================================================================
 ;;;;                                     scheme 
@@ -248,3 +244,36 @@
 ;;;;                                    solidity
 (use-package solidity-mode
   :ensure t)
+
+
+
+;;;; ===========================================================================
+;;;;                                      hoon
+
+;; install nix
+;; pacman -S nix
+;; usermod -a -G nix-users
+;; systemctl enable nix-daemon.service
+;; reboot...
+;;
+;; herb available via /urbit/default.nix
+;; nix-env -f default.nix -iA herb
+;; which herb should be /home/d/.nix-profile/bin/herb
+(require 'hoon-mode)
+;; (setq hoon-herb-path "/home/d/.nix-profile/bin/herb")
+
+;; there is also a hoon language server
+;; install npm
+;; pacman -S npm
+;; npm install -g hoon-language-server
+;; for the lsp to work, you need a fake zod running under localhost:8080
+
+;; herb broken or maybe some version conflict between it and urbit-bin
+;; running this outside emacs:
+;; herb --dojo '(add 2 2)' ~/urbit/zod
+;;
+;; WARNING <module> 484 - unrecognized response
+;; <html><head><title>500 Internal Server Error</title></head><body><h1>Internal Server Error</h1><p>There was an error while handling the request for /.</p><code>/app/lens/hoon:&lt;[82 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[77 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[74 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[72 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[63 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[62 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[60 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[59 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[58 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[56 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[52 3].[123 5]&gt;<br />/app/lens/hoon:&lt;[50 3].[123 5]&gt;<br />/sys/vane/gall/hoon:&lt;[1.372 9].[1.372 37]&gt;<br /></code></body></html>
+
+;; for now, who cares. Whenver I care, do:
+;; (add-hook 'hoon-mode #'lsp)

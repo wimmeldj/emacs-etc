@@ -31,11 +31,14 @@ theme is loaded."
 (defun d/load-next-theme ()
   "Loads the next theme on `d/theme-ring' and evals the before
 and after side-effects. Loads the first member the first time
-it's called."
+it's called. When a prefix argument is given, loads the previous."
   (interactive)
-  (let* ((theme (if d/current-theme
-                    (ring-next d/theme-ring d/current-theme)
-                  (ring-ref d/theme-ring 0)))
+  (let* ((theme (cond ((and current-prefix-arg d/current-theme)
+                       (ring-previous d/theme-ring d/current-theme))
+                      (d/current-theme
+                       (ring-next d/theme-ring d/current-theme))
+                      (t
+                       (ring-ref d/theme-ring 0))))
          (theme-name (car theme))
          (before (cadr theme))
          (after (caddr theme)))

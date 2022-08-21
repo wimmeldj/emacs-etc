@@ -110,7 +110,7 @@
 ;;;;                                     ezkeys
 
 (setq ezk-keymap-path (concat user-emacs-directory "init.el"))
-(diminish '_ezk/minor)
+(diminish 'ezk-minor-mode)
 (ezk-defkeymaps
  ;; precedence
  (c-mode

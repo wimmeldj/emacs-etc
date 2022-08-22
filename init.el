@@ -178,9 +178,22 @@
 
  ("C-S-s" (occur G))
 
+;;;; ===========================================================================
+;;;;                                   temporary
+
  ;; HOON
  ;; useful if we're planning on adding indent and/or alignment to `hoon-mode'
  ("C-X v" ((lambda () (interactive) (message (format "%s" (parse-partial-sexp 786 832)))) HOON))
+
+ ;; for whatever reason, the current definition of `make-frame-command'
+ ;;
+ ;; (if (display-graphic-p)
+ ;;     (make-frame)
+ ;;   (select-frame (make-frame)))
+ ;;
+ ;; Doesn't actually select the newly created frame. Redefining as such works though
+ ("C-x 5 2" ((lambda () (interactive) (switch-to-buffer-other-frame (current-buffer)))
+             G))
 
  )
 
@@ -424,42 +437,41 @@
  ;;   (message "==loaded light theme")
  ;;   ))
 
- (spacemacs-dark
-  :before
-  ((mapc #'disable-theme custom-enabled-themes)
-   )
+ ;; (spacemacs-dark
+ ;;  :before
+ ;;  ((mapc #'disable-theme custom-enabled-themes)
+ ;;   )
 
-  :after
-  ((custom-set-faces
-    ;; bright green ivy selection
-    '(ivy-current-match ((t (:foreground "chartreuse3" :underline t :weight bold)))))
+ ;;  :after
+ ;;  ((custom-set-faces
+ ;;    ;; bright green ivy selection
+ ;;    '(ivy-current-match ((t (:foreground "chartreuse3" :underline t :weight bold)))))
 
-   (message "==loaded dark theme"))
-  )
-
- (modus-operandi
-  :before
-  ((mapc #'disable-theme custom-enabled-themes)
-   )
-  )
+ ;;   (message "==loaded dark theme"))
+ ;;  )
 
  (modus-vivendi
   :before
   ((mapc #'disable-theme custom-enabled-themes)
    )
   )
-
- (gruvbox-dark-hard
+ (modus-operandi
   :before
   ((mapc #'disable-theme custom-enabled-themes)
    )
   )
 
- (gruvbox-light-hard
-  :before
-  ((mapc #'disable-theme custom-enabled-themes)
-   )
-  )
+ ;; (gruvbox-dark-hard
+ ;;  :before
+ ;;  ((mapc #'disable-theme custom-enabled-themes)
+ ;;   )
+ ;;  )
+
+ ;; (gruvbox-light-hard
+ ;;  :before
+ ;;  ((mapc #'disable-theme custom-enabled-themes)
+ ;;   )
+ ;;  )
  )
 
 ;; loads first theme. Subsequent calls load the next
@@ -472,6 +484,7 @@
 
 
 (global-subword-mode 1)                 ;word defn is finer grained. e.g. camelCase - 2 words
+(diminish 'subword-mode)
 (delete-selection-mode 1)               ;highlighted region gets deleted on input
 
 (setq global-eldoc-mode t
@@ -487,6 +500,7 @@
 
 ;; yasnippet
 (yas-global-mode 1)
+(diminish 'yas-minor-mode)
 
 (read-abbrev-file "~/.emacs.d/abbrevs.el")
 (abbrev-mode 1)

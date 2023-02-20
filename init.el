@@ -34,6 +34,9 @@
                    which-key
                    winner
                    yasnippet
+                   markdown-mode
+
+                   gh
                     ))
        (notinstalled (seq-filter #'(lambda (pkg) (not (package-installed-p pkg)))
                                  packages)))
@@ -50,12 +53,10 @@
               "ezkeys"
               "config"
               "hoon-mode.el"
-              ))
-      testvar)
+              )))
   (setq paths (mapcar #'(lambda (path) (file-truename
                                    (concat user-emacs-directory path)))
                       paths))
-  ;; (setq load-path `(,@paths ,@load-path))
   (setq load-path (append paths load-path)))
 
 
@@ -89,14 +90,15 @@
 (require 'which-key)
 (require 'winner)
 (require 'yasnippet)
-
+(require 'hoon-mode)
+(require 'gh)
 
 
 ;;;; ===========================================================================
 ;;;;                                    desktop
 ;; (set-face-attribute 'default nil :font "fixedsys" :height 120)
 ;; (set-face-attribute 'default nil :font "Terminus (TTF)" :height 120)
-(set-face-attribute 'default nil :font "IBM Plex Mono" :height 100)
+(set-face-attribute 'default nil :font "IBM Plex Mono" :height 120)
 
 ;;;; ===========================================================================
 ;;;;                                     mobile
@@ -147,6 +149,7 @@
     ("C-r" (ivy-resume G))
     ;; GUD
     ("C-r" (gud-cont GUD))                     ;override ivy-resume
+    ;; ("C-w" (gud-watch GUD))                    ;override `c-subword-mode'
     ("C-g" (gdb-frame-disassembly-buffer GUD)) ;show disasm in new frame
     )
 
@@ -157,6 +160,7 @@
  ;;    ("S" (counsel-info-lookup-symbol G))
  ;;     )
 
+ ("C-<tab>" (magit-section-cycle-diffs magit-status-mode))
  ("C-;"
     ("m"
        ("m" (magit-status G))
@@ -174,6 +178,7 @@
 
     ("C-d" (d-dired-dotfiles-toggle dired-mode))
     ("0 w" (d/copy-file:line G))
+    ("c" (compile G))
     )
 
  ("C-S-s" (occur G))
@@ -182,7 +187,7 @@
 ;;;;                                   temporary
 
  ;; HOON
- ;; useful if we're planning on adding indent and/or alignment to `hoon-mode'
+ ;; useful if we're planning on adding indent and/or alignment to `hoon
  ("C-X v" ((lambda () (interactive) (message (format "%s" (parse-partial-sexp 786 832)))) HOON))
 
  ;; for whatever reason, the current definition of `make-frame-command'
@@ -192,10 +197,23 @@
  ;;   (select-frame (make-frame)))
  ;;
  ;; Doesn't actually select the newly created frame. Redefining as such works though
- ("C-x 5 2" ((lambda () (interactive) (switch-to-buffer-other-frame (current-buffer)))
-             G))
+ ;; has the effect of only allowing two though.
+ ;;
+ ;; see google: emacs make-frame gnome "is ready"
+ ;;     google: gnome allow focus stealing
+ ;;     https://major.io/2015/07/06/allow-new-windows-to-steal-focus-in-gnome-3/#:~:text=Open%20dconf%2Deditor%20and%20navigate,and%20you%20can%20select%20strict.
+ ;;
+ ;; ("C-x 5 2" ((lambda () (interactive) (switch-to-buffer-other-frame (current-buffer)))
+ ;;             G))
 
  )
+
+(defadvice find-file (before make-directory-maybe (filename &optional wildcards) activate)
+  "Create parent directory if not exists while visiting file."
+  (unless (file-exists-p filename)
+    (let ((dir (file-name-directory filename)))
+      (unless (file-exists-p dir)
+        (make-directory dir t)))))
 
 
 ;;;; ===========================================================================
@@ -210,11 +228,19 @@
 (add-to-list 'auto-mode-alist '("\\.csproj\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\PKGBUILD\\'" . shell-script-mode))
 (add-to-list 'auto-mode-alist '("\\.conf\\'" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.hoon\\'" . hoon-mode))
+(add-to-list 'auto-mode-alist '("\\.BUILD\\'" . bazel-mode))
 
 
 
 ;;;; ===========================================================================
 ;;;;                             general configuration
+
+(when (display-graphic-p)
+  (setq default-frame-alist
+        '((width . 130)
+          (height . 100)
+          (top . 200))))
 
 ;; only warn about file local variables when considered unsafe
 (setq enable-local-variables t)
@@ -461,17 +487,17 @@
    )
   )
 
- ;; (gruvbox-dark-hard
- ;;  :before
- ;;  ((mapc #'disable-theme custom-enabled-themes)
- ;;   )
- ;;  )
+ (gruvbox-dark-hard
+  :before
+  ((mapc #'disable-theme custom-enabled-themes)
+   )
+  )
 
- ;; (gruvbox-light-hard
- ;;  :before
- ;;  ((mapc #'disable-theme custom-enabled-themes)
- ;;   )
- ;;  )
+ (gruvbox-light-hard
+  :before
+  ((mapc #'disable-theme custom-enabled-themes)
+   )
+  )
  )
 
 ;; loads first theme. Subsequent calls load the next
@@ -512,8 +538,12 @@
 
 
 ;; gdb
-(setq gdb-many-windows t)
-(setq gdb-show-main t)
+(setq gdb-many-windows t
+      gdb-show-main t                   ;on start, src code window shows main
+      gdb-speedbar-auto-raise t         ;raise watch frame to foreground upon var change
+      gdb-show-changed-values t         ;speedbar watch frame
+      gdb-use-colon-colon-notation t    ;FUN::VAR format for vars in watch frame
+      )
 
 
 ;;;; ===========================================================================
@@ -559,11 +589,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(diminish gruvbox-theme modus-themes nix-mode undo-tree which-key wgrep-ag use-package spacemacs-theme rainbow-delimiters counsel beacon ace-window))
- '(safe-local-variable-values '((explicit-shell-file-name . /bin/bash))))
+   '(gh markdown-mode bazel diminish gruvbox-theme modus-themes nix-mode undo-tree which-key wgrep-ag use-package spacemacs-theme rainbow-delimiters counsel beacon ace-window))
+ '(safe-local-variable-values
+   '((major-mode . gdb-script-mode)
+     (explicit-shell-file-name . /bin/bash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ivy-current-match ((t (:foreground "chartreuse3" :underline t :weight bold)))))
+(put 'dired-find-alternate-file 'disabled nil)

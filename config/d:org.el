@@ -14,6 +14,7 @@
                   )
             (auto-fill-mode 1)
             (org-indent-mode 1) ;soft indentation.
+            (org-hide-block-all)
             ))
 
 (setq fill-column 100
@@ -73,10 +74,13 @@
   "#+OPTIONS: tex:t"\n
   "#+OPTIONS: html-postamble:nil"\n
   (let ((todo-kwords ""))
-    (loop for kword in (cdar org-todo-keywords)
+    (cl-loop for kword in (cdar org-todo-keywords)
           do (setq todo-kwords (concat todo-kwords " " kword)))
     (format "#+TODO: %s\n" todo-kwords))
   "#+PROPERTY: header-args :results output"\n
-  "#+FILETAGS: :ex1:ex2:")
+  "#+FILETAGS: :ex1:ex2:"\n
+  "#+STARTUP: overview")
 
 (provide 'd:org)
+
+

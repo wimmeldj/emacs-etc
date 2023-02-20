@@ -1,6 +1,6 @@
-alias l ls -v $*
-alias ll ls -l --human-readable -v $*
-alias lla ls -la --human-readable -v $*
-alias lr ls -R --human-readable $*
-alias lt ls -l --sort=time --human-readable --reverse $*
 alias sudo sudo $*
+alias lt ls -l --sort=time --human-readable --reverse $*
+alias lr ls -R --human-readable $*
+alias lla ls -la --human-readable -v $*
+alias ll ls -l --human-readable -v $*
+alias l ls -v $*

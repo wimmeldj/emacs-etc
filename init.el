@@ -35,8 +35,11 @@
                    winner
                    yasnippet
                    markdown-mode
+                   edit-indirect        ;required by markdown-mode to edit codeblocks
 
-                   gh
+                   rust-mode
+                   forge                ;magit interface for "forges", e.g. github
+                   github-review
                     ))
        (notinstalled (seq-filter #'(lambda (pkg) (not (package-installed-p pkg)))
                                  packages)))
@@ -91,7 +94,8 @@
 (require 'winner)
 (require 'yasnippet)
 (require 'hoon-mode)
-(require 'gh)
+(require 'forge)
+(require 'github-review)
 
 
 ;;;; ===========================================================================
@@ -207,6 +211,8 @@
  ;;             G))
 
  )
+
+(define-key org-mode-map (kbd "C-<tab>") 'org-global-cycle)
 
 (defadvice find-file (before make-directory-maybe (filename &optional wildcards) activate)
   "Create parent directory if not exists while visiting file."
@@ -558,24 +564,54 @@
 
 ;; use this for bash completion:
 ;; https://github.com/szermatt/emacs-bash-completion
-(add-hook 'sh-mode
+(add-hook 'sh-mode-hook
           (lambda () (sh-electric-here-document-mode -1)) ;poorly implemented
           )
 
+
+;;;; ===========================================================================
+;;;;                                     eshell
+
+(add-hook 'eshell-mode-hook
+          (lambda ()
+            (company-mode -1)))
 
 
+
+;;;; ===========================================================================
+;;;;                                     forge
 
 
+(setq auth-sources '("~/.authinfo"))
+
+;; forge miscellany
+;;
+;; storing secrets in plaintext in ~/.authinfo. See https://magit.vc/manual/ghub/Storing-a-Token.html
+;;
+;; for ssh subdomain stuff: https://github.com/magit/forge/issues/280 - remember, ~/.ssh/config
+;; defines a host entry "Urbit" that allows us to use a different ssh identity for git urls of the
+;; form: git@urbit:urbit/SUBREPO.git
+;;
+;; we need to inform forge of that like so:
+;;
+
+(setq forge-alist (append forge-alist
+                          '(("urbit"
+                            "api.github.com"
+                            "github.com"
+                            forge-github-repository))))
 
 
+;; additionally, remember that forge requires configuring the following git local variable:
+;; "github.user". This is different from the typical user.name configured in git.
+;;
+;; git config --local github.user <GITHUB_USER_NAME>
+;;
 
-
-
-
-
-
-
-
+;; github-review also requires a token to be stored in .authinfo (or .authinfo.gpg, etc)
+;; https://github.com/charignon/github-review
+(setq github-review-view-comments-in-code-lines t
+      github-review-view-comments-in-code-lines-outdated nil)
 
 
 
@@ -589,7 +625,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(gh markdown-mode bazel diminish gruvbox-theme modus-themes nix-mode undo-tree which-key wgrep-ag use-package spacemacs-theme rainbow-delimiters counsel beacon ace-window))
+   '(github-review edit-indirect forge rust-mode markdown-mode bazel diminish gruvbox-theme modus-themes nix-mode undo-tree which-key wgrep-ag use-package spacemacs-theme rainbow-delimiters counsel beacon ace-window))
  '(safe-local-variable-values
    '((major-mode . gdb-script-mode)
      (explicit-shell-file-name . /bin/bash))))

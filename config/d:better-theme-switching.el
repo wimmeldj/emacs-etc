@@ -49,3 +49,14 @@ it's called. When a prefix argument is given, loads the previous."
     t))
 
 (provide 'd:better-theme-switching)
+
+;; want a way to just as easily cycle the color of the modeline so that I can easily differentiate
+;; separate emacs sessions
+
+;; color palette:
+;;
+;; active (bright), inactive (dark)
+;;
+;; chartreuse1 #7fff00, chartreuse3 #66cd00
+;; yellow1 #ffff00, yellow3 #cdcd00
+;; cyan1 #00ffff, cyan3 #00cdcd

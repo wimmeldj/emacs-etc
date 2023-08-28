@@ -456,54 +456,76 @@
 ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/gruvbox")
 
 (d/defthemes
- ;; (leuven
- ;;  :before
- ;;  ((mapc #'disable-theme custom-enabled-themes) ;disable all themes currently enabled
- ;;   )
-
- ;;  :after
- ;;  ((custom-set-faces '(ivy-current-match ((((class color) (background light))
- ;;                                           (:background "#1a4b77" :foreground "white" :extend t))
- ;;                                          (((class color) (background dark))
- ;;                                           (:background "#65a7e2" :foreground "black" :extend t)))))
- ;;   (message "==loaded light theme")
- ;;   ))
-
- ;; (spacemacs-dark
- ;;  :before
- ;;  ((mapc #'disable-theme custom-enabled-themes)
- ;;   )
-
- ;;  :after
- ;;  ((custom-set-faces
- ;;    ;; bright green ivy selection
- ;;    '(ivy-current-match ((t (:foreground "chartreuse3" :underline t :weight bold)))))
-
- ;;   (message "==loaded dark theme"))
- ;;  )
-
+ ;; pretty ugly. doing this so that we can easily visually differentiate emacs sessions using the
+ ;; modeline color while keeping the theme the same. Could rewrite if we cared.
  (modus-vivendi
   :before
   ((mapc #'disable-theme custom-enabled-themes)
    )
-  )
+  :after
+  ((custom-set-faces
+    '(mode-line ((t (:box (:line-width (1 . 1) :color "#959595") :foreground "#ffffff" :background "#505050" :inherit m (modus-operandi
+  :before
+  ((mapc #'disable-theme custom-enabled-themes))
+  :after
+  ((custom-set-faces
+    '(mode-line ((t (:box (:line-width (1 . 1) :color "#5a5a5a") :foreground "#000000" :background "cyan" :inherit modus-themes-ui-variable-pitch))))
+    '(mode-line-inactive ((t (:box (:line-width (1 . 1) :color "#00cdcd") :foreground "#000000" :background "cyan3" :inherit modus-themes-ui-variable-pitch))))
+    )
+   ))odus-themes-ui-variable-pitch))))
+    '(mode-line-inactive ((t (:box (:line-width (1 . 1) :color "#606060") :foreground "#969696" :background "#2d2d2d" :inherit modus-themes-ui-variable-pitch)))))
+   ))
  (modus-operandi
   :before
   ((mapc #'disable-theme custom-enabled-themes)
    )
-  )
-
- (gruvbox-dark-hard
+  :after
+  ((custom-set-faces
+    '(mode-line ((t (:box (:line-width (1 . 1) :color "#5a5a5a") :foreground "#000000" :background "#c8c8c8" :inherit modus-themes-ui-variable-pitch))))
+    '(mode-line-inactive ((t (:box (:line-width (1 . 1) :color "#a3a3a3") :foreground "#585858" :background "#e6e6e6" :inherit modus-themes-ui-variable-pitch)))))
+   ))
+ (modus-operandi
   :before
   ((mapc #'disable-theme custom-enabled-themes)
    )
-  )
-
- (gruvbox-light-hard
+  :after
+  ((custom-set-faces
+    '(mode-line ((t (:box (:line-width (1 . 1) :color "#7fff00") :foreground "#000000" :background "chartreuse1" :inherit modus-themes-ui-variable-pitch))))
+    '(mode-line-inactive ((t (:box (:line-width (1 . 1) :color "#66cd00") :foreground "#000000" :background "chartreuse3" :inherit modus-themes-ui-variable-pitch))))
+    )
+   ))
+ (modus-operandi
   :before
   ((mapc #'disable-theme custom-enabled-themes)
    )
-  )
+  :after
+  ((custom-set-faces
+    '(mode-line ((t (:box (:line-width (1 . 1) :color "#ffff00") :foreground "#000000" :background "yellow1" :inherit modus-themes-ui-variable-pitch))))
+    '(mode-line-inactive ((t (:box (:line-width (1 . 1) :color "#cdcd00") :foreground "#000000" :background "yellow3" :inherit modus-themes-ui-variable-pitch))))
+    )
+   ))
+ (modus-operandi
+  :before
+  ((mapc #'disable-theme custom-enabled-themes)
+   )
+  :after
+  ((custom-set-faces
+    '(mode-line ((t (:box (:line-width (1 . 1) :color "#5a5a5a") :foreground "#000000" :background "cyan" :inherit modus-themes-ui-variable-pitch))))
+    '(mode-line-inactive ((t (:box (:line-width (1 . 1) :color "#00cdcd") :foreground "#000000" :background "cyan3" :inherit modus-themes-ui-variable-pitch))))
+    )
+   ))
+ 
+ ;; (gruvbox-dark-hard
+ ;;  :before
+ ;;  ((mapc #'disable-theme custom-enabled-themes)
+ ;;   )
+ ;;  )
+
+ ;; (gruvbox-light-hard
+ ;;  :before
+ ;;  ((mapc #'disable-theme custom-enabled-themes)
+ ;;   )
+ ;;  )
  )
 
 ;; loads first theme. Subsequent calls load the next
